@@ -4,10 +4,10 @@ vpath %.h include
 EXE: main.o mylib.o
 	gcc $^ -o $@
 
-main.o: main.c mylib.h testprint_a
+main.o: main.c mylib.h #testprint_a
 	gcc -c $< -o $@
 
-mylib.o: mylib.c mylib.h testprint_b
+mylib.o: mylib.c mylib.h #testprint_b
 	gcc -c $< -o $@
 
 .PHONY: cleanll
