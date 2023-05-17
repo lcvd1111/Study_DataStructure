@@ -1,6 +1,8 @@
 vpath %.c src
 vpath %.h include
 
+.PHONY: cleanall
+
 EXE: main.o mylib.o
 	gcc $^ -o $@
 
