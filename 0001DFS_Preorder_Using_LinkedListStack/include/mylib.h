@@ -1,5 +1,8 @@
 #ifndef _MYLIB_HEADER_
 #define _MYLIB_HEADER_
+
+#define PRINTF( x , ... ) printf("[FUN:%s LINE:%d]" x , __func__, __LINE__)
+
 //Data type Definition
 typedef struct _BINTREE_NODE {
 		int data;

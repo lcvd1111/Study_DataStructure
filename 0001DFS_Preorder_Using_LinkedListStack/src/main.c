@@ -6,6 +6,11 @@ int UnitTest(void);
 
 int main(int argc, char **argv)
 {
+	if (UnitTest()){
+		PRINTF("UNIT TEST ERROR.\n");
+		return -1;
+	}
+
 	return 0;
 }
 

@@ -5,7 +5,42 @@
 //Function Definition
 BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector,int leftArg, int rightArg)
 {
-		return parent;
+	if (parent == NULL){
+		PRINTF("Error occured.\n");
+		return NULL;
+	}
+
+	switch (selector){
+		case NONE:
+			break;
+		case LEFT:
+			parent->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+			parent->left->data = leftArg;
+			parent->left->left = NULL;
+			parent->left->right = NULL;
+			break;
+		case RIGHT:
+			parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+			parent->right->data = rightArg;
+			parent->right->left = NULL;
+			parent->right->right = NULL;
+			break;
+		case BOTH:
+			parent->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+			parent->left->data = leftArg;
+			parent->left->left = NULL;
+			parent->left->right = NULL;
+			
+			parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+			parent->right->data = rightArg;
+			parent->right->left = NULL;
+			parent->right->right = NULL;
+			break;
+		default:
+			PRINTF("Error occured.\n");
+			return NULL;
+	}
+	return parent;
 }
 
 int PreorderTraverse(BINTREE_NODE *root)
