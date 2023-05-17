@@ -10,6 +10,10 @@ main.o: main.c mylib.h #testprint_a
 mylib.o: mylib.c mylib.h #testprint_b
 	gcc -c $< -o $@
 
+.PHONY: clean
+clean:
+	@$(MAKE) cleanall
+
 .PHONY: cleanll
 cleanall:
 	rm EXE *.o
