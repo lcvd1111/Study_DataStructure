@@ -58,6 +58,27 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector,int leftAr
 int PreorderTraverse(BINTREE_NODE *root)
 {
 	int ret = 0;
+	BINTREE_NODE *current = root;
+	STACK traversalStack = {.begin=NULL, .end=NULL};
+	
+	while(1){
+		if (current != NULL){
+			printf("Visit Check: %d\n", current->data);
+			Push(&traversalStack, current);
+			current = current->left;
+			continue;
+		}
+		else if (current == NULL){
+			current = Pop(&traversalStack);
+			if (current == NULL){
+				printf("Traversal Completed!\n");
+				ret = 0;
+				break;
+			}
+			current = current->right;
+			continue;
+		}
+	}
 	return ret;
 }
 
