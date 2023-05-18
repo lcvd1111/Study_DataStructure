@@ -5,10 +5,10 @@ EXE: main.o mylib.o
 	gcc $^ -o $@
 
 main.o: main.c mylib.h #testprint_a
-	gcc -c $< -o $@
+	gcc -c $< -o $@ -I./include
 
 mylib.o: mylib.c mylib.h #testprint_b
-	gcc -c $< -o $@
+	gcc -c $< -o $@ -I./include
 
 .PHONY: clean
 clean:

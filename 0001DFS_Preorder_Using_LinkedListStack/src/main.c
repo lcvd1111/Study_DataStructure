@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/mylib.h"
+#include "mylib.h"
+//#include "../include/mylib.h"
 
 int UnitTest(void);
 BINTREE_NODE *MakeTree
