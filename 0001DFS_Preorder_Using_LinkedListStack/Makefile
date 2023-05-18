@@ -2,13 +2,13 @@ vpath %.c src
 vpath %.h include
 
 EXE: main.o mylib.o
-	gcc $^ -o $@
+	$(CC) $^ -o $@
 
 main.o: main.c mylib.h #testprint_a
-	gcc -c $< -o $@ -I./include
+	$(CC) -c $< -o $@ -I./include/
 
 mylib.o: mylib.c mylib.h #testprint_b
-	gcc -c $< -o $@ -I./include
+	$(CC) -c $< -o $@ -I./include/
 
 .PHONY: clean
 clean:
