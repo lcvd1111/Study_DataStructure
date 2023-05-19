@@ -1,6 +1,8 @@
 #ifndef __MYLIB_HEADER_
 #define __MYLIB_HEADER_
 
+#include <stdio.h>
+
 #define PRINTF( x , ... ) printf("[FUNC:%s LINE:%d]" x , __func__ , __LINE__ , ##__VA_ARGS__)
 
 typedef struct _BINTREE_NODE {

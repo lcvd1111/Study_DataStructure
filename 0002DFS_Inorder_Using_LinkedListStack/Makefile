@@ -1,13 +1,16 @@
 vpath %.c src
 vpath %.h include
 
-EXE: main.o mylib.o
+EXE: main.o mylib.o test.o
 	$(CC) $^ -o $@
 
 main.o: main.c mylib.h
 	$(CC) -c $< -I ./include -o $@
 
 mylib.o: mylib.c mylib.h
+	$(CC) -c $< -I ./include -o $@
+
+test.o: test.c mylib.h test.h
 	$(CC) -c $< -I ./include -o $@
 
 .PHONY: clean
