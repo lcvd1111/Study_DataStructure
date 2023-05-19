@@ -80,7 +80,28 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECT selector, int leftArg
 
 BINTREE_NODE *InorderTraverse(BINTREE_NODE *rootNode)
 {
-	return rootNode;
+	STACK myStack = {.begin=NULL, .end=NULL};
+	BINTREE_NODE *current = NULL;
+	
+	current = rootNode;
+
+	while(1){
+		if (current != NULL){
+			Push(&myStack, current);
+			current = current->left;
+			continue;
+		}
+		else if (current == NULL){
+			current = Pop(&myStack);
+			if (current == NULL){
+				printf("Traversal Complete!\n");
+				return rootNode;
+			}
+			printf("Visit Check: %d\n", current->data);
+			current=current->right;
+			continue;
+		}
+	}
 }
 
 BINTREE_NODE *CleanBintree(BINTREE_NODE *rootNode)
