@@ -17,7 +17,7 @@ typedef enum _CHILD_SELECT {
 } CHILD_SELECT;
 
 typedef struct _STACK_NODE {
-	int data;
+	BINTREE_NODE *data;
 	struct _STACK_NODE *next;
 } STACK_NODE;
 
