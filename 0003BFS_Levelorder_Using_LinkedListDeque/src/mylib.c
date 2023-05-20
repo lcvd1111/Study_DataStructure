@@ -79,7 +79,33 @@ BINTREE_NODE *MakeChild
 
 int LevelOrder(BINTREE_NODE *root)
 {
-	;
+	BINTREE_NODE *current = NULL;
+	DEQUE myDeque = {.begin=NULL, .end=NULL};
+	int emptyFlag = 0;
+
+	current = root;
+
+	while(1){
+		if (current != NULL){
+			printf("Visit Check: %d\n", current->data);
+			InsertLeft(&myDeque, current->left);
+			InsertLeft(&myDeque, current->right);
+			current = DeleteRight(&myDeque, &emptyFlag);
+			if ((current == NULL)&&(emptyFlag == 1)){
+				printf("Traversal Compelted.\n");
+				return 0;
+			}
+			continue;
+		}
+		else if (current == NULL){
+			current = DeleteRight(&myDeque, &emptyFlag);
+			if ((current == NULL)&&(emptyFlag == 1)){
+				printf("Traversal Completed.\n");
+				return 0;
+			}
+			continue;
+		}
+	}
 }
 
 int EmptyBintree(BINTREE_NODE *root)
@@ -114,13 +140,16 @@ DEQUE *InsertLeft(DEQUE *dequeArg, BINTREE_NODE *bintreeArg)
 
 }
 
-BINTREE_NODE *DeleteLeft(DEQUE *dequeArg)
+BINTREE_NODE *DeleteLeft(DEQUE *dequeArg, int *emptyFlag)
 {
 	BINTREE_NODE *ret = NULL;
 	DEQUE_NODE *buf;
 
-	if (dequeArg->begin == NULL)
+	if (dequeArg->begin == NULL){
+		if (emptyFlag != NULL)
+			*emptyFlag = 1;
 		return NULL;
+	}
 
 	ret = dequeArg->begin->data;
 	buf = dequeArg->begin->next;
@@ -159,13 +188,16 @@ DEQUE *InsertRight(DEQUE *dequeArg, BINTREE_NODE *bintreeArg)
 	return dequeArg;
 }
 
-BINTREE_NODE *DeleteRight(DEQUE *dequeArg)
+BINTREE_NODE *DeleteRight(DEQUE *dequeArg, int *emptyFlag)
 {
 	BINTREE_NODE *ret = NULL;
 	DEQUE_NODE *buf = NULL;
 
-	if(dequeArg->begin == NULL)
+	if(dequeArg->begin == NULL){
+		if (emptyFlag != NULL)
+			*emptyFlag = 1;
 		return NULL;
+	}
 
 	ret = dequeArg->end->data;
 	buf = dequeArg->end->prev;
@@ -180,6 +212,9 @@ BINTREE_NODE *DeleteRight(DEQUE *dequeArg)
 
 DEQUE *EmptyDeque(DEQUE *dequeArg)
 {
-	;
+	while(dequeArg->begin != NULL)
+		DeleteRight(dequeArg, NULL);
+
+	return dequeArg;
 }
 

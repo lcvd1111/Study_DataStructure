@@ -37,9 +37,9 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, int);
 int LevelOrder(BINTREE_NODE *);
 int EmptyBintree(BINTREE_NODE *);
 DEQUE *InsertLeft(DEQUE *, BINTREE_NODE *);
-BINTREE_NODE *DeleteLeft(DEQUE *);
+BINTREE_NODE *DeleteLeft(DEQUE *, int *);
 DEQUE *InsertRight(DEQUE *, BINTREE_NODE *);
-BINTREE_NODE *DeleteRight(DEQUE *);
+BINTREE_NODE *DeleteRight(DEQUE *, int *);
 DEQUE *EmptyDeque(DEQUE *);
 
 #endif
