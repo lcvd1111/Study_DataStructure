@@ -34,15 +34,14 @@ typedef struct _STACK_DATA {
 } STACK_DATA;
 
 typedef struct _STACK {
-	STACK_DATA stack_Array[STACK_MAX];
-	uint32_t begin;
-	uint32_t end;
+	STACK_DATA *stack_Array[STACK_MAX];
+	int32_t end;
 } STACK;
 
 //FUNCTION DECLARATIONS
-STACK Push(STACK, BINTREE_NODE *, LAST_ACTION);
-STACK_DATA *Pop(STACK);
-STACK EmptyStack(STACK);
+STACK *Push(STACK *, BINTREE_NODE *, LAST_ACTION, int *);
+STACK *Pop(STACK *, STACK_DATA *, int *);
+STACK *EmptyStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, int);
 int PostOrder(BINTREE_NODE *);
 
