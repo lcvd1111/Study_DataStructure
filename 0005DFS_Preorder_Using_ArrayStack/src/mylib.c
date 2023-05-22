@@ -27,7 +27,7 @@ STACK *Push(STACK *stackArg, BINTREE_NODE *bintreeArg, int *fullFlag)
 
 	(stackArg->stackArray)[stackArg->end] = bintreeArg;
 
-	if (stackArg->end = STACK_MAX - 1){
+	if (stackArg->end == STACK_MAX - 1){
 		if (fullFlag != NULL)
 			*fullFlag = 1;
 	}
@@ -44,7 +44,7 @@ BINTREE_NODE *Pop(STACK *stackArg, int *emptyFlag)
 	BINTREE_NODE *ret = NULL;
 
 	if (stackArg->end == -1){
-		if (emptyFlag != NULL)
+		if (emptyFlag!= NULL)
 			*emptyFlag = 1;
 		return NULL;
 	}
