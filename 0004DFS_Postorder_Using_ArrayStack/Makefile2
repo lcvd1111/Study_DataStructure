@@ -4,7 +4,9 @@
 vpath %.c src
 vpath %.h include
 
-CFLAGS = -I ./include
+COMPILE.c = $(CC) $(CFLAGS) $(INCLUDE) $(CPPFLAGS) $(TARGET_ARCH) -c
+INCLUDE = -I $(INCLUDE_DIR)
+INCLUDE_DIR = ./include
 
 EXE: main.o mylib.o test.o
 	$(CC) $^ -o $@
