@@ -1,0 +1,24 @@
+#Makefile writtne using implicit rules.
+#Several 'implicit rules' can be known using 'make -p' command.
+
+vpath %.c src
+vpath %.h include
+
+CFLAGS = -I ./include
+
+EXE: main.o mylib.o test.o
+	$(CC) $^ -o $@
+
+main.o: main.c mylib.h test.h
+
+mylib.o: mylib.c mylib.h
+
+test.o: test.c test.h mylib.h
+
+.PHONY: clean cleanall
+
+clean:
+	rm -rf EXE *.o
+
+cleanall:
+	rm -rf EXE *.o
