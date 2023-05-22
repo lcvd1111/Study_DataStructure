@@ -133,6 +133,34 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector, int leftA
 
 BINTREE_NODE *PreOrder(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	STACK *myStack;
+	int emptyFlag;
+	int fullFlag;
+
+	myStack = CreateStack();
+	current = root;
+
+	while(1){
+		if (current != NULL){
+			printf("Visit Check: %d\n", current->data);
+			if(Push(myStack, current, &fullFlag)==NULL){
+				PRINTF("ERROR: Stack overflow occured.\n");
+				return NULL;
+			}
+			current = current->left;
+		}
+		else if (current == NULL){
+			current = Pop(myStack, &emptyFlag);
+			if ((current == NULL)&&(emptyFlag == 1)){
+				printf("Traversal Complete.\n");
+				CleanStack(myStack);
+				return root;
+			}
+			current = current->right;
+		}
+	}
+	CleanStack(myStack);
 	return root;
 }
 
