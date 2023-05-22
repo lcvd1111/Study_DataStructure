@@ -74,3 +74,23 @@ BINTREE_NODE *Pop(STACK *stackArg, int *emptyFlag)
 
 	return ret;
 }
+
+STACK *CleanStack(STACK *stackArg)
+{
+	BINTREE_NODE **buf = stackArg->stackArray;
+
+	while(Pop(stackArg, NULL) != NULL)
+		;
+	return stackArg;
+}
+
+STACK *RemoveStack(STACK *stackArg){
+
+	if (stackArg == NULL)
+		return NULL;
+
+	CleanStack(stackArg);
+	free(stackArg);
+
+	return NULL;
+}

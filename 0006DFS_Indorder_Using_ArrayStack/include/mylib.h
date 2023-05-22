@@ -32,7 +32,8 @@ STACK *CreateStack(uint32_t);
 STACK *Push(STACK *, BINTREE_NODE *, int *);
 BINTREE_NODE *Pop(STACK *, int *);
 STACK *CleanStack(STACK *);
-int RemoveStack(STACK *);
+STACK *RemoveStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR,int, int);
+BINTREE_NODE *PostOrder(BINTREE_NODE *);
 BINTREE_NODE *CleanBintree(BINTREE_NODE *);
 #endif
