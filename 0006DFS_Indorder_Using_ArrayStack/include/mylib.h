@@ -7,6 +7,8 @@
 
 #define PRINTF( x , ... ) printf("[FUN:%s LINE:%d]" x , __func__, __LINE__, ##__VA_ARGS__)
 
+#define STACK_MAX 50
+
 //Data type definitions
 typedef struct _BINTREE_NODE {
 	int data;
@@ -34,6 +36,6 @@ BINTREE_NODE *Pop(STACK *, int *);
 STACK *CleanStack(STACK *);
 STACK *RemoveStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR,int, int);
-BINTREE_NODE *PostOrder(BINTREE_NODE *);
+BINTREE_NODE *InOrder(BINTREE_NODE *);
 BINTREE_NODE *CleanBintree(BINTREE_NODE *);
 #endif
