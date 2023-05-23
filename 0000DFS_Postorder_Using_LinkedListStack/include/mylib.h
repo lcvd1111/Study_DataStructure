@@ -19,6 +19,7 @@ typedef enum _CHILD_SELECTOR {
 typedef enum _LAST_ACTION {
 	TRIED_LEFT,
 	TRIED_RIGHT,
+	TRIED_NOTHING,
 } LAST_ACTION;
 
 typedef struct _STACK_NODE_DATA {

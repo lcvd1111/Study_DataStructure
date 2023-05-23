@@ -56,6 +56,7 @@ BINTREE_NODE *Post_order_Traversal(BINTREE_NODE *root)
 		else if (current == NULL){
 			if(Pop(&myStack, &buffer) == NULL){
 				printf("Traversal completed.\n");
+				CleanStack(&myStack);
 				return root;
 			}
 			current = buffer.data_Address;
@@ -81,6 +82,60 @@ BINTREE_NODE *Post_order_Traversal(BINTREE_NODE *root)
 
 int CleanBintree(BINTREE_NODE *root)
 {
+	STACK myStack;
+	STACK outputStack;
+	BINTREE_NODE *current = NULL;
+	STACK_NODE_DATA buffer;
+	int forFlag = 1;
+	
+	myStack.begin = NULL;
+	myStack.end = NULL;
+
+	outputStack.begin = NULL;
+	outputStack.end = NULL;
+
+	current = root;
+
+	while(forFlag){
+		if (current != NULL){
+			Push(&myStack, current, TRIED_LEFT);
+			current = current->left;
+			continue;
+		}
+		else if (current == NULL){
+			if(Pop(&myStack, &buffer) == NULL){
+				//printf("Traversal completed.\n");
+				CleanStack(&myStack);
+				forFlag = 0;
+			}
+			current = buffer.data_Address;
+
+			switch(buffer.data_Action){
+				case TRIED_LEFT:
+					Push(&myStack, current, TRIED_RIGHT);
+					current = current->right;
+					continue;
+					break;
+				case TRIED_RIGHT:
+					//printf("Visit Check: %d\n", current->data);
+					Push(&outputStack, current, TRIED_NOTHING);
+					current = NULL;
+					continue;
+					break;
+				default:
+					PRINTF("Error Occured.\n");
+					return -1;
+			}
+		}
+	}
+
+	while(Pop(&outputStack, &buffer) != NULL){
+		free(buffer.data_Address);
+	}
+
+	free(buffer.data_Address);
+
+	return 1;
 }
 
 STACK *Push(STACK *stackArg, BINTREE_NODE *bintreeArg, LAST_ACTION action)
