@@ -106,7 +106,40 @@ BINTREE_NODE *InorderTraverse(BINTREE_NODE *rootNode)
 
 BINTREE_NODE *CleanBintree(BINTREE_NODE *rootNode)
 {
-	return rootNode;
+	STACK traversalStack = {.begin=NULL, .end=NULL};
+	STACK outputStack = {.begin=NULL, .end=NULL};
+	BINTREE_NODE *current = NULL;
+	
+	current = rootNode;
+
+	while(1){
+		if (current != NULL){
+			Push(&traversalStack, current);
+			current = current->left;
+			continue;
+		}
+		else if (current == NULL){
+			current = Pop(&traversalStack);
+			if (current == NULL){
+				//traversal complete.
+				CleanStack(&traversalStack);
+				break;
+			}
+			//visit check.
+			Push(&outputStack, current);
+			current=current->right;
+			continue;
+		}
+	}
+
+	while((current = Pop(&outputStack)) != NULL)
+		free(current);
+	
+	CleanStack(&outputStack);
+
+	printf("Clean binary tree completed.\n");
+
+	return 0;
 }
 
 

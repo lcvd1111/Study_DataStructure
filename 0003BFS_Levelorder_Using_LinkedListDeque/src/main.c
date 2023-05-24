@@ -15,7 +15,11 @@ int main(int argc, char **argv)
 	UnitTest();
 #endif
 	root = MakeTree(1,2,3,4,5,6,7,8,9,10);
+	
 	LevelOrder(root);
+	
+	EmptyBintree(root);
+	
 	return 0;
 }
 

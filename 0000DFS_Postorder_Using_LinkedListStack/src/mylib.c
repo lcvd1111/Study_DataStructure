@@ -137,6 +137,8 @@ int CleanBintree(BINTREE_NODE *root)
 		free(buffer.data_Address);
 	}
 
+	CleanStack(&outputStack);
+
 	printf("Bintree clean completed.\n");
 	return 1;
 }

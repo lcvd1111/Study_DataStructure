@@ -83,9 +83,38 @@ int PreorderTraverse(BINTREE_NODE *root)
 }
 
 int CleanBintree(BINTREE_NODE *root)
-{
+{	
 	int ret = 0;
-	return ret;
+	BINTREE_NODE *current = root;
+	STACK traversalStack = {.begin=NULL, .end=NULL};
+	STACK outputStack = {.begin=NULL, .end=NULL};
+	
+	while(1){
+		if (current != NULL){
+			Push(&outputStack, current);
+			Push(&traversalStack, current);
+			current = current->left;
+			continue;
+		}
+		else if (current == NULL){
+			current = Pop(&traversalStack);
+			if (current == NULL){
+				CleanStack(&traversalStack);
+				break;
+			}
+			current = current->right;
+			continue;
+		}
+	}
+
+	while((current = Pop(&outputStack)) != NULL){
+		free(current);
+	}
+
+	CleanStack(&outputStack);
+	
+	printf("Cleaning binary tree completed.\n");
+	return 0;
 }
 
 STACK *Push(STACK *stackArg, BINTREE_NODE *bintreeArg)

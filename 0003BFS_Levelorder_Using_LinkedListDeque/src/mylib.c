@@ -97,6 +97,7 @@ int LevelOrder(BINTREE_NODE *root)
 		
 		if (current == NULL){
 			printf("Traversal Compelted.\n");
+			EmptyDeque(&myDeque);
 			return 0;
 		}
 	}
@@ -104,7 +105,39 @@ int LevelOrder(BINTREE_NODE *root)
 
 int EmptyBintree(BINTREE_NODE *root)
 {
-	;
+	BINTREE_NODE *current = NULL;
+	DEQUE traversalDeque = {.begin=NULL, .end=NULL};
+	DEQUE outputDeque = {.begin=NULL, .end=NULL};
+	
+	current = root;
+
+	while(1){
+		//Visit check
+		InsertLeft(&outputDeque, current);
+
+		if (current->left != NULL)
+			InsertLeft(&traversalDeque, current->left);
+		
+		if (current->right != NULL)
+			InsertLeft(&traversalDeque, current->right);
+		
+		current = DeleteRight(&traversalDeque, NULL);
+		
+		if (current == NULL){
+			//Traversal Complete.
+			EmptyDeque(&traversalDeque);
+			break;
+		}
+	}
+
+	while((current=DeleteLeft(&outputDeque, NULL)) != NULL)
+		free(current);
+
+	EmptyDeque(&outputDeque);
+
+	printf("Cleaning binary tree completed.\n");
+
+	return 0;
 }
 
 DEQUE *InsertLeft(DEQUE *dequeArg, BINTREE_NODE *bintreeArg)
