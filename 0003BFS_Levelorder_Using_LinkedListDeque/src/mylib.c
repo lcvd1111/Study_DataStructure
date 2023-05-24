@@ -81,29 +81,23 @@ int LevelOrder(BINTREE_NODE *root)
 {
 	BINTREE_NODE *current = NULL;
 	DEQUE myDeque = {.begin=NULL, .end=NULL};
-	int emptyFlag = 0;
 
 	current = root;
 
 	while(1){
-		if (current != NULL){
-			printf("Visit Check: %d\n", current->data);
+		printf("Visit Check: %d\n", current->data);
+		
+		if (current->left != NULL)
 			InsertLeft(&myDeque, current->left);
+		
+		if (current->right != NULL)
 			InsertLeft(&myDeque, current->right);
-			current = DeleteRight(&myDeque, &emptyFlag);
-			if ((current == NULL)&&(emptyFlag == 1)){
-				printf("Traversal Compelted.\n");
-				return 0;
-			}
-			continue;
-		}
-		else if (current == NULL){
-			current = DeleteRight(&myDeque, &emptyFlag);
-			if ((current == NULL)&&(emptyFlag == 1)){
-				printf("Traversal Completed.\n");
-				return 0;
-			}
-			continue;
+		
+		current = DeleteRight(&myDeque, NULL);
+		
+		if (current == NULL){
+			printf("Traversal Compelted.\n");
+			return 0;
 		}
 	}
 }
