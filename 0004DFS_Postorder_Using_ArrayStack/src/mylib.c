@@ -162,6 +162,7 @@ int PostOrder(BINTREE_NODE *root)
 		else if (current == NULL){
 			if (Pop(&myStack, &popBuffer, &emptyFlag)==NULL){
 				printf("Traversal Complete.\n");
+				EmptyStack(&myStack);
 				return 0;
 			}
 			current = popBuffer.dataAddress;
@@ -186,6 +187,72 @@ int PostOrder(BINTREE_NODE *root)
 	}
 
 	EmptyStack(&myStack);
+	return 0;
+}
 
+int EmptyBintree(BINTREE_NODE *root)
+{
+	BINTREE_NODE *current = NULL;
+	STACK traversalStack = {.end=-1};
+	STACK outputStack = {.end=-1};
+	int emptyFlag;
+	int fullFlag;
+	STACK_DATA popBuffer;
+
+	current = root;
+
+	for (int i=0 ; i<STACK_MAX ; i++){
+		(traversalStack.stack_Array)[i] = NULL;
+	}
+
+	for (int i=0 ; i<STACK_MAX ; i++){
+		(outputStack.stack_Array)[i] = NULL;
+	}
+
+	while(1){
+		if (current != NULL){
+			if (Push(&traversalStack, current, TRIED_LEFT, &fullFlag)==NULL){
+				PRINTF("ERROR. Stack Overflow.\n");
+				return -1;
+			}
+			current = current->left;
+		}
+		else if (current == NULL){
+			if (Pop(&traversalStack, &popBuffer, &emptyFlag)==NULL){
+				//Traversal Complete
+				EmptyStack(&traversalStack);
+				break;
+			}
+			current = popBuffer.dataAddress;
+			switch(popBuffer.dataAction){
+			case TRIED_LEFT:
+				if (Push(&traversalStack, current, TRIED_RIGHT, &fullFlag)==NULL){
+					PRINTF("ERROR. Stack Overflow.\n");
+					return -1;
+			}
+			current = current->right;
+				break;
+			case TRIED_RIGHT:
+				//visitCheck
+				if (Push(&outputStack, current, TRIED_NOTHING, &fullFlag)==NULL){
+					PRINTF("ERROR. Stack Overflow.\n");
+					return -1;
+				}
+				current = NULL;
+				break;
+			default:
+				PRINTF("ERROR.\n");
+				return -1;
+				break;
+			}
+		}
+	}
+
+	while(Pop(&outputStack, &popBuffer, &emptyFlag) != NULL)
+			free(popBuffer.dataAddress);
+
+	EmptyStack(&outputStack);
+
+	printf("Cleaning binary tree completed!\n");
 	return 0;
 }

@@ -23,5 +23,7 @@ int main(int argc, char **argv)
 
 	PostOrder(root);
 
+	EmptyBintree(root);
+
 	return 0;
 }

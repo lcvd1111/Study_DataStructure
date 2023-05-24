@@ -37,5 +37,5 @@ STACK *CleanStack(STACK *);
 STACK *RemoveStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR,int, int);
 BINTREE_NODE *InOrder(BINTREE_NODE *);
-BINTREE_NODE *CleanBintree(BINTREE_NODE *);
+int CleanBintree(BINTREE_NODE *);
 #endif

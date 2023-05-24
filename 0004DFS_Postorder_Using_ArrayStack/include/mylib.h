@@ -26,6 +26,7 @@ typedef enum _CHILD_SELECTOR {
 typedef enum _LAST_ACTION {
 	TRIED_LEFT,
 	TRIED_RIGHT,
+	TRIED_NOTHING,
 } LAST_ACTION;
 
 typedef struct _STACK_DATA {
@@ -44,5 +45,5 @@ STACK *Pop(STACK *, STACK_DATA *, int *);
 STACK *EmptyStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, int);
 int PostOrder(BINTREE_NODE *);
-
+int EmptyBintree(BINTREE_NODE *);
 #endif

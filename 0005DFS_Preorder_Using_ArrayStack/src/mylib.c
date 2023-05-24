@@ -164,7 +164,48 @@ BINTREE_NODE *PreOrder(BINTREE_NODE *root)
 	return root;
 }
 
-BINTREE_NODE *CleanBintree(BINTREE_NODE *root)
+int CleanBintree(BINTREE_NODE *root)
 {
-	return root;
+	BINTREE_NODE *current = NULL;
+	STACK *traverseStack;
+	STACK *outputStack;
+	int emptyFlag;
+	int fullFlag;
+
+	traverseStack = CreateStack();
+	outputStack = CreateStack();
+
+	current = root;
+
+	while(1){
+		if (current != NULL){
+			//Vist Check
+			if (Push(outputStack, current, &fullFlag)==NULL){
+				PRINTF("ERROR: stack overflow occrued on output stack.\n");
+				return -1;
+			}
+			if(Push(traverseStack, current, &fullFlag)==NULL){
+				PRINTF("ERROR: Stack overflow occured.\n");
+				return -2;
+			}
+			current = current->left;
+		}
+		else if (current == NULL){
+			current = Pop(traverseStack, &emptyFlag);
+			if ((current == NULL)&&(emptyFlag == 1)){
+				//Traversal Complete
+				CleanStack(traverseStack);
+				break;
+			}
+			current = current->right;
+		}
+	}
+
+	while((current=Pop(outputStack, &emptyFlag)) != NULL)
+		free(current);
+
+	CleanStack(outputStack);
+	printf("Cleaning binary tree completed.\n");
+
+	return 0;
 }

@@ -22,5 +22,7 @@ int main(int argc, char **argv)
 
 	PreOrder(root);
 
+	CleanBintree(root);
+
 	return 0;
 }
