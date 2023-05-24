@@ -28,7 +28,7 @@ int UnitTest(void)
 	Enqueue(myQueue, root->left->left);
 	Enqueue(myQueue, root->left->right);
 	Enqueue(myQueue, root->right->left);
-	
+
 	if(Enqueue(myQueue, root) != NULL){
 		PRINTF("ERROR: Unit Test Fail.\n");
 		return -2;
@@ -46,7 +46,6 @@ int UnitTest(void)
 		return -4;
 	}
 	printf("test case 04 success.\n");
-
 
 	if(Dequeue(myQueue)->data != 2){
 		PRINTF("ERROR: Unit Test Fail.\n");
@@ -78,7 +77,7 @@ int UnitTest(void)
 	}
 	printf("test case 09 success.\n");
 
-	if(Dequeue(myQueue) != NULL){
+	if(Dequeue(myQueue)->data != 1){
 		PRINTF("ERROR: Unit Test Fail.\n");
 		return -10;
 	}
@@ -108,6 +107,8 @@ int UnitTest(void)
 	free(root->right);
 	free(root->left);
 	free(root);
+
+	DeleteQueue(myQueue);
 
 	return 0;
 }

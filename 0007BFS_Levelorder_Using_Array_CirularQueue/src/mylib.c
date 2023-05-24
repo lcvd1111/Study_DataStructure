@@ -64,8 +64,14 @@ BINTREE_NODE *Dequeue(QUEUE *queueArg)
 	if (queueArg->end == queueArg->begin){
 		queueArg->end = -1;
 		queueArg->begin = 0;
+		//PRINTF("Queue is empty now.\n");
 		//Make queue array empty.
+
+		return ret;
 	}
+	
+	if (queueArg->begin == (queueArg->length-1))
+		queueArg->begin = 0;
 	else
 		queueArg->begin += 1;
 
@@ -154,10 +160,67 @@ BINTREE_NODE *MakeChild
 
 BINTREE_NODE *LevelOrder(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	QUEUE *traversalQueue = NULL;
+
+	current = root;
+	traversalQueue = CreateQueue(QUEUE_MAX);
+
+	while(1){
+		printf("Visit Check: %d\n", current->data);
+
+		if(current->left != NULL)
+			Enqueue(traversalQueue, current->left);
+
+		if(current->right != NULL)
+			Enqueue(traversalQueue, current->right);
+	
+		current = Dequeue(traversalQueue);
+
+		if (current == NULL){
+			printf("Traversal Complete.\n");
+			DeleteQueue(traversalQueue);
+			return root;
+		}
+	}
+
+	DeleteQueue(traversalQueue);
 	return root;
 }
 
 int CleanBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	QUEUE *traversalQueue = NULL;
+	QUEUE *outputQueue = NULL;
+
+	current = root;
+	traversalQueue = CreateQueue(QUEUE_MAX);
+	outputQueue = CreateQueue(QUEUE_MAX);
+
+	while(1){
+		//Visit Check
+		Enqueue(outputQueue, current);
+
+		if(current->left != NULL)
+			Enqueue(traversalQueue, current->left);
+
+		if(current->right != NULL)
+			Enqueue(traversalQueue, current->right);
+	
+		current = Dequeue(traversalQueue);
+
+		if (current == NULL){
+			//Traversal Complete
+			break;
+		}
+	}
+
+	while((current=Dequeue(outputQueue)) != NULL)
+		free(current);
+	
+	DeleteQueue(traversalQueue);
+	DeleteQueue(outputQueue);
+
 	return 0;
 }
