@@ -107,6 +107,7 @@ int CleanBintree(BINTREE_NODE *root)
 				//printf("Traversal completed.\n");
 				CleanStack(&myStack);
 				forFlag = 0;
+				continue;
 			}
 			current = buffer.data_Address;
 
@@ -129,12 +130,14 @@ int CleanBintree(BINTREE_NODE *root)
 		}
 	}
 
+	//PRINTF("Phase 1 completed.\n");
+
 	while(Pop(&outputStack, &buffer) != NULL){
+		//PRINTF("Phase 2 loop Completed, Popped element: %d\n", (buffer.data_Address)->data);
 		free(buffer.data_Address);
 	}
 
-	free(buffer.data_Address);
-
+	printf("Bintree clean completed.\n");
 	return 1;
 }
 
