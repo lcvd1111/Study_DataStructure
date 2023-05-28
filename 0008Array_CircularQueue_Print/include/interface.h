@@ -2,11 +2,12 @@
 #define __INTERFACE_HEADER__
 
 #include "mylib.h"
+#include <stdlib.h>
 
 //Function Declarations
 void ShowMenu(void);
 int SelectMenu(void);
-void PrintQueue(void);
+void PrintQueue(QUEUE *);
 QUEUE *UserEnqueue(QUEUE *);
 QUEUE *UserDequeue(QUEUE *);
 

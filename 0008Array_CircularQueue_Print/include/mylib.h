@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #define PRINTF( x , ... ) printf("[FUNC:%s LINE:%d]" x , __func__, __LINE__, ##__VA_ARGS__)
+#define QUEUE_LEN 8
 
 //Data type definitions
 typedef struct QUEUE {
