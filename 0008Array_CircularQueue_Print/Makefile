@@ -17,9 +17,10 @@ object_sub2.o: test.c test.h mylib.h
 
 object_sub3.o: interface.c interface.h mylib.h
 
-.PHONLY: clean cleanall
+.PHONLY: clean
 clean:
 	rm EXE *.o
 
+.PHONY: cleanall
 cleanall:
 	rm EXE *.o
