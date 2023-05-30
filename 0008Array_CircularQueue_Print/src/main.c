@@ -4,38 +4,42 @@
 #include "interface.h"
 #include "test.h"
 
+//#define UNIT_TEST_GO
+
+
 int main(int arc, char **argv)
 {
-	int emptyErr;
 	QUEUE *myQueue = NULL;
+	myQueue = CreateQueue(QUEUE_LEN);
+	int seLector = 0;
 
-	
-	myQueue = CreateQueue(9);
-	
-	EnQueue(myQueue, 1);
-	EnQueue(myQueue, 2);
-	EnQueue(myQueue, 3);
-	EnQueue(myQueue, 4);
-	EnQueue(myQueue, 5);
-	EnQueue(myQueue, 6);
-	
-	DeQueue(myQueue, &emptyErr);		
-	DeQueue(myQueue, &emptyErr);	
-	DeQueue(myQueue, &emptyErr);	
-	DeQueue(myQueue, &emptyErr);
-	
-	EnQueue(myQueue, 7);
-	EnQueue(myQueue, 8);
-	EnQueue(myQueue, 9);
-	EnQueue(myQueue, 9);
-	EnQueue(myQueue, 9);
-	EnQueue(myQueue, 9);
-	
-	DeQueue(myQueue, &emptyErr);
-	DeQueue(myQueue, &emptyErr);
-	DeQueue(myQueue, &emptyErr);
-	
-	PrintQueue(myQueue);
-	
+#ifdef UNIT_TEST_GO
+	int ret = 0;
+	if (ret = UnitTest()){
+		printf("Unit Test Error. Error Code: %d.\n", ret);
+		return -1;
+	}
+	printf("Unit Test Success.\n");
+#endif
+
+	while(1){
+		ShowMenu();
+		seLector = SelectMenu();
+		switch(seLector){
+		case 1:
+			UserEnqueue(myQueue);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			PrintQueue(myQueue);
+			break;
+		default:
+			printf("Wrong Select. Input an rigth number Pleasoe.\n");
+			break;
+		}
+	}
 	return 0;
 }

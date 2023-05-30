@@ -10,6 +10,6 @@ int SelectMenu(void);
 void PrintQueue(QUEUE *);
 QUEUE *UserEnqueue(QUEUE *);
 QUEUE *UserDequeue(QUEUE *);
-
+QUEUE *UserClean(QUEUE *);
 #endif
 

@@ -1,13 +1,27 @@
 #include "interface.h"
+#include <stdlib.h>
 
 //Function Definitions
 void ShowMenu(void)
 {
+	printf("    <MENU>\n"
+			"1. Enqueue to Queue.\n"
+			"2. Dequeue from Queue.\n"
+			"3. Clean Queue.\n"
+			"4. Print Queue.\n"
+		  );
 }
 
 int SelectMenu(void)
 {
-	return 0;
+	int selector;
+	char inputString[12];
+	printf("Select the menu: ");
+	fgets(inputString, 12, stdin);
+
+	selector = atoi(inputString);
+
+	return selector;
 }
 
 void PrintQueue(QUEUE *arg)
@@ -51,6 +65,25 @@ void PrintQueue(QUEUE *arg)
 
 QUEUE* UserEnqueue(QUEUE *arg)
 {
+	int inputtedVal = 0;
+	char inputtedString[15] = {0,};
+
+	printf("Input an element to enqueue(0,1,...,9): ");
+	fgets(inputtedString, 15, stdin);
+	inputtedVal = atoi(inputtedString);
+
+	if (!((0<=inputtedVal)&&(inputtedVal<=9))){
+		printf("Wrong Input. Please input only an integer from 0 to 9.\n");
+		return NULL;
+	}
+
+	if(EnQueue(arg, inputtedVal) == NULL){
+		printf("Queue is full now.\n");
+		return NULL;
+	}
+
+	PrintQueue(arg);
+
 	return arg;
 }
 

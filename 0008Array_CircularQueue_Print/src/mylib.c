@@ -79,6 +79,7 @@ QUEUE *CleanQueue(QUEUE *queueArg)
 int DeleteQueue(QUEUE *queueArg)
 {
 	CleanQueue(queueArg);
+	free(queueArg->queueArray);
 	free(queueArg);
 
 	return 0;
