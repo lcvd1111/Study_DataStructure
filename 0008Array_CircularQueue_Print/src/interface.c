@@ -89,5 +89,19 @@ QUEUE* UserEnqueue(QUEUE *arg)
 
 QUEUE *UserDequeue(QUEUE *arg)
 {
+	int emptyFlag = 0;
+	int dequeuedVal = 0;
+
+	dequeuedVal = DeQueue(arg, &emptyFlag);
+	
+	if (emptyFlag ==1){
+		printf("Queue is empty now.\n");
+		return NULL;
+	}
+
+	printf("Dequeued Value: %d\n", dequeuedVal);
+
+	PrintQueue(arg);
+
 	return arg;
 }

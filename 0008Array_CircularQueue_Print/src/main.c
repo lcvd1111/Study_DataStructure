@@ -30,8 +30,11 @@ int main(int arc, char **argv)
 			UserEnqueue(myQueue);
 			break;
 		case 2:
+			UserDequeue(myQueue);
 			break;
 		case 3:
+			CleanQueue(myQueue);
+			PrintQueue(myQueue);
 			break;
 		case 4:
 			PrintQueue(myQueue);
