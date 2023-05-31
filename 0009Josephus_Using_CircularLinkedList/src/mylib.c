@@ -19,7 +19,8 @@ CIRCULAR_LIST *Add_List(CIRCULAR_LIST *listArg, int data)
 	temp->next = (CIRCULAR_LIST_NODE *)malloc(sizeof(CIRCULAR_LIST_NODE));
 	temp->next->number = data;
 	temp->next->next = listArg->begin; 
-	temp->next->prev = temp;
+	temp->next->prev = temp;	
+	listArg->begin->prev = temp->next;
 
 	return listArg;
 }
@@ -39,11 +40,13 @@ CIRCULAR_LIST *Create_List(int lengTh)
 		return NULL;
 	}
 
+	ret->current = NULL;
+	ret->begin = NULL;
+
 	for (int i=0 ; i<lengTh ; i++){
 		Add_List(ret, i+1);
 	}
 
-	ret->current = NULL;
 
 	return ret;
 }
@@ -55,14 +58,14 @@ CIRCULAR_LIST *Kill_Current(CIRCULAR_LIST *listArg)
 		return NULL;
 	}
 
-	if ((listArg->begin == listArg->begin->next) && (listArg->begin == listArg->current)){
+	if ((listArg->begin == listArg->begin->next) && (listArg->begin == listArg->begin->prev)){
 		//When there is only an one single element in list.
 		free(listArg->begin);
 		listArg->begin = NULL;
 		return listArg;
 	}
 
-	if (listArg->begin == listArg->current){
+	if (listArg->current == listArg->begin){
 		listArg->begin = listArg->begin->next;
 		listArg->begin->prev = listArg->begin->prev->prev;
 		free(listArg->current);
@@ -71,8 +74,8 @@ CIRCULAR_LIST *Kill_Current(CIRCULAR_LIST *listArg)
 	}
 
 	listArg->current = listArg->current->next;
-	listArg->current->prev = listArg->current->prev->prev;
 	free(listArg->current->prev);
+	listArg->current->prev = listArg->current->prev->prev;
 	return listArg;
 }
 
@@ -113,6 +116,7 @@ PRINTF("DEBUG1\n");
 CIRCULAR_LIST_NODE *temp = NULL;
 	CIRCULAR_LIST *peopleList = NULL;
 	peopleList = Create_List(n);
+	peopleList->current = peopleList->begin;
 
 temp = peopleList->begin;
 	for (int i = 0 ; i < 10 ; i++){
