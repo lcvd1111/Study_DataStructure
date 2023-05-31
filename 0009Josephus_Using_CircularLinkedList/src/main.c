@@ -5,6 +5,10 @@
 
 int main(int argc, char **argv)
 {
-	UnitTest();
+	if(UnitTest()!=0){
+		return -1;
+	}
+	printf("Unit Test Success.\n");
+
 	return 0;
 }

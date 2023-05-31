@@ -97,9 +97,11 @@ int Destroy_List(CIRCULAR_LIST *listArg)
 
 	listArg->current = listArg->begin;
 
-	while(Kill_Current(listArg) != NULL)
-		;
-
+	while(1){
+		if (Kill_Current(listArg) != NULL){
+			break;
+		}
+	}
 	free(listArg);
 
 	return 0;
@@ -133,8 +135,7 @@ int Josephus(int n, int k)
 	peopleList = Create_List(n);
 	peopleList->current = peopleList->begin;
 
-	while(1){
-		
+	while(1){	
 		Move_Several(peopleList,k-1);
 		Kill_Current(peopleList);
 
