@@ -53,6 +53,8 @@ CIRCULAR_LIST *Create_List(int lengTh)
 
 CIRCULAR_LIST *Kill_Current(CIRCULAR_LIST *listArg)
 {
+	CIRCULAR_LIST_NODE *temp = NULL;
+
 	if (listArg->current == NULL){
 		PRINTF("ERROR: Current variable is NULL.\n");
 		return NULL;
@@ -68,14 +70,20 @@ CIRCULAR_LIST *Kill_Current(CIRCULAR_LIST *listArg)
 	if (listArg->current == listArg->begin){
 		listArg->begin = listArg->begin->next;
 		listArg->begin->prev = listArg->begin->prev->prev;
+		listArg->begin->prev->next = listArg->begin;
 		free(listArg->current);
 		listArg->current = listArg->begin;
 		return listArg;
 	}
 
+	temp = listArg->current;
+
 	listArg->current = listArg->current->next;
-	free(listArg->current->prev);
 	listArg->current->prev = listArg->current->prev->prev;
+	listArg->current->prev->next = listArg->current;
+
+	free(temp);
+
 	return listArg;
 }
 
@@ -87,6 +95,13 @@ int Destroy_List(CIRCULAR_LIST *listArg)
 		return 0;
 	}
 
+	listArg->current = listArg->begin;
+
+	while(Kill_Current(listArg) != NULL)
+		;
+
+	free(listArg);
+
 	return 0;
 }
 
@@ -96,7 +111,6 @@ CIRCULAR_LIST *Move_One(CIRCULAR_LIST *listArg)
 		listArg->current = listArg->begin;
 		return listArg;
 	}
-
 	listArg->current = listArg->current->next;
 
 	return listArg;
@@ -108,40 +122,34 @@ CIRCULAR_LIST *Move_Several(CIRCULAR_LIST *listArg, int num)
 	for (int i=0; i<num ; i++){
 		Move_One(listArg);
 	}
+
+	return listArg;
 }
 
 int Josephus(int n, int k)
 {
-PRINTF("DEBUG1\n");
-CIRCULAR_LIST_NODE *temp = NULL;
+	int ret;
 	CIRCULAR_LIST *peopleList = NULL;
 	peopleList = Create_List(n);
 	peopleList->current = peopleList->begin;
 
-temp = peopleList->begin;
-	for (int i = 0 ; i < 10 ; i++){
-PRINTF("list[%d]: %d, %p\n", i, temp->number, temp);
-temp = temp->next;
-	}
-
-PRINTF("DEBUG2\n");
 	while(1){
 		
-PRINTF("DEBUG3\n");
 		Move_Several(peopleList,k-1);
-PRINTF("CURRENT AFTER MOVE: %d\n", peopleList->current->number);
 		Kill_Current(peopleList);
-PRINTF("CURRENT AFTER KILLING: %d\n", peopleList->current->number);
 
-PRINTF("DEBUG4\n");
 		if
 			((peopleList->current == peopleList->current->next)
 			&&
 			(peopleList->current == peopleList->current->prev))
 		{
-PRINTF("DEBUG5\n");
 			break;
 		}
-	}
-	return peopleList->current->number;
+	}	
+
+	ret = peopleList->current->number;
+
+	Destroy_List(peopleList);
+	
+	return ret;
 }
