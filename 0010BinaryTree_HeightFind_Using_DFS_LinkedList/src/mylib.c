@@ -159,11 +159,21 @@ WRAPPED_NODE *Pop(STACK *stackArg)
 
 STACK *EmptyStack(STACK *stackArg)
 {
-	return NULL;
+	while(stackArg->begin != NULL)
+		free(Pop(stackArg));
+
+	return stackArg;
 }
 
 int RemoveStack(STACK *stackArg)
 {
+	if (stackArg->begin != NULL){
+		PRINTF("ERROR: stack is not empty yet.\n");
+		return -1;
+	}
+
+	free(stackArg);
+
 	return 0;
 }
 

@@ -3,6 +3,7 @@
 
 int UnitTest_Stack(void)
 {
+	int err;
 	STACK *myStack = NULL;
 	WRAPPED_NODE *popRet = NULL;
 	BTREE_NODE node01, node02, node03, node04, node05;
@@ -64,6 +65,23 @@ int UnitTest_Stack(void)
 	if(Pop(myStack) != NULL){
 		PRINTF("Unit test Fail.\n");
 		return -7;
+	}
+	
+	Push(myStack, &node01, TRIED_LEFT);
+	Push(myStack, &node02, TRIED_RIGHT);
+	Push(myStack, &node03, TRIED_LEFT);
+	Push(myStack, &node04, TRIED_RIGHT);
+	Push(myStack, &node05, TRIED_LEFT);
+	EmptyStack(myStack);
+
+	if(Pop(myStack) != NULL){
+		PRINTF("Unit test Fail.\n");
+		return -8;
+	}
+
+	if(err=RemoveStack(myStack) != 0){
+		PRINTF("Unit test Fail. Err=%d\n", err);
+		return -9;
 	}
 	
 	return 0;
