@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define PRINTF( x , ... ) printf("[FUNC:%s LINE:%d]" x, __func__, __LINE__, ##__VA_ARGS__);
+
+//Type Declarations and Definitions
 typedef struct _BTREE_NODE {
 	int data;
 	struct _BTREE_NODE *left;
@@ -26,24 +29,33 @@ typedef enum _CHILD_SELECTOR {
 typedef enum _TRIED_ACTION {
 	TRIED_LEFT,
 	TRIED_RIGHT,
-	NONE,
+	NOTHING,
 } TRIED_ACTION;
 
 typedef struct _STACK_NODE {
 	BTREE_NODE *nodeAddress;
-	TRIED_ACTION *LastTried;
-	_STACK_NODE *next;
-	_STACK_NODE *prev;
+	TRIED_ACTION lastTried;
+	struct _STACK_NODE *next;
+	struct _STACK_NODE *prev;
 } STACK_NODE;
 
-struct _STACK {
+typedef struct _WRAPPED_NODE {
+	BTREE_NODE *nodeAddress_W;
+	TRIED_ACTION lastTried_W;
+} WRAPPED_NODE;
+
+typedef struct _STACK {
 	STACK_NODE *begin;
 	STACK_NODE *end;
 } STACK;
 
-BTREE_NODE *MakeChild(BTREE_NODE *, CHILD_SELECTOR, int Left, int Right);
-STACK_NODE *Pop(STACK *);
+//Function Declarations
+BTREE_NODE *MakeChild(BTREE_NODE *, CHILD_SELECTOR, int , int );
+STACK *CreateStack(void);
 STACK *Push(STACK *, BTREE_NODE *, TRIED_ACTION);
+WRAPPED_NODE *Pop(STACK *);
+STACK *EmptyStack(STACK *);
+int RemoveStack(STACK *);
 int Calc_Subtree_Height(BTREE_NODE, CHILD_SELECTOR);
 int Calc_Btree_Height_DFS(BTREE_NODE *root);
 #endif
