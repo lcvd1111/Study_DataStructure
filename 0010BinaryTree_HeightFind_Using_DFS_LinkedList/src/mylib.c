@@ -25,6 +25,7 @@ BTREE_NODE *MakeChild
 		parent->left->data = left;
 		parent->left->left = NULL;
 		parent->left->right = NULL;
+		parent->left->header = NULL;
 		break;
 	case RIGHT:
 		if (parent->right != NULL){
@@ -39,8 +40,9 @@ BTREE_NODE *MakeChild
 			return NULL;
 		}
 		parent->right->data = right;
-		parent->left->left = NULL;
-		parent->left->right = NULL;
+		parent->right->left = NULL;
+		parent->right->right = NULL;
+		parent->right->header = NULL;
 		break;
 	case BOTH:
 		if ((parent->left != NULL)
@@ -58,7 +60,8 @@ BTREE_NODE *MakeChild
 		parent->left->data = left;
 		parent->left->left = NULL;
 		parent->left->right = NULL;
-		
+		parent->left->header = NULL;
+
 		parent->right = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
 		
 		if (parent->right == NULL){
@@ -66,8 +69,9 @@ BTREE_NODE *MakeChild
 			return NULL;
 		}
 		parent->right->data = right;
-		parent->left->left = NULL;
-		parent->left->right = NULL;
+		parent->right->left = NULL;
+		parent->right->right = NULL;
+		parent->right->header = NULL;
 		break;
 	case NONE:
 		break;
@@ -177,9 +181,43 @@ int RemoveStack(STACK *stackArg)
 	return 0;
 }
 
-int Calc_Subtree_Height(BTREE_NODE parent, CHILD_SELECTOR direction)
+int Calc_Subtree_Height(BTREE_NODE *parent, CHILD_SELECTOR direction)
 {
-	return 0;
+	BTREE_NODE *temp = NULL;
+	int ret = 0;
+	int r_temp = 0;
+	int l_temp = 0;
+	switch(direction){
+	case LEFT:
+		temp = parent->left;
+		break;
+	case RIGHT:
+		temp = parent->right;
+		break;
+	default:
+		PRINTF("ERROR: Wrong direction Value.\n");
+		return -1;
+		break;
+	}
+
+	if (temp==NULL){
+		PRINTF("ERROR: parent has no child for that direction at all.\n");
+		return -2;
+	}
+
+	if (temp->header == NULL){
+		PRINTF("ERROR: parent's child has no sub_tree_Height info.\n");
+		return -3;
+	}
+
+	r_temp = ((HEADER_DATA*)(temp->header))->left_Sub_Height; 
+	l_temp = ((HEADER_DATA*)(temp->header))->left_Sub_Height;
+
+	ret = (r_temp>l_temp) ? r_temp : l_temp;
+
+	ret++;
+	
+	return ret;
 }
 
 int Calc_Btree_Height_DFS(BTREE_NODE *root)

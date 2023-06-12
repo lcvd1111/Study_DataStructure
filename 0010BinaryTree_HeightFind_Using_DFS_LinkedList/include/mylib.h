@@ -56,6 +56,6 @@ STACK *Push(STACK *, BTREE_NODE *, TRIED_ACTION);
 WRAPPED_NODE *Pop(STACK *);
 STACK *EmptyStack(STACK *);
 int RemoveStack(STACK *);
-int Calc_Subtree_Height(BTREE_NODE, CHILD_SELECTOR);
+int Calc_Subtree_Height(BTREE_NODE *, CHILD_SELECTOR);
 int Calc_Btree_Height_DFS(BTREE_NODE *root);
 #endif
