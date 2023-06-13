@@ -87,7 +87,74 @@ int UnitTest_Stack(void)
 	return 0;
 }
 
-int UnitTest_HeightFild(void)
+int UnitTest_HeightFind(void)
 {
+	BTREE_NODE *root = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root2 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root3 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root4 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root5 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root6 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	BTREE_NODE *root7 = (BTREE_NODE *)malloc(sizeof(BTREE_NODE));
+	
+	root->data = 1;
+	MakeChild(root, BOTH, 2, 3);
+	MakeChild(root->left, LEFT , 4, 4);
+	MakeChild(root->left->left, LEFT , 5, 5);
+	MakeChild(root->left->left->left, LEFT, 6, 6);
+	if (Calc_Btree_Height_DFS(root) != 5){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root2->data = 1;
+	MakeChild(root2, RIGHT, 2, 2);
+	if (Calc_Btree_Height_DFS(root2) != 2){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root3->data = 1;
+	MakeChild(root3, BOTH, 2, 3);
+	if (Calc_Btree_Height_DFS(root3) != 2){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root4->data = 1;
+	MakeChild(root4, BOTH, 2, 3);
+	MakeChild(root4->right, LEFT, 4, 4);
+	if (Calc_Btree_Height_DFS(root4) != 3){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root5->data = 1;
+	MakeChild(root5, BOTH, 2, 3);
+	MakeChild(root5->right, BOTH, 4, 5);
+	if (Calc_Btree_Height_DFS(root5) != 3){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root6->data = 1;
+	MakeChild(root6, BOTH, 2, 3);
+	MakeChild(root6->right, BOTH, 4, 5);
+	MakeChild(root6->right->left, BOTH, 6, 7);
+	if (Calc_Btree_Height_DFS(root6) != 4){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+
+	root7->data = 1;
+	MakeChild(root7, BOTH, 2, 3);
+	MakeChild(root7->right, BOTH, 4, 5);
+	MakeChild(root7->left, RIGHT, 6, 6);
+	MakeChild(root7->left->right, BOTH, 7, 8);
+	if (Calc_Btree_Height_DFS(root7) != 4){
+		PRINTF("Unit test Fail.\n");
+		return -1;
+	}
+	
 	return 0;
 }

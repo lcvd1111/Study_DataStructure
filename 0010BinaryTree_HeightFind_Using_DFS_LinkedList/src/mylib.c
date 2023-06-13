@@ -166,6 +166,12 @@ STACK *EmptyStack(STACK *stackArg)
 	while(stackArg->begin != NULL)
 		free(Pop(stackArg));
 
+	if (stackArg->begin != NULL)
+		return NULL;
+
+	if (stackArg->end != NULL)
+		return NULL;
+
 	return stackArg;
 }
 
@@ -210,17 +216,159 @@ int Calc_Subtree_Height(BTREE_NODE *parent, CHILD_SELECTOR direction)
 		return -3;
 	}
 
-	r_temp = ((HEADER_DATA*)(temp->header))->left_Sub_Height; 
+	r_temp = ((HEADER_DATA*)(temp->header))->right_Sub_Height; 
 	l_temp = ((HEADER_DATA*)(temp->header))->left_Sub_Height;
 
-	ret = (r_temp>l_temp) ? r_temp : l_temp;
+	ret = (l_temp>r_temp) ? l_temp : r_temp;
 
 	ret++;
-	
+
+
 	return ret;
 }
 
 int Calc_Btree_Height_DFS(BTREE_NODE *root)
 {
-	return 0;
+	BTREE_NODE *current = NULL;
+	WRAPPED_NODE *wrapped_data = NULL;
+	STACK *myStack = NULL;
+	int branchCase = 0;
+	int loop = 1;
+	int ret = 0;
+
+	current = root;
+	if (root == NULL){
+		return 0;
+	}
+
+	myStack = CreateStack();
+
+	while(loop){
+	switch (branchCase){
+	case 0:
+		//When the node is visited for the first.
+		Push(myStack, current, TRIED_LEFT);
+		current = current->left;
+
+		if (current == NULL){
+			wrapped_data = Pop(myStack);
+			current = wrapped_data->nodeAddress_W;
+			free(wrapped_data);
+			current->header = (HEADER_DATA *)malloc(sizeof(HEADER_DATA));
+			((HEADER_DATA *)(current->header))->left_Sub_Height = 0;
+			Push(myStack, current, TRIED_RIGHT);
+			current = current->right;
+			if (current == NULL){
+				wrapped_data = Pop(myStack);
+				current = wrapped_data->nodeAddress_W;
+				free(wrapped_data);
+				((HEADER_DATA *)(current->header))->right_Sub_Height = 0;
+				wrapped_data = Pop(myStack);
+				if (wrapped_data == NULL){
+					free(wrapped_data);
+					loop = 0;
+					ret = ((HEADER_DATA *)(current->header))->left_Sub_Height
+					> ((HEADER_DATA *)(current->header))->right_Sub_Height 
+					? ((HEADER_DATA *)(current->header))->left_Sub_Height 
+					: ((HEADER_DATA *)(current->header))->right_Sub_Height;
+					ret++;
+					break;
+				}
+				current = wrapped_data->nodeAddress_W;
+				switch(wrapped_data->lastTried_W){
+				case TRIED_LEFT:
+					branchCase = 1;
+					break;
+				case TRIED_RIGHT:
+					branchCase = 2;
+					break;
+				default:
+					PRINTF("ERROR.\n");
+					return -1;
+				}
+			}
+		}
+		break;
+	case 1:
+		//When the last tried action was a 'Moving Left'
+		current->header = (HEADER_DATA *)malloc(sizeof(HEADER_DATA));
+		((HEADER_DATA *)(current->header))->left_Sub_Height = Calc_Subtree_Height(current, LEFT);
+		
+		Push(myStack, current, TRIED_RIGHT);
+		current = current->right;
+		branchCase = 0;
+		if (current == NULL){
+			wrapped_data = Pop(myStack);
+			current = wrapped_data->nodeAddress_W;
+			free(wrapped_data);
+			((HEADER_DATA *)(current->header))->right_Sub_Height = 0;
+			wrapped_data = Pop(myStack);
+			if (wrapped_data == NULL){
+				free(wrapped_data);
+				loop = 0;
+				ret = ((HEADER_DATA *)(current->header))->left_Sub_Height
+					> ((HEADER_DATA *)(current->header))->right_Sub_Height 
+					? ((HEADER_DATA *)(current->header))->left_Sub_Height 
+					: ((HEADER_DATA *)(current->header))->right_Sub_Height;
+				ret++;
+				break;
+			}
+			current = wrapped_data->nodeAddress_W;
+			switch(wrapped_data->lastTried_W){
+			case TRIED_LEFT:
+				branchCase = 1;
+				break;
+			case TRIED_RIGHT:
+				branchCase = 2;
+				break;
+			default:
+				PRINTF("ERROR.\n");
+				return -1;
+			}
+		}
+		break;
+	case 2:
+		//When the last tried action was a 'Moving Right'
+		((HEADER_DATA *)(current->header))->right_Sub_Height = Calc_Subtree_Height(current, RIGHT);
+		
+		wrapped_data = Pop(myStack);
+		if (wrapped_data == NULL){
+		free(wrapped_data);
+			loop = 0;
+			ret = ((HEADER_DATA *)(current->header))->left_Sub_Height
+					> ((HEADER_DATA *)(current->header))->right_Sub_Height 
+					? ((HEADER_DATA *)(current->header))->left_Sub_Height 
+					: ((HEADER_DATA *)(current->header))->right_Sub_Height;
+			ret++;
+			break;
+		}
+		current = wrapped_data->nodeAddress_W;
+		switch(wrapped_data->lastTried_W){
+		case TRIED_LEFT:
+			branchCase = 1;
+			break;
+		case TRIED_RIGHT:
+			branchCase = 2;
+			break;
+		default:
+			PRINTF("ERROR.\n");
+			return -1;
+		}
+		break;
+	default:
+		break;
+	}
+	}
+
+	if(EmptyStack(myStack) == NULL){
+		PRINTF("ERROR: EmptyStack( ) failed.\n");
+		return -2;
+	}
+
+	if(RemoveStack(myStack)){
+		PRINTF("ERROR: RemoveStack( ) failed.\n");
+		return -3;
+	}
+
+	return ret;
 }
