@@ -47,8 +47,9 @@ DEQUE *PushLeft(DEQUE *, BINTREE_NODE *, int);
 DEQUE *PopLeft(DEQUE *, WRAPPED_NODE *);
 DEQUE *PushRight(DEQUE *, BINTREE_NODE *, int);
 DEQUE *PopRight(DEQUE *, WRAPPED_NODE *);
-int LevelFindBFS(BINTREE_NODE *);
 DEQUE *CleanDeque(DEQUE *);
 int DeleteDeque(DEQUE *);
+int LevelFindBFS(BINTREE_NODE *);
+int DeleteBintree(BINTREE_NODE *);
 
 #endif

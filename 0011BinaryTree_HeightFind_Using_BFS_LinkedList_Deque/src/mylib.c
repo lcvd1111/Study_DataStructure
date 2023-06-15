@@ -233,12 +233,6 @@ DEQUE *PopRight(DEQUE *dequeArg, WRAPPED_NODE *poppedData)
 	return dequeArg;
 }
 
-int LevelFindBFS(BINTREE_NODE *root)
-{
-	int ret = 0;
-	return ret;
-}
-
 DEQUE *CleanDeque(DEQUE *dequeArg)
 {
 	WRAPPED_NODE dummy;
@@ -262,6 +256,83 @@ int DeleteDeque(DEQUE *dequeArg)
 	}
 
 	free(dequeArg);
+
+	return 0;
+}
+
+int LevelFindBFS(BINTREE_NODE *root)
+{
+	BINTREE_NODE *current = NULL;
+	WRAPPED_NODE poppedData;
+	int height = 0;
+	DEQUE *myDeque = NULL;
+
+	if (root == NULL){
+		return height;
+	}
+	
+	myDeque = CreateDeque();
+
+	height++;
+
+	PushLeft(myDeque, current, height);
+
+	while(1){
+		if(PopRight(myDeque, &poppedData) == NULL)
+			break;
+
+		current = poppedData.bintreeNode;
+		height = poppedData.level;
+
+		if(current->left != NULL)
+			PushLeft(myDeque, current->left, height+1);
+
+		if(current->right != NULL)
+			PushLeft(myDeque, current->right, height+1);
+	}
+
+	return height;
+}
+
+int DeleteBintree(BINTREE_NODE *root)
+{
+	//Deleting every nodes of binary tree using Traversing via BFS
+	DEQUE *traversingDeque = NULL;
+	DEQUE *visitDeque = NULL;
+	BINTREE_NODE *current = NULL;
+	WRAPPED_NODE poppedData;
+	traversingDeque = CreateDeque();
+	visitDeque = CreateDeque();
+
+	current = root;
+
+	if (root = NULL){
+		return 0;
+	}
+
+	//Visiting every nodes
+	PushLeft(traversingDeque, current, 0);
+
+	while(1){
+		if (PopRight(traversingDeque, &poppedData) == NULL)
+			break;
+
+		current = poppedData.bintreeNode;
+		PushLeft(visitDeque, current, 0); //Check Visited.
+
+		if (current->left != NULL)
+			PushLeft(traversingDeque, current->left, 0);
+
+		if (current->right != NULL)
+			PushLeft(traversingDeque, current->right, 0);
+	}
+
+	//Removing all Visited nodes.
+	while(PopLeft(visitDeque, &poppedData) != NULL)
+		free(poppedData.bintreeNode);
+
+	DeleteDeque(traversingDeque);
+	DeleteDeque(visitDeque);
 
 	return 0;
 }

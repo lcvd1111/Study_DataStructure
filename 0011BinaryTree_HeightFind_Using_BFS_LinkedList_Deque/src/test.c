@@ -250,7 +250,6 @@ int UnitTest_Deque(void)
 		return -4;
 	}
 
-
 	free(poppedData);
 	if(DeleteDeque(testDeque)){
 		PRINTF("UNIT TEST FAIL.\n");
@@ -262,7 +261,147 @@ int UnitTest_Deque(void)
 
 int UnitTest_FindHeightBFS(void)
 {
-	int ret = 0;
+	BINTREE_NODE *testRoot = NULL;
 
-	return ret;
+	if (LevelFindBFS(testRoot) != 0){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -1;
+	}
+
+PRINTF("---DEBUG---\n");
+
+	testRoot = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+	testRoot->data = 1;
+	testRoot->left = NULL;
+	testRoot->right = NULL;
+
+PRINTF("---DEBUG---\n");
+
+
+	if (LevelFindBFS(testRoot) != 1){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -2;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot, LEFT, 2, 2);
+	if (LevelFindBFS(testRoot) != 2){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -3;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot, RIGHT, 3, 3);
+	if (LevelFindBFS(testRoot) != 2){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -4;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	free(testRoot->left);
+	testRoot->left = NULL;
+	if (LevelFindBFS(testRoot) != 2){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -5;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot, LEFT, 2, 2);
+	MakeChild(testRoot->left, LEFT, 4, 4);
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -6;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot->left, RIGHT, 5, 5); 
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -7;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	free(testRoot->left->left);
+	testRoot->left->left = NULL;
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -8;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	free(testRoot->left->right);
+	testRoot->left->right = NULL;
+	MakeChild(testRoot->right, LEFT, 6, 6);
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -9;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot->right, RIGHT, 7, 7);
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -10;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	free(testRoot->right->left);
+	testRoot->right->left = NULL;
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -11;
+	}
+
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot->right, LEFT, 8, 8);
+	MakeChild(testRoot->left, BOTH, 9, 10);
+	if (LevelFindBFS(testRoot) != 3){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -12;
+	}
+
+
+PRINTF("---DEBUG---\n");
+
+
+	MakeChild(testRoot->left->right, BOTH, 11, 12);
+	MakeChild(testRoot->left->right->left, RIGHT, 13, 13);
+	MakeChild(testRoot->left->right->left->right, LEFT, 14, 14);
+	MakeChild(testRoot->right->right, LEFT, 15, 15);
+	MakeChild(testRoot->right->right->left, BOTH, 16, 17);
+	if (LevelFindBFS(testRoot) != 6){
+		PRINTF("UNIT TEST FAIL.\n");
+		return -13;
+	}
+
+PRINTF("---DEBUG---\n");
+
+
+	DeleteBintree(testRoot);
+
+PRINTF("---DEBUG---\n");
+
+
+	return 0;
 }
