@@ -268,14 +268,11 @@ int UnitTest_FindHeightBFS(void)
 		return -1;
 	}
 
-PRINTF("---DEBUG---\n");
 
 	testRoot = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 	testRoot->data = 1;
 	testRoot->left = NULL;
 	testRoot->right = NULL;
-
-PRINTF("---DEBUG---\n");
 
 
 	if (LevelFindBFS(testRoot) != 1){
@@ -283,26 +280,17 @@ PRINTF("---DEBUG---\n");
 		return -2;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot, LEFT, 2, 2);
 	if (LevelFindBFS(testRoot) != 2){
 		PRINTF("UNIT TEST FAIL.\n");
 		return -3;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot, RIGHT, 3, 3);
 	if (LevelFindBFS(testRoot) != 2){
 		PRINTF("UNIT TEST FAIL.\n");
 		return -4;
 	}
-
-PRINTF("---DEBUG---\n");
-
 
 	free(testRoot->left);
 	testRoot->left = NULL;
@@ -311,9 +299,6 @@ PRINTF("---DEBUG---\n");
 		return -5;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot, LEFT, 2, 2);
 	MakeChild(testRoot->left, LEFT, 4, 4);
 	if (LevelFindBFS(testRoot) != 3){
@@ -321,17 +306,11 @@ PRINTF("---DEBUG---\n");
 		return -6;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot->left, RIGHT, 5, 5); 
 	if (LevelFindBFS(testRoot) != 3){
 		PRINTF("UNIT TEST FAIL.\n");
 		return -7;
 	}
-
-PRINTF("---DEBUG---\n");
-
 
 	free(testRoot->left->left);
 	testRoot->left->left = NULL;
@@ -339,9 +318,6 @@ PRINTF("---DEBUG---\n");
 		PRINTF("UNIT TEST FAIL.\n");
 		return -8;
 	}
-
-PRINTF("---DEBUG---\n");
-
 
 	free(testRoot->left->right);
 	testRoot->left->right = NULL;
@@ -351,17 +327,11 @@ PRINTF("---DEBUG---\n");
 		return -9;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot->right, RIGHT, 7, 7);
 	if (LevelFindBFS(testRoot) != 3){
 		PRINTF("UNIT TEST FAIL.\n");
 		return -10;
 	}
-
-PRINTF("---DEBUG---\n");
-
 
 	free(testRoot->right->left);
 	testRoot->right->left = NULL;
@@ -370,20 +340,12 @@ PRINTF("---DEBUG---\n");
 		return -11;
 	}
 
-
-PRINTF("---DEBUG---\n");
-
-
 	MakeChild(testRoot->right, LEFT, 8, 8);
 	MakeChild(testRoot->left, BOTH, 9, 10);
 	if (LevelFindBFS(testRoot) != 3){
 		PRINTF("UNIT TEST FAIL.\n");
 		return -12;
 	}
-
-
-PRINTF("---DEBUG---\n");
-
 
 	MakeChild(testRoot->left->right, BOTH, 11, 12);
 	MakeChild(testRoot->left->right->left, RIGHT, 13, 13);
@@ -395,13 +357,7 @@ PRINTF("---DEBUG---\n");
 		return -13;
 	}
 
-PRINTF("---DEBUG---\n");
-
-
 	DeleteBintree(testRoot);
-
-PRINTF("---DEBUG---\n");
-
 
 	return 0;
 }

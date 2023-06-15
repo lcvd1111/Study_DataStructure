@@ -275,6 +275,7 @@ int LevelFindBFS(BINTREE_NODE *root)
 
 	height++;
 
+	current = root;
 	PushLeft(myDeque, current, height);
 
 	while(1){
