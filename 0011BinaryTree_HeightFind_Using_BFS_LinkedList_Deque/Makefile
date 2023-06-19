@@ -9,7 +9,8 @@ INCLUDE_MY_DIRS = ./include/
 EXE: object_main.o object_sub01.o object_sub02.o
 	$(CC) $^ $(OUTPUT_OPTION)
 
-object_main.o: main.c mylib.h test.h
+object_main.o: main.c mylib.h 
+object_main.o: test.h
 
 object_sub01.o: mylib.c mylib.h
 
