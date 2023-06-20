@@ -3,5 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "mylib.h"
+
+int UnitTest_Queue(void);
+int UnitTest_BFS(void);
 
 #endif

@@ -151,5 +151,77 @@ int DeleteQueue(QUEUE *queueArg)
 	return 0;
 }
 
-int FindHeightBFS(BINTREE_NODE *root);
-int DeleteBintree(BINTREE_NODE *root);
+int FindHeightBFS(BINTREE_NODE *root)
+{
+	int height = 0;
+	BINTREE_NODE *current = NULL;
+	QUEUE *BFSQueue = NULL;
+	QUEUE_NODE output;
+
+	if (root == NULL)
+		return height;
+
+	current = root;
+
+	BFSQueue = CreateQueue();
+
+	Enqueue(BFSQueue, current, height+1);
+		
+	while(1){
+		if (Dequeue(BFSQueue, &output) == NULL)
+			break;
+
+		current = output.addressData;
+		height = output.levelData;
+
+		if (current->left != NULL)
+			Enqueue(BFSQueue, current->left, height+1);
+
+		if (current->right != NULL)
+			Enqueue(BFSQueue, current->right, height+1);
+	}
+	
+	EmptyQueue(BFSQueue);
+	DeleteQueue(BFSQueue);
+
+	return height;
+}
+
+int DeleteBintree(BINTREE_NODE *root)
+{
+	QUEUE *BFSQueue = NULL;
+	QUEUE *resultQueue = NULL;
+	QUEUE_NODE output;
+	BINTREE_NODE *current = root;
+
+	if (current == NULL)
+		return 0;
+	
+	BFSQueue = CreateQueue();
+	resultQueue = CreateQueue();
+
+	Enqueue(BFSQueue, current, 0);
+
+	//Traversing using BFS
+	while(1){
+		if(Dequeue(BFSQueue, &output) == NULL)
+			break;
+
+		Enqueue(resultQueue, output.addressData, 0);
+		current = output.addressData;
+
+		if (current->left != NULL)
+			Enqueue(BFSQueue, current->left, 0);
+
+		if (current->right != NULL)
+			Enqueue(BFSQueue, current->right, 0);
+	}
+
+	while(Dequeue(resultQueue, &output) != NULL)
+		free(output.addressData);
+
+	DeleteQueue(BFSQueue);
+	DeleteQueue(resultQueue);
+
+	return 0;
+}
