@@ -330,12 +330,69 @@ int FindInternalNodes(BINTREE_NODE *root)
 
 	ret = ((HEADER_DATA *)(root->header))->left_Sub_Internal +
 							((HEADER_DATA *)(root->header))->right_Sub_Internal + 1;
+	
+	DeleteStack(DFS_Stack);
+
 	return ret;
 }
 
 int DeleteBintree(BINTREE_NODE *root)
 {
 	int ret = 0;
+	BINTREE_NODE *current = NULL;
+	STACK *DFSStack = NULL;
+	STACK *resultStack = NULL;
+	STACK_NODE popOutput;
+	int i=1, j=1;
+
+	current = root;
+
+	if (current==NULL){
+		return 0;
+	}
+
+	DFSStack = CreateStack();
+	resultStack = CreateStack();
+
+	while(i){
+		Push(resultStack, current, TRIED_NONE);
+		Push(DFSStack, current, TRIED_LEFT);
+		current = current->left;
+
+		if (current != NULL)
+			continue;
+
+		Pop(DFSStack, &popOutput);
+
+		current = popOutput.addressData;
+
+		while(1){
+			current = current->right;
+
+			if (current != NULL)
+				break;
+
+			if(Pop(DFSStack, &popOutput)==NULL){
+				i = 0;
+				break;
+			}
+
+			current = popOutput.addressData;
+		}
+	}
+
+	DeleteStack(DFSStack);
+
+	while(Pop(resultStack, &popOutput) != NULL){
+		current = popOutput.addressData;
+
+		if (current->header != NULL)
+			free(current->header);
+
+		free(current);
+	}
+	
+	DeleteStack(resultStack);
 
 	return ret;
 }

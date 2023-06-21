@@ -115,6 +115,8 @@ int UnitTest_Stack(void)
 		return -10;
 	}
 
+	DeleteBintree(testRoot);
+
 	return 0;
 }
 
@@ -188,6 +190,8 @@ int UnitTest_DFS(void)
 		return -5;
 	}
 
+	DeleteBintree(testRoot);
+	
 	return 0;
 }
 
