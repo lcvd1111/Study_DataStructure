@@ -50,7 +50,10 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, int);
 STACK *CreateStack(void);
 STACK *Push(STACK *, BINTREE_NODE *, ACTION);
 STACK *Pop(STACK *, STACK_NODE *);
-int EmptyStack(STACK *);
+STACK *EmptyStack(STACK *);
+int DeleteStack(STACK *);
+int CheckExternal(BINTREE_NODE *);
+int FindSubInternalNodes(BINTREE_NODE *, CHILD_SELECTOR);
 int FindInternalNodes(BINTREE_NODE *);
 int DeleteBintree(BINTREE_NODE *);
 

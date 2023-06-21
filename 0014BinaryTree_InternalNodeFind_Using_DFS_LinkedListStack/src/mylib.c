@@ -28,7 +28,7 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector, int lArg,
 		}
 		
 		parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
-		parent->right->data = lArg;
+		parent->right->data = rArg;
 		parent->right->left = NULL;
 		parent->right->right = NULL;
 		parent->right->header = NULL;
@@ -46,7 +46,7 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector, int lArg,
 		parent->left->header = NULL;
 		
 		parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
-		parent->right->data = lArg;
+		parent->right->data = rArg;
 		parent->right->left = NULL;
 		parent->right->right = NULL;
 		parent->right->header = NULL;
@@ -97,7 +97,7 @@ STACK *Push(STACK *stackArg, BINTREE_NODE *binArg, ACTION triedAction)
 	stackArg->end->next->addressData = binArg;
 	stackArg->end->next->lastAction = triedAction;
 	stackArg->end->next->prev = stackArg->end;
-	stackArg->end->next = NULL;
+	stackArg->end->next->next = NULL;
 	stackArg->end = stackArg->end->next;	
 
 	return stackArg;
@@ -135,15 +135,190 @@ STACK *Pop(STACK *stackArg, STACK_NODE *outputStore)
 	return stackArg;
 }
 
-int EmptyStack(STACK *stackArg)
+STACK *EmptyStack(STACK *stackArg)
 {
+	STACK_NODE dummy;
+
+	//When the stack is already empty.
+	if (stackArg->begin == NULL && stackArg->end == NULL){
+		return stackArg;
+	}
+
+	while(Pop(stackArg, &dummy) != NULL)
+		;
+
+	return stackArg;
+}
+
+int DeleteStack(STACK *stackArg)
+{
+	if(EmptyStack(stackArg) != stackArg){
+		PRINTF("ERROR: EmptyStack( ) failed.\n");
+		return -1;
+	}
+
+	free(stackArg);
+
+	return 0;
+}
+
+int CheckExternal(BINTREE_NODE *parent)
+{
+	if (parent->left == NULL && parent->right == NULL)
+		return 1;
+	else
+		return 0;
+}
+
+int FindSubInternalNodes(BINTREE_NODE *parent, CHILD_SELECTOR selector)
+{	
+	if (parent->header == NULL){
+		PRINTF("ERROR: parent's header is NULL.\n");
+		return -1;
+	}
+
+	switch (selector){
+	case LEFT:
+		if ( ((HEADER_DATA *)(parent->left->header))->externalFlag ){
+			((HEADER_DATA *)(parent->header))->left_Sub_Internal = 0;
+			break;
+		}
+
+		((HEADER_DATA *)(parent->header))->left_Sub_Internal = 
+			((HEADER_DATA*)(parent->left->header))->left_Sub_Internal +
+			((HEADER_DATA*)(parent->left->header))->right_Sub_Internal + 1;
+		break;
+	case RIGHT:
+		if ( ((HEADER_DATA *)(parent->right->header))->externalFlag ){
+			((HEADER_DATA *)(parent->header))->right_Sub_Internal = 0;
+			break;
+		}
+		
+		((HEADER_DATA *)(parent->header))->right_Sub_Internal = 
+			((HEADER_DATA*)(parent->right->header))->left_Sub_Internal +
+			((HEADER_DATA*)(parent->right->header))->right_Sub_Internal + 1;
+		break;
+	default:
+		PRINTF("ERROR: Wrong selector value.\n");
+		return -1;
+		break;
+	}
+
 	return 0;
 }
 
 int FindInternalNodes(BINTREE_NODE *root)
 {
+	STACK *DFS_Stack = NULL;
+	STACK_NODE outputStore;
+	BINTREE_NODE *current = NULL;
 	int ret = 0;
-	
+	int i=1, j=1, k=1;
+
+	if (root==NULL){
+		return 0;
+	}
+
+	DFS_Stack = CreateStack();
+
+	current = root;
+	while(i){
+		if (current->header == NULL){
+			current->header = (HEADER_DATA *)malloc(sizeof(HEADER_DATA));
+			if (current->header == NULL){
+				PRINTF("ERROR: malloc( ) failed.\n");
+				return -1;
+			}
+		}
+
+		((HEADER_DATA *)(current->header))->externalFlag = CheckExternal(current);
+		
+		if (!(((HEADER_DATA *)(current->header))->externalFlag)){
+			Push(DFS_Stack, current, TRIED_LEFT);
+			current = current->left;
+			
+			if (current !=NULL)
+				continue;
+
+			Pop(DFS_Stack, &outputStore);
+			current = outputStore.addressData;
+			((HEADER_DATA *)(current->header))->left_Sub_Internal = 0;
+			while (j){
+				Push(DFS_Stack, current, TRIED_RIGHT);
+				current = current->right;
+
+				if (current != NULL)
+					break;
+				
+				Pop(DFS_Stack, &outputStore);
+				current = outputStore.addressData;
+				((HEADER_DATA *)(current->header))->right_Sub_Internal = 0;
+
+				while (k){
+					if(Pop(DFS_Stack, &outputStore)==NULL){
+						i = 0;
+						j = 0;
+						break;
+					}
+					
+					current = outputStore.addressData;
+
+					if (outputStore.lastAction == TRIED_LEFT){
+						if (FindSubInternalNodes(current, LEFT)){
+							PRINTF("ERROR: FindSubInternalNodes( , LEFT) failed.\n");
+							return -1;
+						}
+						break;
+					}
+
+					if (FindSubInternalNodes(current, RIGHT)){
+						PRINTF("ERROR: FindSubInternalNodes( , RIGHT) failed.\n");
+						return -1;
+					}
+					continue;
+				}
+			}
+		}
+		else{
+			while (k){
+				if(Pop(DFS_Stack, &outputStore)==NULL){
+					i = 0;
+					j = 0;
+					break;
+				}
+				
+				current = outputStore.addressData;
+
+				if (outputStore.lastAction == TRIED_LEFT){
+					if (FindSubInternalNodes(current, LEFT)){
+						PRINTF("ERROR: FindSubInternalNodes( , LEFT) failed.\n");
+						return -1;
+					}
+					
+					Push(DFS_Stack, current, TRIED_RIGHT);
+					current = current->right;
+
+					if (current != NULL)
+						break;
+
+					Pop(DFS_Stack, &outputStore);
+					current = outputStore.addressData;
+					((HEADER_DATA *)(current->header))->right_Sub_Internal = 0;
+
+					continue;
+				}
+
+				if (FindSubInternalNodes(current, RIGHT)){
+					PRINTF("ERROR: FindSubInternalNodes( , RIGHT) failed.\n");
+					return -1;
+				}
+				continue;
+			}
+		}
+	}
+
+	ret = ((HEADER_DATA *)(root->header))->left_Sub_Internal +
+							((HEADER_DATA *)(root->header))->left_Sub_Internal + 1;
 	return ret;
 }
 
