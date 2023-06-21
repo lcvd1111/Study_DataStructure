@@ -164,6 +164,11 @@ int DeleteStack(STACK *stackArg)
 
 int CheckExternal(BINTREE_NODE *parent)
 {
+	if (parent->header == NULL){
+		PRINTF("ERROR: parent->header is NULL.\n");
+		return -1;
+	}
+
 	if (parent->left == NULL && parent->right == NULL)
 		return 1;
 	else
@@ -219,9 +224,14 @@ int FindInternalNodes(BINTREE_NODE *root)
 		return 0;
 	}
 
+	if (root->left == NULL || root->right == NULL){
+		return 0;
+	}
+
 	DFS_Stack = CreateStack();
 
 	current = root;
+
 	while(i){
 		if (current->header == NULL){
 			current->header = (HEADER_DATA *)malloc(sizeof(HEADER_DATA));
@@ -243,6 +253,7 @@ int FindInternalNodes(BINTREE_NODE *root)
 			Pop(DFS_Stack, &outputStore);
 			current = outputStore.addressData;
 			((HEADER_DATA *)(current->header))->left_Sub_Internal = 0;
+			
 			while (j){
 				Push(DFS_Stack, current, TRIED_RIGHT);
 				current = current->right;
@@ -318,7 +329,7 @@ int FindInternalNodes(BINTREE_NODE *root)
 	}
 
 	ret = ((HEADER_DATA *)(root->header))->left_Sub_Internal +
-							((HEADER_DATA *)(root->header))->left_Sub_Internal + 1;
+							((HEADER_DATA *)(root->header))->right_Sub_Internal + 1;
 	return ret;
 }
 

@@ -120,6 +120,74 @@ int UnitTest_Stack(void)
 
 int UnitTest_DFS(void)
 {
+	BINTREE_NODE *testRoot = NULL;
+	testRoot = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+	testRoot->data = 1;
+	testRoot->left = NULL;
+	testRoot->right = NULL;
+	testRoot->header = NULL;
+
+	if (FindInternalNodes(testRoot) != 0){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -1;
+	}
+	
+	MakeChild(testRoot, BOTH, 2, 3);
+	if (FindInternalNodes(testRoot) != 1){
+		PRINTF("UNIT TEST FAILED.\n");
+		PRINTF("Ret: %d.\n", FindInternalNodes(testRoot));
+		PRINTF("Ret: %d.\n", FindInternalNodes(testRoot));
+		PRINTF("Ret: %d.\n", FindInternalNodes(testRoot));
+		return -2;
+	}
+
+	MakeChild(testRoot->left, LEFT, 4, 4);
+	if (FindInternalNodes(testRoot) != 2){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -3;
+	}
+
+
+	MakeChild(testRoot->left, RIGHT, 5, 5);
+	if (FindInternalNodes(testRoot) != 2){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -3;
+	}
+
+
+	MakeChild(testRoot->right, BOTH, 6, 7);
+	if (FindInternalNodes(testRoot) != 3){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -3;
+	}
+
+
+	MakeChild(testRoot->right->left, RIGHT, 8, 8);
+	if (FindInternalNodes(testRoot) != 4){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -4;
+	}
+
+
+	MakeChild(testRoot->right->left, LEFT, 9, 9);
+	if (FindInternalNodes(testRoot) != 4){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -4;
+	}
+
+
+	MakeChild(testRoot->right->right, BOTH, 10, 11);
+	if (FindInternalNodes(testRoot) != 5){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -4;
+	}
+
+	MakeChild(testRoot->right->right->right, RIGHT, 12, 12);
+	if (FindInternalNodes(testRoot) != 6){
+		PRINTF("UNIT TEST FAILED.\n");
+		return -5;
+	}
+
 	return 0;
 }
 
