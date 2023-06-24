@@ -34,10 +34,11 @@ typedef struct {
 //FUNCTION DECLARATIONS
 QUEUE *CreateQueue(void);
 QUEUE *Push(QUEUE *, BINTREE_NODE *);
-BINTREE_NODE *Pop(QUEUE *);
+QUEUE *Pop(QUEUE *, QUEUE_NODE *);
 QUEUE *EmptyQueue(QUEUE *);
 int DeleteQueue(QUEUE *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, int);
+int CheckExternalNode(BINTREE_NODE *);
 int FindInternalNodes(BINTREE_NODE *);
 int DeleteBintree(BINTREE_NODE *);
 #endif
