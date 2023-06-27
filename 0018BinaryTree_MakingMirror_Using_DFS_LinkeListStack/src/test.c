@@ -31,7 +31,7 @@ int UnitTest_MakeChild(void)
 		return -4;
 	}
 
-	MakeChild(root->right->right, RIGHT, 7, 7);
+	MakeChild(root->right, RIGHT, 7, 7);
 	if (root->right->right->data != 7){
 		PRINTF("Unit Test Failed.\n");
 		return -5;

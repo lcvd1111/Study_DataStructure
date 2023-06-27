@@ -171,10 +171,105 @@ BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECT selector, int lArg, i
 
 BINTREE_NODE *MakeMirror_DFS(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	BINTREE_NODE *dummy = NULL;
+	STACK *DFS_Stack = NULL;
+	int i=1;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return NULL;
+	}
+
+	if (root->left == NULL && root->right == NULL)
+		return root;
+	
+	current = root;
+	DFS_Stack = CreateStack();
+
+	while(i){
+		dummy = current->left;
+		current->left = current->right;
+		current->right = dummy;
+
+		Push(DFS_Stack, current);
+		current = current->left;
+
+		if (current)
+			continue;
+		
+		while(1){
+			current = Pop(DFS_Stack);
+			
+			if (current==NULL){
+				i=0;
+				break;
+			}
+
+			current = current->right;
+
+			if (current)
+				break;
+		}
+	}
+
+	DeleteStack(DFS_Stack);
+
 	return root;
 }
 
 int DeleteBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	STACK *DFS_Stack = NULL;
+	STACK *result_Stack = NULL;
+	int i = 1;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return -1;
+	}
+
+	if (root->left==NULL && root->right==NULL){
+		free(root);
+		return 0;
+	}
+
+	current = root;
+	DFS_Stack = CreateStack();
+	result_Stack = CreateStack();
+
+	//Traversal using DFS
+	while(i){
+		Push(result_Stack, current);
+
+		Push(DFS_Stack, current);
+		current = current->left;
+
+		if (current)
+			continue;
+
+		while(1){
+			current = Pop(DFS_Stack);
+			
+			if (!current){
+				i=0;
+				break;
+			}
+
+			current = current->right;
+			
+			if (current)
+				break;
+		}
+	}
+
+	//Freeing the every node
+	while(current=Pop(result_Stack))
+		free(current);
+
+	DeleteStack(DFS_Stack);
+	DeleteStack(result_Stack);
+
 	return 0;
 }
