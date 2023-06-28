@@ -20,7 +20,7 @@ QUEUE *Enqueue(QUEUE *queueArg, BINTREE_NODE *binArg)
 	//When queue is empty.
 	if(queueArg->begin == NULL && queueArg->end == NULL){
 		queueArg->begin = (QUEUE_NODE *)malloc(sizeof(QUEUE_NODE));
-		queueArg->end = queueArg->end;
+		queueArg->end = queueArg->begin;
 		queueArg->end->prev = NULL;
 		queueArg->end->next = NULL;
 		queueArg->end->addressData = binArg;
@@ -157,10 +157,84 @@ BINTREE_NODE *MakeChild
 
 BINTREE_NODE *MakeMirror_BFS(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	QUEUE *BFS_Queue = NULL;
+	BINTREE_NODE *dummy = NULL;
+
+	if (root==NULL || (root->left==NULL && root->right==NULL))
+		return root;
+
+	current = root;
+	BFS_Queue = CreateQueue();
+
+	Enqueue(BFS_Queue, current);
+	
+	while(1){
+		current = Dequeue(BFS_Queue);
+		
+		if (current == NULL)
+			break;
+
+		dummy = current->left;
+		current->left = current->right;
+		current->right = dummy;
+
+		if (current->left)
+			Enqueue(BFS_Queue, current->left);
+
+		if (current->right)
+			Enqueue(BFS_Queue, current->right);
+	}
+
+	DeleteQueue(BFS_Queue);
 	return root;
 }
 
 int DeleteBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	QUEUE *BFS_Queue = NULL;
+	QUEUE *result_Queue = NULL;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return -1;
+	}
+
+	if (root->left==NULL && root->right==NULL){
+		free(root);
+		return 0;
+	}
+
+	current = root;
+	
+	BFS_Queue = CreateQueue();
+	result_Queue = CreateQueue();
+
+	//Traversing every node.
+	Enqueue(BFS_Queue, current);
+
+	while(1){
+		current = Dequeue(BFS_Queue);
+
+		if (current == NULL)
+			break;
+
+		Enqueue(result_Queue, current);
+
+		if (current->left)
+			Enqueue(BFS_Queue, current->left);
+
+		if (current->right)
+			Enqueue(BFS_Queue, current->right);
+	}
+
+	//Freeing every node.
+	while(current = Dequeue(result_Queue))
+		free(current);
+
+	DeleteQueue(BFS_Queue);
+	DeleteQueue(result_Queue);
+
 	return 0;
 }

@@ -57,7 +57,6 @@ int UnitTest_Queue(void)
 	BINTREE_NODE *testRoot = NULL;
 	BINTREE_NODE *dequeueOutput = NULL;
 	QUEUE *testQueue = NULL;
-
 	testRoot = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 	testRoot->data = 1;
 	testRoot->left = NULL;
@@ -96,37 +95,37 @@ int UnitTest_Queue(void)
 
 	dequeueOutput = Dequeue(testQueue);
 	
-	if (dequeueOutput->data != 3){
+	if (dequeueOutput->data != 1){
 		PRINTF("Unit Test Failed.\n");
 		return -5;
 	}
 
-	if (testQueue->begin->addressData->data != 1 || testQueue->end->addressData->data != 2){
+	if (testQueue->begin->addressData->data != 2 || testQueue->end->addressData->data != 3){
 		PRINTF("Unit Test Failed.\n");
 		return -6;
 	}
 
 	Enqueue(testQueue, testRoot->left->left);
 
-	if (testQueue->begin->addressData->data != 1 || testQueue->end->addressData->data != 4){
+	if (testQueue->begin->addressData->data != 2 || testQueue->end->addressData->data != 4){
 		PRINTF("Unit Test Failed.\n");
 		return -7;
 	}
 
 	dequeueOutput = Dequeue(testQueue);
-	if (dequeueOutput->data != 4){
+	if (dequeueOutput->data != 2){
 		PRINTF("Unit Test Failed.\n");
 		return -8;
 	}
 
 	dequeueOutput = Dequeue(testQueue);
-	if (dequeueOutput->data != 2){
+	if (dequeueOutput->data != 3){
 		PRINTF("Unit Test Failed.\n");
 		return -9;
 	}
 
 	dequeueOutput = Dequeue(testQueue);
-	if (dequeueOutput->data != 1){
+	if (dequeueOutput->data != 4){
 		PRINTF("Unit Test Failed.\n");
 		return -10;
 	}
