@@ -18,10 +18,10 @@ object_sub01: mylib.o
 
 object_sub02: test.o
 
-include Dependency.mk
-
 Dependency.mk: main.c mylib.c test.c
 	$(CC) -M $^ -I $(INCLUDE_MY_DIRS) > $@
+
+include Dependency.mk
 
 .PHONY: clean cleanall
 clean:
