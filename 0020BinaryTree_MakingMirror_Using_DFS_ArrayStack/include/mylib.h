@@ -21,7 +21,7 @@ typedef enum {
 } CHILD_SELECT;
 
 typedef struct _STACK {
-	BINTREE_NODE stackArray[STACK_MAX];
+	BINTREE_NODE *stackArray[STACK_MAX];
 	int end;
 } STACK;
 
