@@ -8,7 +8,7 @@ STACK *CreateStack(void)
 	ret->end = -1;
 }
 
-STACK *Push(STACK *stackArg, BINTREE_NODE *binArg)
+STACK *Push(STACK *stackArg, BINTREE_NODE *binArg, TRIED_ACTION actionArg)
 {
 	if (stackArg==NULL){
 		PRINTF("ERROR: stackArg is NULL.\n");
@@ -27,17 +27,21 @@ STACK *Push(STACK *stackArg, BINTREE_NODE *binArg)
 	}
 
 	stackArg->end += 1;
-	(stackArg->stackArray)[stackArg->end] = binArg;
+	(stackArg->stackArray)[stackArg->end].addressData = binArg;
+	(stackArg->stackArray)[stackArg->end].triedAction = actionArg;
 
 	return stackArg;
 }
 
-BINTREE_NODE *Pop(STACK *stackArg)
+STACK *Pop(STACK *stackArg, STACK_NODE *popOutput)
 {
-	BINTREE_NODE *ret = NULL;
-
 	if (stackArg == NULL){
 		PRINTF("ERROR: stackArg is NULL.\n");
+		return NULL;
+	}
+
+	if (popOutput == NULL){
+		PRINTF("ERROR: popOutput is NULL.\n");
 		return NULL;
 	}
 
@@ -45,11 +49,12 @@ BINTREE_NODE *Pop(STACK *stackArg)
 	if (stackArg->end == -1)
 		return NULL;
 	
-	ret = (stackArg->stackArray)[stackArg->end];
+	popOutput->addressData = (stackArg->stackArray)[stackArg->end].addressData;
+	popOutput->triedAction = (stackArg->stackArray)[stackArg->end].triedAction;
 
 	stackArg->end -= 1;
 
-	return ret;
+	return stackArg;
 }
 
 int DeleteStack(STACK *stackArg)
@@ -122,7 +127,8 @@ BINTREE_NODE *MakeMirror(BINTREE_NODE *root)
 	BINTREE_NODE *current = NULL;
 	BINTREE_NODE *swapBuffer = NULL;
 	STACK *DFS_Stack = NULL;
-
+	STACK_NODE popOutput;
+	int i=1, j=1, k=1;
 	if (root == NULL){
 		PRINTF("ERROR: root is NULL.\n");
 		return NULL;
@@ -135,32 +141,46 @@ BINTREE_NODE *MakeMirror(BINTREE_NODE *root)
 	current = root;
 	DFS_Stack = CreateStack();
 
-	while(1){
-		swapBuffer = current->left;
-		current->left = current->right;
-		current->right = swapBuffer;
-
-		Push(DFS_Stack, current);
+	while(i){
+		Push(DFS_Stack, current, TRIED_LEFT);
 		current = current->left;
-
+		
 		if (current != NULL)
 			continue;
 
-		//when the left-moved is NULL.
-		while(1){
-			current = Pop(DFS_Stack);
-			
-			//When the traversal is completed.
-			if (current != NULL)
-				return root;
+		//When the trying to move left failed to NULL.
+		Pop(DFS_Stack, &popOutput);
+		current = popOutput.addressData;
 
+		while(j){
+			Push(DFS_Stack, current, TRIED_RIGHT);
 			current = current->right;
 
 			if (current != NULL)
 				break;
 
-			//when the right-moved position NULL.
-			continue; //It's okay to remove this statement.
+			//When the trying to move right failed to NULL.
+			Pop(DFS_Stack,&popOutput);
+			current = popOutput.addressData;
+
+			while(j){
+				swapBuffer = current->left;
+				current->left = current->right;
+				current->right = swapBuffer;
+
+				if(Pop(DFS_Stack, &popOutput)==NULL){
+					i=0;
+					j=0;
+					return root;
+				}
+
+				current = popOutput.addressData;
+
+				if (popOutput.triedAction == TRIED_LEFT)
+					break;
+				else if (popOutput.triedAction == TRIED_RIGHT)
+					continue;
+			}
 		}
 	}
 
@@ -170,6 +190,12 @@ BINTREE_NODE *MakeMirror(BINTREE_NODE *root)
 
 int DeleteBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	STACK *DFS_Stack = NULL;
+	STACK *result_Stack = NULL;
+	STACK_NODE popOutput;
+	int i = 1;
+
 	if (root == NULL){
 		PRINTF("ERROR: root is NULL.\n");
 		return -1;
@@ -180,13 +206,44 @@ int DeleteBintree(BINTREE_NODE *root)
 		return 0;
 	}
 
-	/*
+	current = root;
+	DFS_Stack = CreateStack();
+	result_Stack = CreateStack();
+
 	//Traversing every node
-	while(1){
+	while(i){
+		Push(result_Stack, current, TRIED_NONE);
+
+		Push(DFS_Stack, current, TRIED_NONE);
+		current = current->left;
+		
+		if(current != NULL)
+			continue;
+
+		while(1){
+			if(Pop(DFS_Stack, &popOutput)==NULL){
+				i=0;
+				break;
+			}
+			current = popOutput.addressData;
+			current = current->right;
+
+			if (current != NULL)
+				break;
+
+			continue;
+		}
 	}
 
 	//Freeing every node
-	*/
+	while(1){
+		if (Pop(result_Stack, &popOutput) == NULL)
+			break;
 
+		free(popOutput.addressData);
+	}
+
+	DeleteStack(DFS_Stack);
+	DeleteStack(result_Stack);
 	return 0;
 }

@@ -7,7 +7,6 @@ int UnitTest_MakeChild(void)
 	testRoot->data = 1;
 	testRoot->left = NULL;
 	testRoot->right = NULL;
-
 	MakeChild(testRoot, BOTH, 2, 3);
 	if (testRoot->left->data != 2 || testRoot->right->data != 3){
 		PRINTF("Unit Test Failed.\n");
@@ -37,14 +36,15 @@ int UnitTest_MakeChild(void)
 	}
 
 	DeleteBintree(testRoot);
+
 	return 0;
 }
 
 int UnitTest_Stack(void)
 {
 	BINTREE_NODE *testRoot = NULL;
-	BINTREE_NODE *popOutput = NULL;
 	STACK *testStack = NULL;
+	STACK_NODE popOutput;
 
 	testRoot = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 	testRoot->data = 1;
@@ -61,73 +61,72 @@ int UnitTest_Stack(void)
 		return -1;
 	}
 
-	Push(testStack, testRoot);
+	Push(testStack, testRoot, TRIED_NONE);
 	if (testStack->end != 0){
 		PRINTF("Unit Test Failed.\n");
 		return -2;
 	}
 
-	Push(testStack, testRoot->left);
+	Push(testStack, testRoot->left, TRIED_NONE);
 	if (testStack->end != 1){
 		PRINTF("Unit Test Failed.\n");
 		return -3;
 	}
 
-	Push(testStack, testRoot->right);
+	Push(testStack, testRoot->right, TRIED_NONE);
 	if (testStack->end != 2){
 		PRINTF("Unit Test Failed.\n");
 		return -4;
 	}
 
-	popOutput = Pop(testStack);
+	Pop(testStack, &popOutput);
 	if (testStack->end != 1){
 		PRINTF("Unit Test Failed.\n");
 		return -5;
 	}
 
-	if (popOutput->data != 3){
+	if (popOutput.addressData->data != 3){
 		PRINTF("Unit Test Failed.\n");
 		return -6;
 	}
 
-	Push(testStack, testRoot->left->left);
+	Push(testStack, testRoot->left->left, TRIED_NONE);
 	if (testStack->end != 2){
 		PRINTF("Unit Test Failed.\n");
 		return -7;
 	}
 
-	Push(testStack, testRoot->left->right);
+	Push(testStack, testRoot->left->right, TRIED_NONE);
 	if (testStack->end != 3){
 		PRINTF("Unit Test Failed.\n");
 		return -8;
 	}
 
-	popOutput = Pop(testStack);
-	if (popOutput->data != 5){
+	Pop(testStack, &popOutput);
+	if (popOutput.addressData->data != 5){
 		PRINTF("Unit Test Failed.\n");
 		return -9;
 	}
 
-	popOutput = Pop(testStack);
-	if (popOutput->data != 4){
+	Pop(testStack, &popOutput);
+	if (popOutput.addressData->data != 4){
 		PRINTF("Unit Test Failed.\n");
 		return -10;
 	}
 
-	popOutput = Pop(testStack);
-	if (popOutput->data != 2){
+	Pop(testStack, &popOutput);
+	if (popOutput.addressData->data != 2){
 		PRINTF("Unit Test Failed.\n");
 		return -11;
 	}
 
-	popOutput = Pop(testStack);
-	if (popOutput->data != 1){
+	Pop(testStack, &popOutput);
+	if (popOutput.addressData->data != 1){
 		PRINTF("Unit Test Failed.\n");
 		return -12;
 	}
 
-	popOutput = Pop(testStack);
-	if (popOutput){
+	if (Pop(testStack, &popOutput)){
 		PRINTF("Unit Test Failed.\n");
 		return -13;
 	}
@@ -190,6 +189,7 @@ int UnitTest_MakeMirror(void)
 
 	if (testRoot->right->left->data != 5){
 		PRINTF("Unit Test Failed.\n");
+		PRINTF("test->right->left->data: %d\n", testRoot->right->left->data);
 		return -7;
 	}
 

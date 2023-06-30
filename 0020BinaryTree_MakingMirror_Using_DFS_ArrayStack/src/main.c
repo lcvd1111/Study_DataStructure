@@ -4,7 +4,6 @@
 int main(int argc, char **argv)
 {
 	int err = 0;
-
 	if (err=UnitTest_MakeChild()){
 		printf("Unit Test for MakeChild: Fail\n");
 		printf("Err code: %d\n", err);
