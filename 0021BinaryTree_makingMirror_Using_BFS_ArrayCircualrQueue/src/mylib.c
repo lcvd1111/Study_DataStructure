@@ -42,7 +42,7 @@ QUEUE *Enqueue(QUEUE *queueArg, BINTREE_NODE *binArg)
 	if (queueArg->end == QUEUE_MAX)
 		queueArg->end = 0;
 
-	(queueArg->queueAddress)[queueArg->end] = binArg;
+	(queueArg->queueArray)[queueArg->end] = binArg;
 
 	return queueArg;
 }
@@ -70,6 +70,8 @@ BINTREE_NODE *Dequeue(QUEUE *queueArg)
 	}
 
 	queueArg->begin += 1;
+	if (queueArg->begin == QUEUE_MAX)
+		queueArg->begin = 0;
 	
 	return ret;
 }
@@ -78,7 +80,7 @@ int DeleteQueue(QUEUE *queueArg)
 {
 	if (queueArg == NULL){
 		PRINTF("ERROR: queueArg is NULL.\n");
-		reutrn -1;
+		return -1;
 	}
 
 	free(queueArg);
@@ -88,16 +90,139 @@ int DeleteQueue(QUEUE *queueArg)
 
 BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR select, int lArg, int rArg)
 {
+	if (parent == NULL){
+		PRINTF("ERROR: parent is NULL.\n");
+		return NULL;
+	}
+
+	switch(select){
+	case LEFT:
+		if (parent->left != NULL){
+			PRINTF("ERROR: parent already has a left child.\n");
+			return NULL;
+		}
+
+		parent->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		parent->left->data = lArg;
+		parent->left->left = NULL;
+		parent->left->right = NULL;
+		break;
+	case RIGHT:
+		if (parent->right != NULL){
+			PRINTF("ERROR: parent already has a right child.\n");
+			return NULL;
+		}
+
+		parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		parent->right->data = rArg;
+		parent->right->left = NULL;
+		parent->right->right = NULL;
+		break;
+	case BOTH:
+		if (parent->left != NULL){
+			PRINTF("ERROR: parent already has a left child.\n");
+			return NULL;
+		}
+
+		parent->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		parent->left->data = lArg;
+		parent->left->left = NULL;
+		parent->left->right = NULL;
+
+		if (parent->right != NULL){
+			PRINTF("ERROR: parent already has a right child.\n");
+			return NULL;
+		}
+
+		parent->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		parent->right->data = rArg;
+		parent->right->left = NULL;
+		parent->right->right = NULL;
+		break;
+	default:
+		PRINTF("ERROR: Wrong selector value.\n");
+		return NULL;
+	}
 
 	return parent;
 }
 
 BINTREE_NODE *MakeMirror(BINTREE_NODE *root)
 {
-	return NULL;
+	BINTREE_NODE *current = NULL;
+	BINTREE_NODE *swapBuffer = NULL;
+
+	QUEUE *BFS_Queue = NULL;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return NULL;
+	}
+
+	if (root->left==NULL && root->right==NULL){
+		return root;
+	}
+
+	current = root;
+	BFS_Queue = CreateQueue();
+
+	Enqueue(BFS_Queue, current);
+
+	while(1){
+		current = Dequeue(BFS_Queue);
+		
+		if (current == NULL)
+			break;
+
+		if (current->left)
+			Enqueue(BFS_Queue, current->left);
+
+		if (current->right)
+			Enqueue(BFS_Queue, current->right);
+
+		swapBuffer = current->left;
+		current->left = current->right;
+		current->right = swapBuffer;
+	}
+
+	DeleteQueue(BFS_Queue);
+	return root;
 }
 
 int DeleteBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	QUEUE *BFS_Queue = NULL;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return -1;
+	}
+
+	if (root->left==NULL && root->right==NULL){
+		free(root);
+	}
+
+	current = root;
+	BFS_Queue = CreateQueue();
+
+	Enqueue(BFS_Queue, current);
+
+	while(1){
+		current = Dequeue(BFS_Queue);
+		
+		if (current==NULL)
+			break;
+
+		if (current->left)
+			Enqueue(BFS_Queue, current->left);
+
+		if (current->right)
+			Enqueue(BFS_Queue, current->right);
+
+		free(current);
+	}
+	
+	DeleteQueue(BFS_Queue);
 	return 0;
 }
