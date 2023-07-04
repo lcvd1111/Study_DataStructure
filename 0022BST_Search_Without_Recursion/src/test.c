@@ -61,7 +61,7 @@ int UnitTest_Search(void)
 {
 	BINTREE_NODE *root = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 	root->number = 13;
-	strncpy(root->name, "Joon");
+	strncpy(root->name, "Joon", NAME_MAX);
 	root->left = NULL;
 	root->right = NULL;
 
