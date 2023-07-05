@@ -72,7 +72,65 @@ int UnitTest_Search(void)
 	MakeChild(root->right->left, BOTH, 14, "Maxwell",26, "Steinmetz");
 	MakeChild(root->right->right, BOTH, 55, "Friedberg", 100, "Lax");
 
+	if(strcmp(SearchBST(root, 55)->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -1;
+	}
 
+	if(strcmp(SearchBST(root, 100)->name, "Lax")){
+		PRINTF("Unit Test Failed.\n");
+		return -2;
+	}
+	
+	if(strcmp(SearchBST(root, 14)->name, "Maxwell")){
+		PRINTF("Unit Test Failed.\n");
+		return -3;
+	}
+	
+	if(strcmp(SearchBST(root, 26)->name, "Steinmetz")){
+		PRINTF("Unit Test Failed.\n");
+		return -4;
+	}
+
+	if(strcmp(SearchBST(root, 25)->name, "Munkres")){
+		PRINTF("Unit Test Failed.\n");
+		return -5;
+	}
+
+	if(strcmp(SearchBST(root, 74)->name, "Zorich")){
+		PRINTF("Unit Test Failed.\n");
+		return -6;
+	}
+	
+	if(strcmp(SearchBST(root, 5)->name, "Stewart")){
+		PRINTF("Unit Test Failed.\n");
+		return -7;
+	}
+
+	if(strcmp(SearchBST(root, 3)->name, "Courant")){
+		PRINTF("Unit Test Failed.\n");
+		return -8;
+	}
+
+	if(strcmp(SearchBST(root, 11)->name, "Callahan")){
+		PRINTF("Unit Test Failed.\n");
+		return -9;
+	}
+
+	if(strcmp(SearchBST(root, 7)->name, "Ellen")){
+		PRINTF("Unit Test Failed.\n");
+		return -10;
+	}
+
+	if(strcmp(SearchBST(root, 36)->name, "Hartman")){
+		PRINTF("Unit Test Failed.\n");
+		return -11;
+	}
+
+	if(SearchBST(root, 6) != NULL){
+		PRINTF("Unit Test Failed.\n");
+		return -12;
+	}
 
 	return 0;
 }

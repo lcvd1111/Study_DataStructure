@@ -11,6 +11,32 @@ BINTREE_NODE *SearchBST(BINTREE_NODE *root, int arg)
 	}
 
 	current = root;
+
+	while(1){
+		if (current->number > arg){
+			if (current->left == NULL)
+				return NULL;
+
+			current = current->left;
+			continue;
+		}
+		
+		if (current->number < arg){
+			if (current->right == NULL)
+				return NULL;
+			
+			current = current->right;
+			continue;
+		}
+
+		if (current->number == arg){
+			return current;
+		}
+
+		PRINTF("ERROR: Search went wrong.\n");
+		return NULL;
+	}
+	current = root;
 	return 0;
 }
 
