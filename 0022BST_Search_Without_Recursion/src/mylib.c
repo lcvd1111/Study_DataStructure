@@ -76,6 +76,18 @@ BINTREE_NODE *Pop(STACK *stackArg)
 	return ret;
 }
 
+BINTREE_NODE *Peek(STACK *stackArg)
+{
+	//If the below part is omiited, DeleteBintree Makes an error.
+	if (stackArg->end == NULL)
+		return NULL;
+	//You have to know why it is.
+	//It's a greate algorithm question in my opinion.
+	//Try to solve it.
+
+	return (stackArg->end->data);
+}
+
 STACK *EmptyStack(STACK *stackArg)
 {
 	if (stackArg == NULL){
@@ -225,6 +237,81 @@ BINTREE_NODE *MakeChild
 
 int DeleteBintree(BINTREE_NODE *root)
 {
+	BINTREE_NODE *current = NULL;
+	STACK *DFS_Stack = NULL;
+	STACK *left_Stack = NULL;
+	STACK *right_Stack = NULL;
+	int i=1, j=1, k=1;
+
+	if (root == NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return -1;
+	}
+
+	if (root->left == NULL && root->right == NULL){
+		free(root);
+		return 0;
+	}
+
+	current = root;
+	DFS_Stack = CreateStack();
+	left_Stack = CreateStack();
+	right_Stack = CreateStack();
+
+	while(i){
+		Push(DFS_Stack, current);
+		Push(left_Stack, current);
+		current = current->left;
+
+		if (current != NULL)
+			continue;
+
+		//When the current is NULL after moving left.
+		current = Pop(left_Stack);
+		Pop(DFS_Stack);
+		
+		while(j){
+			Push(DFS_Stack, current);
+			Push(right_Stack, current);
+			
+			current = current->right;
+
+			if (current != NULL)
+				break;
+
+			//when the current is NULL after moving right.
+			current = Pop(right_Stack);
+			Pop(DFS_Stack);
+
+			while(k){
+				free(current);
+
+				current = Pop(DFS_Stack);
+				if (current == NULL){
+					i=0;
+					j=0;
+					break;
+				}
+
+				if (current==Peek(left_Stack)){
+					Pop(left_Stack);
+					break;
+				}
+				else if (current==Peek(right_Stack)){
+					Pop(right_Stack);
+					continue;
+				}
+				else {
+					PRINTF("ERROR: Something went wrong.\n");
+					return -2;
+				}
+			}
+		}
+	}
+
+	DeleteStack(DFS_Stack);
+	DeleteStack(left_Stack);
+	DeleteStack(right_Stack);
 
 	return 0;
 }

@@ -54,6 +54,9 @@ int UnitTest_MakeChild(void)
 		PRINTF("Unit Test Failed.\n");
 		return -6;
 	}
+	
+	DeleteBintree(testRoot);
+
 	return 0;
 }
 
@@ -89,6 +92,48 @@ int UnitTest_Stack(void)
 		PRINTF("Unit Test Failed.\n");
 		return -3;
 	}
+
+	Push(testStack, root->right);
+	Push(testStack, root->left->left);
+	Push(testStack, root->left->right);
+
+	if(Pop(testStack)->number != 5){
+		PRINTF("Unit Test Failed.\n");
+		return -4;
+	}
+
+	if(Pop(testStack)->number != 4){
+		PRINTF("Unit Test Failed.\n");
+		return -5;
+	}
+
+	if(Pop(testStack)->number != 3){
+		PRINTF("Unit Test Failed.\n");
+		return -6;
+	}
+
+	if(Pop(testStack)->number != 2){
+		PRINTF("Unit Test Failed.\n");
+		return -7;
+	}
+
+	if(Pop(testStack)->number != 1){
+		PRINTF("Unit Test Failed.\n");
+		return -8;
+	}
+
+	if (testStack->begin != NULL || testStack->end != NULL){
+		PRINTF("Unit Test Failed.\n");
+		return -9;
+	}
+
+	if(Pop(testStack) != NULL){
+		PRINTF("Unit Test Failed.\n");
+		return -10;
+	}
+
+	DeleteStack(testStack);
+	DeleteBintree(root);
 
 	return 0;
 }
@@ -167,6 +212,8 @@ int UnitTest_Search(void)
 		PRINTF("Unit Test Failed.\n");
 		return -12;
 	}
+
+	DeleteBintree(root);
 
 	return 0;
 }

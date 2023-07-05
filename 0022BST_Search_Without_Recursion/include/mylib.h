@@ -38,6 +38,7 @@ typedef struct _STACK {
 STACK *CreateStack(void);
 STACK *Push(STACK *, BINTREE_NODE *);
 BINTREE_NODE *Pop(STACK *);
+BINTREE_NODE *Peek(STACK *);
 STACK *EmptyStack(STACK *stackArg);
 int DeleteStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, const char *, int, const char *);
