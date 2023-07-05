@@ -57,6 +57,42 @@ int UnitTest_MakeChild(void)
 	return 0;
 }
 
+int UnitTest_Stack(void)
+{
+	STACK *testStack = NULL;
+	BINTREE_NODE *root = NULL;
+
+	root = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+	root->number = 1;
+	strncpy(root->name, "TEST", 4);
+	root->left = NULL;
+	root->right = NULL;
+
+	MakeChild(root, BOTH, 2, "TEST", 3, "TEST");
+	MakeChild(root->left, BOTH, 4, "TEST", 5, "TEST");
+
+	testStack = CreateStack();
+
+	if (Pop(testStack)){
+		PRINTF("Unit Test Failed.\n");
+		return -1;
+	}
+
+	Push(testStack, root);
+	Push(testStack, root->left);
+	if(testStack->end->data->number != 2){
+		PRINTF("Unit Test Failed.\n");
+		return -2;
+	}
+
+	if(testStack->end->prev->data->number != 1){
+		PRINTF("Unit Test Failed.\n");
+		return -3;
+	}
+
+	return 0;
+}
+
 int UnitTest_Search(void)
 {
 	BINTREE_NODE *root = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));

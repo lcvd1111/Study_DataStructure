@@ -10,7 +10,14 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	printf("Unit Test for MakeChild: Success.\n");
-	
+
+	if(err = UnitTest_Stack()){
+		printf("Unit Test for Stack: Fail.\n");
+		printf("ERR code: %d\n", err);
+		return -1;
+	}
+	printf("Unit Test for Stack: Success.\n");
+
 	if(err = UnitTest_Search()){
 		printf("Unit Test for BST Search: Fail.\n");
 		printf("ERR code: %d\n", err);

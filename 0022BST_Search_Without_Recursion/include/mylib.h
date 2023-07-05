@@ -23,8 +23,24 @@ typedef enum {
 	BOTH
 } CHILD_SELECTOR;
 
+typedef struct _STACK_NODE {
+	BINTREE_NODE *data;
+	struct _STACK_NODE *prev;
+	struct _STACK_NODE *next;
+} STACK_NODE;
+
+typedef struct _STACK {
+	STACK_NODE *begin;
+	STACK_NODE *end;
+} STACK;
+
 //Function Definitions
+STACK *CreateStack(void);
+STACK *Push(STACK *, BINTREE_NODE *);
+BINTREE_NODE *Pop(STACK *);
+STACK *EmptyStack(STACK *stackArg);
+int DeleteStack(STACK *);
 BINTREE_NODE *MakeChild(BINTREE_NODE *, CHILD_SELECTOR, int, const char *, int, const char *);
 BINTREE_NODE *SearchBST(BINTREE_NODE *root, int);
-
+int DeleteBintree(BINTREE_NODE *root);
 #endif
