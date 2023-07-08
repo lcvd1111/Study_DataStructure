@@ -30,7 +30,7 @@ STACK *CreateStack(void);
 STACK *Push(STACK *, BINTREE_NODE *);
 BINTREE_NODE *Pop(STACK *);
 STACK *EmptyStack(STACK *);
-int *DeleteStack(STACK *);
+int DeleteStack(STACK *);
 BINTREE_NODE *Search(BINTREE_NODE *root, int key);
 BINTREE_NODE *Insert(BINTREE_NODE *root, int keyArg, const char *keyStr);
 BINTREE_NODE *Delete(BINTREE_NODE *root, int key);
