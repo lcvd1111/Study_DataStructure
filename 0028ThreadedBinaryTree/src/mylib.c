@@ -345,14 +345,34 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 	}
 
 	src_current = src;
+	dst_root = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+	dst_root->data = src_current->data;
+	dst_root->left = NULL;
+	dst_root->right = NULL;
 	BFS_Deque_src = CreateDeque();
 	BFS_Deque_dst = CreateDeque();
 
+	if (src_current->left != NULL){
+		dst_current->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		dst_current->left->data = src_current->left->data;
+		PushRight(BFS_Deque_src, src_current->left);
+		PushRight(BFS_Deque_dst, dst_current->left);
+	}
+
+	if (src_current->right != NULL){
+		dst_current->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
+		dst_current->right->data = src_current->right->data;
+		PushRight(BFS_Deque_src, src_current->right);
+		PushRight(BFS_Deque_dst, dst_current->right);
+	}
+
 	while(1){
-		dst_current = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
-		dst_current->data = src_current->data;
-		dst_current->left = NULL;
-		dst_current->right = NULL;
+		src_current = PopLeft(BFS_Deque_src);
+		if (src_current == NULL)
+			break;
+
+		dst_current = PopLeft(BFS_Deque_dst);
+
 		if (src_current->left != NULL){
 			dst_current->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 			dst_current->left->data = src_current->left->data;
@@ -366,12 +386,6 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 			PushRight(BFS_Deque_src, src_current->right);
 			PushRight(BFS_Deque_dst, dst_current->right);
 		}
-
-		src_current = PopLeft(BFS_Deque_src);
-		if (src_current == NULL)
-			break;
-
-		dst_current = PopLeft(BFS_Deque_dst);
 	}
 
 	DeleteDeque(BFS_Deque_src);
