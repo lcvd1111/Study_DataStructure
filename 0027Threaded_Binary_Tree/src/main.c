@@ -45,7 +45,9 @@ int main(int argc, char **argv)
 		return -6;
 	}
 	printf("Unit Test for Threaded tree Traversing: Success.\n");
-	
+
+	UnitTest_TimeCompare();
+
 	return 0;
 }
 

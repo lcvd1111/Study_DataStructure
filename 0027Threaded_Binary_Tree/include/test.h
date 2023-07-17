@@ -9,5 +9,6 @@ int UnitTest_CopyBintree(void);
 int UnitTest_DFSandBFS(void);
 int UnitTest_CreateThreaded(void);
 int UnitTest_ThreadedTraverse(void);
+int UnitTest_TimeCompare(void);
 
 #endif

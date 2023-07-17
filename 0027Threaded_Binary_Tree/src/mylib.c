@@ -349,12 +349,15 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 	dst_root->data = src_current->data;
 	dst_root->left = NULL;
 	dst_root->right = NULL;
+	dst_current = dst_root;
 	BFS_Deque_src = CreateDeque();
 	BFS_Deque_dst = CreateDeque();
 
 	if (src_current->left != NULL){
 		dst_current->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 		dst_current->left->data = src_current->left->data;
+		dst_current->left->left = NULL;
+		dst_current->left->right = NULL;
 		PushRight(BFS_Deque_src, src_current->left);
 		PushRight(BFS_Deque_dst, dst_current->left);
 	}
@@ -362,6 +365,8 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 	if (src_current->right != NULL){
 		dst_current->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 		dst_current->right->data = src_current->right->data;
+		dst_current->right->left = NULL;
+		dst_current->right->right = NULL;
 		PushRight(BFS_Deque_src, src_current->right);
 		PushRight(BFS_Deque_dst, dst_current->right);
 	}
@@ -376,6 +381,8 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 		if (src_current->left != NULL){
 			dst_current->left = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 			dst_current->left->data = src_current->left->data;
+			dst_current->left->left = NULL;
+			dst_current->left->right = NULL;
 			PushRight(BFS_Deque_src, src_current->left);
 			PushRight(BFS_Deque_dst, dst_current->left);
 		}
@@ -383,6 +390,8 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 		if (src_current->right != NULL){
 			dst_current->right = (BINTREE_NODE *)malloc(sizeof(BINTREE_NODE));
 			dst_current->right->data = src_current->right->data;
+			dst_current->right->left = NULL;
+			dst_current->right->right = NULL;
 			PushRight(BFS_Deque_src, src_current->right);
 			PushRight(BFS_Deque_dst, dst_current->right);
 		}
@@ -394,18 +403,133 @@ BINTREE_NODE *CopyBintree(BINTREE_NODE *src)
 	return dst_root;
 }
 
-BINTREE_NODE *MakeThreadedTree(BINTREE_NODE *src);
+BINTREE_NODE *FindInorderSuccessor(BINTREE_NODE *root, BINTREE_NODE *target)
+{
+	BINTREE_NODE *current = NULL;
+	BINTREE_NODE *ret = NULL;
 
-BINTREE_NODE *ThreadedTraverse(BINTREE_NODE *root, DEQUE *output);
+	current = root;
 
-int *DeleteBintree(BINTREE_NODE *root)
+	while(1){
+		if (current->data > target->data){
+			ret = current;
+			current = current->left;
+			continue;
+		}
+
+		if (current->data < target->data){
+			current = current->right;
+			continue;
+		}
+
+		if (current->data == target->data){
+			break;
+		}
+
+		PRINTF("ERROR: Unexpected Situation Happened.\n");
+		return NULL;
+	}
+
+	return ret;
+}
+
+BINTREE_NODE *MakeThreadedTree(BINTREE_NODE *src)
+{
+	BINTREE_NODE *current = NULL;
+	DEQUE *BFS_Deque = NULL;
+
+	if (src == NULL){
+		PRINTF("ERROR: src is NULL.\n");
+		return NULL;
+	}
+
+	current = src;
+	BFS_Deque = CreateDeque();
+
+	while(1){
+		if (current->left != NULL)
+			PushLeft(BFS_Deque, current->left);
+		
+		if (current->right != NULL){
+			current->threadFlag = 0;
+			PushLeft(BFS_Deque, current->right);
+		}
+		else {
+			current->threadFlag = 1;
+			current->right = FindInorderSuccessor(src, current);
+		}
+
+		current = PopRight(BFS_Deque);
+
+		if (current==NULL)
+			break;
+	}
+
+	if (BFS_Deque->begin != NULL || BFS_Deque->end != NULL){
+		PRINTF("ERROR: Unexpected Situation Happened.\n");
+		return NULL;
+	}
+
+	DeleteDeque(BFS_Deque);
+	return src;
+}
+
+BINTREE_NODE *ThreadedTraverse(BINTREE_NODE *root, DEQUE *output)
+{
+	BINTREE_NODE *current = NULL;
+	int i=1, j=1;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return NULL;
+	}
+
+	if (output==NULL){
+		PRINTF("ERROR: output storage is NULL.\n");
+		return NULL;
+	}
+
+	current = root;
+	while(i){
+		if (current->left != NULL){
+			current = current->left;
+			continue;
+		}
+
+		while(j){
+			PushRight(output, current);
+
+			if (current->right == NULL){
+				i=0;
+				break;
+			}
+
+			if (current->threadFlag == 0){
+				current = current->right;
+				break;
+			}
+
+			if (current->threadFlag == 1){
+				current = current->right;
+				continue;
+			}
+
+			PRINTF("ERROR: Unexpected situation occured.\n");
+			return NULL;
+		}
+	}
+
+	return root;
+}
+
+int DeleteBintree(BINTREE_NODE *root)
 {
 	DEQUE *BFS_Deque = NULL;
 	BINTREE_NODE *current = NULL;
 
 	if (root == NULL){
 		PRINTF("ERROR: root is NULL.\n");
-		return NULL;
+		return -1;
 	}
 
 	if (root->left==NULL && root->right==NULL){
@@ -431,5 +555,46 @@ int *DeleteBintree(BINTREE_NODE *root)
 	}
 
 	DeleteDeque(BFS_Deque);
+	return 0;
+}
+
+int DeleteThreadedTree(BINTREE_NODE *root)
+{
+	BINTREE_NODE *current = NULL;
+	DEQUE *BFS_Deque = NULL;
+
+	if (root==NULL){
+		PRINTF("ERROR: root is NULL.\n");
+		return -1;
+	}
+
+	current = root;
+	BFS_Deque = CreateDeque();
+
+	while(1){
+		if (current->threadFlag == 1)
+			current->right = NULL;
+
+		current->threadFlag = 0;
+
+		if (current->left != NULL)
+			PushLeft(BFS_Deque, current->left);
+
+		if (current->right != NULL)
+			PushLeft(BFS_Deque, current->right);
+
+		current = PopRight(BFS_Deque);
+
+		if (current == NULL)
+			break;
+	}
+
+	if(DeleteBintree(root)){
+		PRINTF("ERROR: DeleteBintree() failed.\n");
+		return -1;
+	}
+
+	DeleteDeque(BFS_Deque);
+
 	return 0;
 }

@@ -11,6 +11,7 @@
 typedef struct _BINTREE_NODE {
 	int data;
 	struct _BINTREE_NODE *left, *right;
+	char threadFlag;
 } BINTREE_NODE;
 
 typedef struct _DEQUE_NODE {
@@ -34,7 +35,9 @@ int DeleteDeque(DEQUE *);
 BINTREE_NODE *InorderTraverse(BINTREE_NODE *root, DEQUE *outputDeque);
 BINTREE_NODE *LevelorderTraverse(BINTREE_NODE *root, DEQUE *outputDeque);
 BINTREE_NODE *CopyBintree(BINTREE_NODE *src);
+BINTREE_NODE *FindInorderSuccessor(BINTREE_NODE *root, BINTREE_NODE *target);
 BINTREE_NODE *MakeThreadedTree(BINTREE_NODE *src);
 BINTREE_NODE *ThreadedTraverse(BINTREE_NODE *root, DEQUE *outputDeque);
-int *DeleteBintree(BINTREE_NODE *root);
+int DeleteBintree(BINTREE_NODE *root);
+int DeleteThreadedTree(BINTREE_NODE *root); 
 #endif
