@@ -20,6 +20,12 @@ typedef struct _BST {
 	int size;
 } BST;
 
+typedef enum _DIRECTION {
+	LEFT,
+	RIGHT,
+	NONE,
+} DIRECTION;
+
 typedef struct _DEQUE_NODE {
 	BST_NODE *data;
 	struct _DEQUE_NODE *prev, *next;
@@ -32,7 +38,7 @@ typedef struct _DEQUE {
 
 //Function Declarations
 BST *CreateBST(void);
-BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore);
+BST *Search(BST *bstArg, char *searchArg, BST_NODE **outputStore);
 BST *Add(BST *bstArg, char *addName, char *addDsc);
 BST *Delete(BST *bstArg, char *deleteArg);
 int CleanBST(BST *bstArg);

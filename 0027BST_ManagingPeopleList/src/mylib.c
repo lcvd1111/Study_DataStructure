@@ -11,7 +11,7 @@ BST *CreateBST(void)
 	return ret;
 }
 
-BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore)
+BST *Search(BST *bstArg, char *searchArg, BST_NODE **outputStore)
 {
 	BST_NODE *current = NULL;
 
@@ -20,11 +20,6 @@ BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore)
 		return NULL;
 	}
 	
-	if (outputStore == NULL){
-		PRINTF("ERROR: outputStore is NULL.\n");
-		return NULL;
-	}
-
 	if (bstArg->root == NULL)
 		return NULL;
 
@@ -32,11 +27,11 @@ BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore)
 
 	while(1){
 		if (strcmp(current->name, searchArg) == 0){
-			outputStore = current;
+			*outputStore = current;
 			return bstArg;
 		}
 
-		if (strcmp(current->name, searchArg) > 0){
+		if (strcmp(current->name, searchArg) < 0){
 			if (current->right != NULL){
 				current = current->right;
 				continue;
@@ -45,7 +40,7 @@ BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore)
 			return NULL;
 		}
 
-		if (strcmp(current->name, searchArg) < 0){
+		if (strcmp(current->name, searchArg) > 0){
 			if (current->left != NULL){
 				current = current->left;
 				continue;
@@ -58,16 +53,13 @@ BST *Search(BST *bstArg, char *searchArg, BST_NODE *outputStore)
 
 BST *Add(BST *bstArg, char *addName, char *addDsc)
 {
-PRINTF("DEBUG\n");
 	BST_NODE *current = NULL;
 
-PRINTF("DEBUG\n");
 	if (bstArg==NULL){
 		PRINTF("ERROR: bstArg is NULL.\n");
 		return NULL;
 	}
 
-PRINTF("DEBUG\n");
 	if (bstArg->root == NULL){
 		if (bstArg->size != 0){
 			PRINTF("ERROR: bstArg is broken somewhere.\n");
@@ -82,56 +74,39 @@ PRINTF("DEBUG\n");
 		return bstArg;
 	}
 	
-PRINTF("DEBUG\n");
 	current = bstArg->root;
 
-PRINTF("DEBUG\n");
 	while(1){
 		if (strcmp(current->name, addName) == 0)
 			return NULL;
 
-PRINTF("DEBUG\n");
-		if (strcmp(current->name, addName) > 0){
+		if (strcmp(current->name, addName) < 0){
 			if (current->right != NULL){
 				current = current->right;
 				continue;
 			}
-PRINTF("DEBUG\n");
 			//else if (current->right == NULL)
 			current->right = (BST_NODE *)malloc(sizeof(BST_NODE));
 			strncpy(current->right->name, addName, STRING_LEN);
-PRINTF("DEBUG\n");
 			strncpy(current->right->description, addDsc, STRING_LEN);
-PRINTF("DEBUG\n");
 			current->right->left = NULL;
-PRINTF("DEBUG\n");
 			current->right->right = NULL;
 			bstArg->size += 1;
-PRINTF("DEBUG\n");
 			return bstArg;
 		}
-
-		if (strcmp(current->name, addName) < 0){
-PRINTF("DEBUG\n");
+		
+		if (strcmp(current->name, addName) > 0){
 			if (current->left != NULL){
-PRINTF("DEBUG\n");
 				current = current->left;
-PRINTF("DEBUG\n");
 				continue;
 			}
 			//else if (current->left == NULL)
 			current->left = (BST_NODE *)malloc(sizeof(BST_NODE));
-PRINTF("DEBUG\n");
 			strncpy(current->left->name, addName, STRING_LEN);
-PRINTF("DEBUG\n");
 			strncpy(current->left->description, addDsc, STRING_LEN);
-PRINTF("DEBUG\n");
 			current->left->left = NULL;
-PRINTF("DEBUG\n");
 			current->left->right = NULL;
-PRINTF("DEBUG\n");
 			bstArg->size += 1;
-PRINTF("DEBUG\n");
 			return bstArg;
 		}
 	}
@@ -139,11 +114,170 @@ PRINTF("DEBUG\n");
 
 BST *Delete(BST *bstArg, char *deleteArg)
 {
-	;
+	BST_NODE *current = NULL;
+	BST_NODE *parent = NULL;
+	DIRECTION direction = NONE;
+	BST_NODE *temp = NULL;
+	BST_NODE *successor = NULL;
+	BST_NODE *parent_of_successor = NULL;
+
+	if (bstArg==NULL){
+		PRINTF("ERROR: bstArg is NULL.\n");
+		return NULL;
+	}
+
+	if (deleteArg == NULL){
+		PRINTF("ERROR: deleteArg is NULL.\n");
+		return NULL;
+	}
+
+	if (bstArg->root == NULL)
+		return NULL;
+	
+	current = bstArg->root;
+	while(1){
+		if (current==NULL)
+			return NULL;
+		
+		if (strcmp(current->name, deleteArg)==0)
+			break;
+
+		if (strcmp(current->name, deleteArg)>0){
+			parent = current;
+			current = current->left;
+			direction = LEFT;
+		}
+
+		if (strcmp(current->name, deleteArg)<0){
+			parent = current;
+			current = current->right;
+			direction = RIGHT;
+		}
+	}
+
+	if (strcmp(current->name, deleteArg) != 0){
+		PRINTF("ERROR: Something unexpected happened.\n");
+		return NULL;
+	}
+
+	if (current->left == NULL && current->right == NULL){
+		if (current == bstArg->root){
+			free(bstArg->root);
+			bstArg->root = NULL;
+			return bstArg;
+		}
+
+		switch (direction){
+		case LEFT:
+			parent->left = NULL;
+			break;
+		case RIGHT:
+			parent->right = NULL;
+			break;
+		}
+		free(current);
+		return bstArg;
+	}
+
+	if (current->left == NULL)//When the current node has only a right child.
+	{
+		if (current == bstArg->root){
+			bstArg->root = current->right;
+			free(current);
+			return bstArg;
+		}
+
+		switch (direction){
+		case LEFT:
+			parent->left = current->right;
+			break;
+		case RIGHT:
+			parent->right = current->right;
+			break;
+		}
+		free(current);
+		return bstArg;
+	}
+
+	if (current->left == NULL)//When the current node has only a left child.
+	{
+		if (current == bstArg->root){
+			bstArg->root = current->left;
+			free(current);
+			return bstArg;
+		}
+
+		switch (direction){
+		case LEFT:
+			parent->left = current->left;
+			break;
+		case RIGHT:
+			parent->right = current->left;
+			break;
+		}
+		free(current);
+		return bstArg;
+	}
+
+	//When the current node has both left and right children.
+	if (current->left == NULL || current->right == NULL){
+		PRINTF("ERROR: Something unexpected occured.\n");
+		return NULL;
+	}
+
+	parent_of_successor = current;
+	successor = current->right;
+	if (successor->left == NULL){
+		strncpy(current->name, successor->name, STRING_LEN);
+		strncpy(current->description, successor->description, STRING_LEN);
+		current->right = successor->right;
+		free(successor);
+		return bstArg;
+	}
+
+	while(1){
+		parent_of_successor = successor;
+		successor = successor->left;
+
+		if (successor->left != NULL)
+			continue;
+
+		break;
+	}
+
+	strncpy(current->name, successor->name, STRING_LEN);
+	strncpy(current->description, successor->description, STRING_LEN);
+	parent_of_successor->left = successor->right;
+	free(successor);
+
+	return bstArg;
 }
 
 int CleanBST(BST *bstArg)
 {
+	BST_NODE *popOutput = NULL;
+	DEQUE *traverseResult = NULL;
+	
+	if (bstArg==NULL){
+		PRINTF("ERROR: bstArg is NULL.\n");
+		return -1;
+	}
+
+	if (bstArg->root = NULL){
+		free(bstArg);
+		return 0;
+	}
+
+	traverseResult = InorderTraverse(bstArg);
+
+	while(PopLeft(traverseResult, &popOutput) != NULL)
+		free(popOutput);
+
+	if (CleanDeque(traverseResult) != 0){
+		PRINTF("ERROR: CleanDeque( ) failed.\n");
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -151,8 +285,8 @@ DEQUE *CreateDeque(void)
 {
 	DEQUE *ret = NULL;
 	ret = (DEQUE *)malloc(sizeof(DEQUE));
-	ret->begin == NULL;
-	ret->end == NULL;
+	ret->begin = NULL;
+	ret->end = NULL;
 	return ret;
 }
 
