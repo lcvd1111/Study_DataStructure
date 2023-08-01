@@ -6,9 +6,9 @@
 //Function Declarations
 int MainMenu(void);
 int UserPrint(BST *bstArg);
-int UserSearch(void);
-int UserAdd(void);
-int UserDelete(void);
-int UserEmpty(void);
+int UserSearch(BST *bstArg);
+int UserAdd(BST *bstArg);
+int UserDelete(BST *bstArg);
+int UserEmpty(BST *bstArg);
 
 #endif

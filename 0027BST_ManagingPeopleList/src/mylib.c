@@ -290,6 +290,9 @@ int CleanBST(BST *bstArg)
 		return -1;
 	}
 
+	bstArg->root = NULL;
+	bstArg->size = 0;
+
 	return 0;
 }
 
@@ -425,7 +428,7 @@ int CleanDeque(DEQUE *dequeArg)
 	while(PopRight(dequeArg, &temp) != NULL)
 		;
 	free(dequeArg);
-	
+
 	return 0;
 }
 
