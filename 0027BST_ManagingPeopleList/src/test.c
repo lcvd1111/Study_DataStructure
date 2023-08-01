@@ -4,7 +4,8 @@ int UnitTest_BST(void)
 {
 	BST *testBST = NULL;
 	BST_NODE *searchResult = NULL;
-	
+	DEQUE *traverseDeque = NULL;
+
 	testBST = CreateBST();
 	if (testBST == NULL){
 		PRINTF("Unit Test Failed.\n");
@@ -113,12 +114,198 @@ int UnitTest_BST(void)
 	if(strcmp(searchResult->description, "ODE1")){
 		PRINTF("Unit Test Failed.\n");
 		return -18;
-	}	
+	}
 
-	if (CleanBST(testBST) != 0){
+	if (Delete(testBST, "TESTNAME") != NULL){
 		PRINTF("Unit Test Failed.\n");
 		return -19;
 	}
+
+	Delete(testBST, "Joon");
+	traverseDeque = InorderTraverse(testBST);
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Boyce")){
+		PRINTF("Unit Test Failed.\n");
+		return -20;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Courant")){
+		PRINTF("Unit Test Failed.\n");
+		return -21;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Ellen")){
+		PRINTF("Unit Test Failed.\n");
+		return -22;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -23;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Poole")){
+		PRINTF("Unit Test Failed.\n");
+		return -24;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Susan")){
+		PRINTF("Unit Test Failed.\n");
+		return -25;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Tannenbaum")){
+		PRINTF("Unit Test Failed.\n");
+		return -26;
+	}
+
+	CleanDeque(traverseDeque);
+	traverseDeque = NULL;
+
+	Delete(testBST, "Courant");
+	traverseDeque = InorderTraverse(testBST);
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Boyce")){
+		PRINTF("Unit Test Failed.\n");
+		return -27;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Ellen")){
+		PRINTF("Unit Test Failed.\n");
+		return -28;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -29;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Poole")){
+		PRINTF("Unit Test Failed.\n");
+		return -30;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Susan")){
+		PRINTF("Unit Test Failed.\n");
+		return -31;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Tannenbaum")){
+		PRINTF("Unit Test Failed.\n");
+		return -32;
+	}
+
+	CleanDeque(traverseDeque);
+	traverseDeque = NULL;
+
+	Delete(testBST, "Boyce");
+	traverseDeque = InorderTraverse(testBST);
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Ellen")){
+		PRINTF("Unit Test Failed.\n");
+		return -33;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -34;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Poole")){
+		PRINTF("Unit Test Failed.\n");
+		return -35;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Susan")){
+		PRINTF("Unit Test Failed.\n");
+		return -36;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Tannenbaum")){
+		PRINTF("Unit Test Failed.\n");
+		return -37;
+	}
+
+	CleanDeque(traverseDeque);
+	traverseDeque = NULL;
+
+	Delete(testBST, "Tannenbaum");
+	traverseDeque = InorderTraverse(testBST);
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Ellen")){
+		PRINTF("Unit Test Failed.\n");
+		return -38;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -39;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Poole")){
+		PRINTF("Unit Test Failed.\n");
+		return -39;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Susan")){
+		PRINTF("Unit Test Failed.\n");
+		return -40;
+	}
+
+	CleanDeque(traverseDeque);
+	traverseDeque = NULL;
+
+	Delete(testBST, "Ellen");
+	traverseDeque = InorderTraverse(testBST);
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Friedberg")){
+		PRINTF("Unit Test Failed.\n");
+		return -41;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Poole")){
+		PRINTF("Unit Test Failed.\n");
+		return -42;
+	}
+
+	PopLeft(traverseDeque, &searchResult);
+	if (strcmp(searchResult->name, "Susan")){
+		PRINTF("Unit Test Failed.\n");
+		return -43;
+	}
+
+	CleanDeque(traverseDeque);
+	traverseDeque = NULL;
+
+	if (CleanBST(testBST) != 0){
+		PRINTF("Unit Test Failed.\n");
+		return -27;
+	}
+
 	return 0;
 }
 

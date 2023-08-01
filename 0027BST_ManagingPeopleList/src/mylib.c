@@ -146,12 +146,14 @@ BST *Delete(BST *bstArg, char *deleteArg)
 			parent = current;
 			current = current->left;
 			direction = LEFT;
+			continue;
 		}
 
 		if (strcmp(current->name, deleteArg)<0){
 			parent = current;
 			current = current->right;
 			direction = RIGHT;
+			continue;
 		}
 	}
 
@@ -160,10 +162,12 @@ BST *Delete(BST *bstArg, char *deleteArg)
 		return NULL;
 	}
 
+	//When the current doesn't have any child.
 	if (current->left == NULL && current->right == NULL){
 		if (current == bstArg->root){
 			free(bstArg->root);
 			bstArg->root = NULL;
+			bstArg->size -= 1;
 			return bstArg;
 		}
 
@@ -176,14 +180,16 @@ BST *Delete(BST *bstArg, char *deleteArg)
 			break;
 		}
 		free(current);
+		bstArg->size -= 1;
 		return bstArg;
 	}
 
-	if (current->left == NULL)//When the current node has only a right child.
-	{
+	//When the current node has only a right child.
+	if (current->left == NULL && current->right != NULL){
 		if (current == bstArg->root){
 			bstArg->root = current->right;
 			free(current);
+			bstArg->size -= 1;
 			return bstArg;
 		}
 
@@ -195,15 +201,18 @@ BST *Delete(BST *bstArg, char *deleteArg)
 			parent->right = current->right;
 			break;
 		}
+		bstArg->size -= 1;
 		free(current);
 		return bstArg;
 	}
 
-	if (current->left == NULL)//When the current node has only a left child.
+	//When the current node has only a left child.
+	if (current->left != NULL && current->right == NULL)
 	{
 		if (current == bstArg->root){
 			bstArg->root = current->left;
 			free(current);
+			bstArg->size -= 1;
 			return bstArg;
 		}
 
@@ -215,6 +224,7 @@ BST *Delete(BST *bstArg, char *deleteArg)
 			parent->right = current->left;
 			break;
 		}
+		bstArg->size -= 1;
 		free(current);
 		return bstArg;
 	}
@@ -232,6 +242,7 @@ BST *Delete(BST *bstArg, char *deleteArg)
 		strncpy(current->description, successor->description, STRING_LEN);
 		current->right = successor->right;
 		free(successor);
+		bstArg->size -= 1;
 		return bstArg;
 	}
 
@@ -248,6 +259,7 @@ BST *Delete(BST *bstArg, char *deleteArg)
 	strncpy(current->name, successor->name, STRING_LEN);
 	strncpy(current->description, successor->description, STRING_LEN);
 	parent_of_successor->left = successor->right;
+	bstArg->size -= 1;
 	free(successor);
 
 	return bstArg;
