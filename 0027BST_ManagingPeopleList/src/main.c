@@ -5,6 +5,7 @@ int main(int argc, char **argv)
 	BST *peopleList = NULL;
 	int loopCtl = 1;
 	int userInput = 0;
+
 #ifdef UNIT_TEST_ON
 	if (UnitTest_BST()){
 		printf("Unit Test for Binary Search Tree failed.\n");

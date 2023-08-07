@@ -157,6 +157,7 @@ BST *Delete(BST *bstArg, char *deleteArg)
 		}
 	}
 
+	//Exception Handling.
 	if (strcmp(current->name, deleteArg) != 0){
 		PRINTF("ERROR: Something unexpected happened.\n");
 		return NULL;
