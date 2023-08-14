@@ -49,6 +49,16 @@ int UnitTest_Deque(void)
 	if (testDeque->begin != -1 || testDeque->end != -1)
 		return -10;
 
+	PushLeft(testDeque, testNode);
+	for (int i=1 ; i<DEQUE_MAX ; i++){
+		PushLeft(testDeque, testNode+i);
+		
+		if (testDeque->begin + i != DEQUE_MAX)
+			return -11;
+	}
+
+	if (PushLeft(testDeque, testNode) != NULL)
+		return -12;
 
 	RemoveDeque(testDeque);
 
