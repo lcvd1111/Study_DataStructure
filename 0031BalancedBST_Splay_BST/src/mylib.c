@@ -174,14 +174,15 @@ SPLAY_BST_NODE *Search_BST(SPLAY_BST *BST, int value)
 SPLAY_BST *Delete_BST(SPLAY_BST *BST, int value)
 {
 	SPLAY_BST_NODE *searchResult = NULL;
-
+	SPLAY_BST_NODE *InorderPredecessor = NULL;
+	
 	//Exception Handling
 	if (BST == NULL){
 		PRINTF("ERROR: BST is NULL.\n");
 		return NULL;
 	}
 
-	searchResult = SearchBST(BST, value);
+	searchResult = Search_BST(BST, value);
 
 	//When the element doesn't exist in BST
 	if (searchResult == NULL)
@@ -192,17 +193,83 @@ SPLAY_BST *Delete_BST(SPLAY_BST *BST, int value)
 		//When the element is a root node.
 		if (searchResult->parent == NULL){
 			//Exception Handling
-			if (searchRestul != BST->root){
+			if (searchResult != BST->root){
 				PRINTF("ERROR: Unexpected Event occured.\n");
 				return NULL;
 			}
 			BST->root = searchResult->left;
-			free(BST->root);
+			free(searchResult);
+			return BST;
+		}
+		//When the element is not a root node.
+		if (searchResult->parent->right == searchResult){
+			searchResult->parent->right = searchResult->left;
+			free(searchResult);
 			return BST;
 		}
 
+		if(searchResult->parent->left != searchResult){
+			PRINTF("ERROR: Unexpected Event occured.\n");
+			return NULL;
+		}
+
+		searchResult->parent->left = searchResult->left;
+		free(searchResult);
+		return BST;
 	}
 
+	//When element has only a right child.
+	if (searchResult->left == NULL){
+		//When the element is a root node.
+		if (searchResult->parent == NULL){
+			//Exception Handling
+			if (searchResult != BST->root){
+				PRINTF("ERROR: Unexpected Event occured.\n");
+				return NULL;
+			}
+			BST->root = searchResult->right;
+			free(searchResult);
+			return BST;
+		}
+		//When the element is not a root node.
+		if (searchResult->parent->right == searchResult){
+			searchResult->parent->right = searchResult->right;
+			free(searchResult);
+			return BST;
+		}
+
+		if(searchResult->parent->left != searchResult){
+			PRINTF("ERROR: Unexpected Event occured.\n");
+			return NULL;
+		}
+
+		searchResult->parent->left = searchResult->right;
+		free(searchResult);
+		return BST;
+	}
+
+	//When element has both left and right children.
+	if (searchResult->left == NULL || searchResult->right == NULL){
+		PRINTF("ERROR: Unexpected Event occured.\n");
+		return NULL;
+	}
+
+	InorderPredecessor = searchResult->left;
+	while(1){
+		if (InorderPredecessor->right == NULL)
+			break;
+		InorderPredecessor = InorderPredecessor->right;
+	}
+
+	searchResult->data = InorderPredecessor->data;
+	if (InorderPredecessor->parent->left == InorderPredecessor)
+		InorderPredecessor->parent->left = InorderPredecessor->left;
+	else
+		InorderPredecessor->parent->right = InorderPredecessor->left;
+
+	free(InorderPredecessor);
+
+	return BST;
 }
 
 SPLAY_BST_NODE *RotateLeft(SPLAY_BST *BST, SPLAY_BST_NODE *node);
