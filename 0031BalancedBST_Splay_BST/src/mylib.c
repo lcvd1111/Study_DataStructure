@@ -6,6 +6,8 @@ SPLAY_BST *Create_SplayBST(void);
 SPLAY_BST *Insert_SplayBST(SPLAY_BST *BST, int value);
 SPLAY_BST_NODE *Search_SplayBST(SPLAY_BST *BST, int value);
 SPLAY_BST *Delete_SplayBST(SPLAY_BST *BST, int value);
+
+
 int Remove_SplayBST(SPLAY_BST *BST)
 {
 	DEQUE *BFS_Deque = NULL;
@@ -169,7 +171,40 @@ SPLAY_BST_NODE *Search_BST(SPLAY_BST *BST, int value)
 	}
 }
 
-SPLAY_BST *Delete_BST(SPLAY_BST *BST, int value);
+SPLAY_BST *Delete_BST(SPLAY_BST *BST, int value)
+{
+	SPLAY_BST_NODE *searchResult = NULL;
+
+	//Exception Handling
+	if (BST == NULL){
+		PRINTF("ERROR: BST is NULL.\n");
+		return NULL;
+	}
+
+	searchResult = SearchBST(BST, value);
+
+	//When the element doesn't exist in BST
+	if (searchResult == NULL)
+		return NULL;
+
+	//When element doesn't have a right child.
+	if (searchResult->right == NULL){
+		//When the element is a root node.
+		if (searchResult->parent == NULL){
+			//Exception Handling
+			if (searchRestul != BST->root){
+				PRINTF("ERROR: Unexpected Event occured.\n");
+				return NULL;
+			}
+			BST->root = searchResult->left;
+			free(BST->root);
+			return BST;
+		}
+
+	}
+
+}
+
 SPLAY_BST_NODE *RotateLeft(SPLAY_BST *BST, SPLAY_BST_NODE *node);
 SPLAY_BST_NODE *RotateRight(SPLAY_BST *BST, SPLAY_BST_NODE *node);
 
