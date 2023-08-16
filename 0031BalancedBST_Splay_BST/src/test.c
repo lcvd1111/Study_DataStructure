@@ -60,9 +60,47 @@ int UnitTest_Deque(void)
 	if (PushLeft(testDeque, testNode) != NULL)
 		return -12;
 
+	if (PushRight(testDeque, testNode) != NULL)
+		return -13;
+
+	for (int i=0 ; i<DEQUE_MAX-2 ; i++){
+		if (testDeque->begin != i+1)
+			return -14;
+		PopLeft(testDeque, &popOutput);
+		if (popOutput->data != DEQUE_MAX - 1 - i)
+			return -15;
+		if (testDeque->begin != i+2)
+			return -16;
+	}
+
+	if (testDeque->begin != DEQUE_MAX-1 || testDeque->end != 0)
+		return -17;
+
+	if (PopLeft(testDeque, &popOutput) == NULL)
+		return -18;
+
+	if (popOutput->data != 1)
+		return -19;
+
+	if (testDeque->begin != 0 || testDeque->end != 0)
+		return -20;
+
+	if (PopLeft(testDeque, &popOutput) == NULL)
+		return -21;
+
+	if (popOutput->data != 0)
+		return -22;
+
+	if (PopLeft(testDeque, &popOutput) != NULL)
+		return -23;
+
+	if (PopRight(testDeque, &popOutput) != NULL)
+		return -24;
+
 	RemoveDeque(testDeque);
 
 	return 0;
 }
+
 int UnitTest_BST(void);
 int UnitTest_SplayBST(void);
