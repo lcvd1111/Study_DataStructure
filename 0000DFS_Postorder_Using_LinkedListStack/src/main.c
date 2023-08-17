@@ -135,7 +135,8 @@ int main(int argc, char **argv)
 #endif
 
 	Post_order_Traversal(root);
-
+	printf("\n\n\n\n<Recursive Method>\n");
+	Post_order_Traversal_Recursive(root);
 	CleanBintree(root);
 
 	return 0;

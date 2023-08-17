@@ -80,6 +80,19 @@ BINTREE_NODE *Post_order_Traversal(BINTREE_NODE *root)
 	}
 }
 
+BINTREE_NODE *Post_order_Traversal_Recursive(BINTREE_NODE *root)
+{
+	//Base case. Recursive calling gets stop.
+	if (root==NULL)
+		return root;
+
+	Post_order_Traversal_Recursive(root->left);
+	Post_order_Traversal_Recursive(root->right);
+	printf("Visit Check: %d\n", root->data);
+}
+
+
+
 int CleanBintree(BINTREE_NODE *root)
 {
 	STACK myStack;
