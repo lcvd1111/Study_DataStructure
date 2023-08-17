@@ -503,15 +503,13 @@ SPLAY_BST_NODE *RotateLeft(SPLAY_BST *BST, SPLAY_BST_NODE *node)
 		BST->root = rightnode;
 		rightnode->parent = NULL;
 	}
-
 	//When the node is a left child.
-	if (node->parent->left == node){
+	else if (node->parent->left == node){
 		node->parent->left = rightnode;
 		rightnode->parent = node->parent;
 	}
-
 	//When the node is a right child.
-	if (node->parent->right != node){
+	else if (node->parent->right != node){
 		PRINTF("ERROR: Unexpected event occurs.\n");
 		return NULL;
 	}
@@ -560,15 +558,13 @@ SPLAY_BST_NODE *RotateRight(SPLAY_BST *BST, SPLAY_BST_NODE *node)
 		BST->root = leftnode;
 		leftnode->parent = NULL;
 	}
-
 	//When the node is a left child.
-	if (node->parent->left == node){
+	else if (node->parent->left == node){
 		node->parent->left = leftnode;
 		leftnode->parent = node->parent;
 	}
-
 	//When the node is a right child.
-	if (node->parent->right != node){
+	else if (node->parent->right != node){
 		PRINTF("ERROR: Unexpected event occurs.\n");
 		return NULL;
 	}

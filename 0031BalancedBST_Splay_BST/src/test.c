@@ -376,4 +376,60 @@ int UnitTest_BST(void)
 
 	return 0;
 }
-int UnitTest_SplayBST(void);
+int UnitTest_SplayBST(void)
+{
+	SPLAY_BST *testBST = NULL;
+	DEQUE *testDeque = NULL;
+	testBST = Create_SplayBST();
+	testDeque = CreateDeque();
+
+	if (Insert_SplayBST(testBST, 50) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -1;
+	}
+
+	if (Insert_SplayBST(testBST, 50) != NULL){
+		PRINTF("Unit Test Fail.\n");
+		return -2;
+	}
+
+	if (Insert_SplayBST(testBST, 500) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -3;
+	}
+
+	if (testBST->root->data != 500 
+	   || testBST->root->left->data != 50){
+		PRINTF("Unit Test Fail.\n");
+		return -4;
+	}
+
+	if (Insert_SplayBST(testBST, 500) != NULL){
+		PRINTF("Unit Test Fail.\n");
+		return -5;
+	}
+
+	if (Insert_SplayBST(testBST, 1000) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -6;
+	}
+
+	if (testBST->root->data !=1000
+		|| testBST->root->left->data != 500
+		|| testBST->root->left->left->data != 50){
+		PRINTF("Unit Test Fail.\n");
+		return -7;
+	}
+
+	if (Remove_SplayBST(testBST)){
+		PRINTF("ERROR: Remove_SplayBST(testBST) failed.\n");
+		return -9999;
+	}
+
+	if (RemoveDeque(testDeque)){
+		PRINTF("ERROR: RemoveDeque(DFS_output) failed.\n");
+		return -8888;
+	}
+	
+	return 0;
+}

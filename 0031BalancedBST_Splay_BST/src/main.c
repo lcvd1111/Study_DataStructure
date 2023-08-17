@@ -16,5 +16,11 @@ int main(void)
 	}
 	printf("Unit Test for BST success.\n");
 
+	if (err=UnitTest_SplayBST()){
+		printf("Unit Test for SplayBST failed. err: %d\n", err);
+		return -3;
+	}
+	printf("Unit Test for SplayBST success.\n");
+
 	return 0;
 }
