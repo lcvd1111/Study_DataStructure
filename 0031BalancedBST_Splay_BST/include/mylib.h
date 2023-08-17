@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define DEQUE_MAX 256
-#define PRINTF( x , ... ) printf("[%s %d]" x, __func__, __LINE__)	
+#define PRINTF( x , ... ) printf("[%s %d]" x, __func__, __LINE__, ##__VA_ARGS__)	
 
 //Type Declarations and Definitions
 typedef struct _SPLAY_BST_NODE {
@@ -40,8 +40,10 @@ int Remove_SplayBST(SPLAY_BST *BST);
 SPLAY_BST_NODE *Insert_BST(SPLAY_BST *BST, int value);
 SPLAY_BST_NODE *Search_BST(SPLAY_BST *BST, int value);
 SPLAY_BST *Delete_BST(SPLAY_BST *BST, int value);
+SPLAY_BST *PreorderTraversal(SPLAY_BST *BST, DEQUE *outputDeque);
 SPLAY_BST_NODE *RotateLeft(SPLAY_BST *BST, SPLAY_BST_NODE *node);
 SPLAY_BST_NODE *RotateRight(SPLAY_BST *BST, SPLAY_BST_NODE *node);
+SPLAY_BST_NODE *Correction(SPLAY_BST *BST, SPLAY_BST_NODE *node);
 
 ////Circular Deque Operations
 CIRCULAR_DEQUE *CreateDeque(void);
@@ -49,6 +51,7 @@ CIRCULAR_DEQUE *PushLeft(CIRCULAR_DEQUE *, SPLAY_BST_NODE *inputArg);
 CIRCULAR_DEQUE *PopLeft(CIRCULAR_DEQUE *, SPLAY_BST_NODE **outputStore);
 CIRCULAR_DEQUE *PushRight(CIRCULAR_DEQUE *, SPLAY_BST_NODE *inputArg);
 CIRCULAR_DEQUE *PopRight(CIRCULAR_DEQUE *, SPLAY_BST_NODE **outputStore);
+CIRCULAR_DEQUE *EmptyDeque(CIRCULAR_DEQUE *);
 int RemoveDeque(CIRCULAR_DEQUE *);
 
 #endif
