@@ -523,6 +523,63 @@ int UnitTest_SplayBST(void)
 		return -19;
 	}
 
+	if (testBST->root->data != 1000
+		|| testBST->root->left->data != 660
+		|| testBST->root->left->left->data != 350
+		|| testBST->root->left->right->data != 750
+		|| testBST->root->left->left->left->data != 200
+		|| testBST->root->left->left->right->data != 500
+		|| testBST->root->left->right->left->data != 700
+		|| testBST->root->left->left->left->left->data != 50){
+		PRINTF("Unit Test Fail.\n");
+		return -20;
+	}
+
+	if (Delete_SplayBST(testBST, 660) != testBST){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -21;
+	}
+
+	if (testBST->root->data != 500
+		|| testBST->root->left->data != 350
+		|| testBST->root->right->data != 1000
+		|| testBST->root->left->left->data != 200
+		|| testBST->root->right->left->data != 750
+		|| testBST->root->left->left->left->data != 50
+		|| testBST->root->right->left->left->data != 700){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -22;
+	}
+
+	if (Delete_SplayBST(testBST, 700) != testBST){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -23;
+	}
+
+	if (testBST->root->data != 500
+		|| testBST->root->left->data != 350
+		|| testBST->root->right->data != 750
+		|| testBST->root->left->left->data != 200
+		|| testBST->root->right->right->data != 1000
+		|| testBST->root->left->left->left->data != 50){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -24;
+	}
+
+	if (Delete_SplayBST(testBST, 50) != testBST){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -25;
+	}
+
+	if (testBST->root->data != 500
+		|| testBST->root->left->data != 200
+		|| testBST->root->right->data != 750
+		|| testBST->root->left->right->data != 350
+		|| testBST->root->right->right->data != 1000){
+		PRINTF("ERROR: Unit Test Fail.\n");
+		return -26;
+	}
+
 	if (Remove_SplayBST(testBST)){
 		PRINTF("ERROR: Remove_SplayBST(testBST) failed.\n");
 		return -9999;
