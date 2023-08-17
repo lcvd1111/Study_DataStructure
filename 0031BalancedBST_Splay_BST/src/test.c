@@ -379,6 +379,7 @@ int UnitTest_BST(void)
 int UnitTest_SplayBST(void)
 {
 	SPLAY_BST *testBST = NULL;
+	SPLAY_BST_NODE *searchResult = NULL;
 	DEQUE *testDeque = NULL;
 	testBST = Create_SplayBST();
 	testDeque = CreateDeque();
@@ -419,6 +420,107 @@ int UnitTest_SplayBST(void)
 		|| testBST->root->left->left->data != 50){
 		PRINTF("Unit Test Fail.\n");
 		return -7;
+	}
+
+	if (Insert_SplayBST(testBST, 200) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -8;
+	}
+
+	if (testBST->root->data != 200
+		|| testBST->root->left->data != 50
+		|| testBST->root->right->data != 1000
+		|| testBST->root->right->left->data != 500){
+		PRINTF("Unit Test Fail.\n");
+		return -8;
+	}
+
+	if (Insert_SplayBST(testBST, 750) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -9;
+	}
+
+	if (testBST->root->data != 750
+		|| testBST->root->left->data != 200
+		|| testBST->root->right->data != 1000
+		|| testBST->root->left->left->data != 50
+		|| testBST->root->left->right->data != 500){
+		PRINTF("Unit Test Fail.\n");
+		return -10;
+	}
+
+	if (Insert_SplayBST(testBST, 660) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -11;
+	}
+
+	if (testBST->root->data != 660
+		|| testBST->root->left->data != 500
+		|| testBST->root->right->data != 750
+		|| testBST->root->left->left->data != 200
+		|| testBST->root->right->right->data != 1000
+		|| testBST->root->left->left->left->data != 50){
+		PRINTF("Unit Test Fail.\n");
+		return -12;
+	}
+    
+	if (Insert_SplayBST(testBST, 700) != testBST){
+        PRINTF("Unit Test Fail.\n");
+        return -13;
+    }
+
+    if (testBST->root->data != 700
+        || testBST->root->left->data != 660
+        || testBST->root->right->data != 750
+        || testBST->root->left->left->data != 500
+        || testBST->root->right->right->data != 1000
+        || testBST->root->left->left->left->data != 200
+		|| testBST->root->left->left->left->left->data != 50){
+        PRINTF("Unit Test Fail.\n");
+        return -14;
+    }
+
+	if (Insert_SplayBST(testBST, 350) != testBST){
+		PRINTF("Unit Test Fail.\n");
+		return -15;
+	}
+
+	if (testBST->root->data != 350
+		|| testBST->root->left->data != 200
+		|| testBST->root->right->data != 660
+		|| testBST->root->left->left->data != 50
+		|| testBST->root->right->left->data != 500
+		|| testBST->root->right->right->data != 700
+		|| testBST->root->right->right->right->data != 750
+		|| testBST->root->right->right->right->right->data != 1000){
+		PRINTF("Unit Test Fail.\n");
+		return -16;
+	}
+
+	searchResult = Search_SplayBST(testBST, 660);
+
+	if (searchResult->data != 660){
+		PRINTF("Unit Test Fail.\n");
+		return -17;
+	}
+
+	if (testBST->root->data != 660
+		|| testBST->root->left->data != 350
+		|| testBST->root->right->data != 700
+		|| testBST->root->left->left->data != 200
+		|| testBST->root->left->right->data != 500
+		|| testBST->root->right->right->data != 750
+		|| testBST->root->left->left->left->data != 50
+		|| testBST->root->right->right->right->data != 1000){
+		PRINTF("Unit Test Fail.\n");
+		return -18;
+	}
+
+	searchResult = Search_SplayBST(testBST, 1000);
+
+	if (searchResult->data != 1000){
+		PRINTF("Unit Test Fail.\n");
+		return -19;
 	}
 
 	if (Remove_SplayBST(testBST)){
