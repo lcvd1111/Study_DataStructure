@@ -19,7 +19,8 @@ int main(int argc, char **argv)
 	root = MakeBintree(1,2,3,4,5,6,7,8,9,10);
 
 	InorderTraverse(root);
-
+	printf("\n\n\n<Using Recursive method>\n");
+	InorderTraverse_Recursive(root);
 	CleanBintree(root);
 
 	return 0;

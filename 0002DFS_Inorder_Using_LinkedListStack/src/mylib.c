@@ -104,6 +104,17 @@ BINTREE_NODE *InorderTraverse(BINTREE_NODE *rootNode)
 	}
 }
 
+BINTREE_NODE *InorderTraverse_Recursive(BINTREE_NODE *rootNode)
+{
+	//Base case: Stop the recursive calling
+	if (rootNode == NULL)
+		return rootNode;
+
+	InorderTraverse_Recursive(rootNode->left);
+	printf("Visit Check: %d\n", rootNode->data);
+	InorderTraverse_Recursive(rootNode->right);
+}
+
 BINTREE_NODE *CleanBintree(BINTREE_NODE *rootNode)
 {
 	STACK traversalStack = {.begin=NULL, .end=NULL};
