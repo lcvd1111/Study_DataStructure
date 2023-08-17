@@ -30,6 +30,7 @@ typedef struct _STACK {
 //Function Declaration
 BINTREE_NODE *MakeChild(BINTREE_NODE *parent, CHILD_SELECTOR selector,int leftArg, int rightArg);
 int PreorderTraverse(BINTREE_NODE *);
+int PreorderTraverse_Recursive(BINTREE_NODE *root);
 int CleanBintree(BINTREE_NODE *root);
 STACK *Push(STACK *, BINTREE_NODE *);
 BINTREE_NODE *Pop(STACK *);

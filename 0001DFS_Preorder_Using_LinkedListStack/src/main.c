@@ -21,7 +21,8 @@ int main(int argc, char **argv)
 	root = MakeTree(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
 	PreorderTraverse(root);
-
+	printf("\n\n\n\n<Recursive Version>\n");
+	PreorderTraverse_Recursive(root);
 	CleanBintree(root);
 
 	return 0;

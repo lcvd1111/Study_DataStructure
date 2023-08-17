@@ -82,6 +82,20 @@ int PreorderTraverse(BINTREE_NODE *root)
 	return ret;
 }
 
+int PreorderTraverse_Recursive(BINTREE_NODE *root)
+{
+	//Base Case. Findishing the recursive calling.
+	if (root == NULL)
+		return 0;
+
+	//Visit Check.
+	printf("Visit Check: %d\n", root->data);
+
+	PreorderTraverse_Recursive(root->left);
+
+	PreorderTraverse_Recursive(root->right);
+}
+
 int CleanBintree(BINTREE_NODE *root)
 {	
 	int ret = 0;
