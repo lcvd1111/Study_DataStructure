@@ -1,7 +1,7 @@
 #include "mylib.h"
 
 //Function Definitions
-MAX_HEAP *CreateHeap(int level)
+MAX_HEAP *CreateHeap(unsigned int level)
 {
 	MAX_HEAP *ret = NULL;
 	try{
@@ -38,7 +38,7 @@ MAX_HEAP *CreateHeap(int level)
 	return ret;
 }
 
-int DeleteHeap(MAX_HEAP *heapArg)
+int DeleteHeap(MAX_HEAP *heapArg) //Remove and empty the entire heap.
 {
 	//Exception Handling1
 	if (heapArg==NULL){
@@ -101,7 +101,7 @@ MAX_HEAP *Insert(MAX_HEAP *heapArg, int keyArg, const char *dataArg)
 
 	//Exception Handling2: When the Heap is full
 	if (heapArg->lastIndex == heapArg->maxNum - 1){
-		std::cout << DEBUG << "ERROR: heap is full currently.\n" << std::endl;
+		//std::cout << DEBUG << "ERROR: heap is full currently.\n" << std::endl;
 		return NULL;
 	}
 	
@@ -110,7 +110,7 @@ MAX_HEAP *Insert(MAX_HEAP *heapArg, int keyArg, const char *dataArg)
 	
 	currentIndex = heapArg->lastIndex;
 	tempArray[currentIndex].key = keyArg;
-	strncpy(tempArray->data, dataArg, STRING_LEN);
+	strncpy(tempArray[currentIndex].data, dataArg, STRING_LEN);
 	
 	while(1){
 		//When the current node is a root node -> return.
@@ -154,7 +154,7 @@ MAX_HEAP *Delete(MAX_HEAP *heapArg, HEAP_NODE *outputStore)
 
 	//Exception Handling3: When the heap is empty.
 	if (heapArg->lastIndex == -1){
-		std::cout << DEBUG << "ERROR: Heap is empty currently." << std::endl;
+		//std::cout << DEBUG << "ERROR: Heap is empty currently." << std::endl;
 		return NULL;
 	}
 
@@ -176,7 +176,7 @@ MAX_HEAP *Delete(MAX_HEAP *heapArg, HEAP_NODE *outputStore)
 	//Deleting the former last node.
 	heapArg->lastIndex -= 1;
 
-	//Iterative Sapping
+	//Iterative Swapping
 	//currentIndex is 0 currently.
 	while(1){
 		//When the current node is a leaf node.
@@ -189,6 +189,7 @@ MAX_HEAP *Delete(MAX_HEAP *heapArg, HEAP_NODE *outputStore)
 				return heapArg;
 
 			SwapNode(tempArray+currentIndex, tempArray+(currentIndex*2 + 1));
+			currentIndex = currentIndex*2 + 1;
 			return heapArg;
 		}
 
@@ -196,7 +197,7 @@ MAX_HEAP *Delete(MAX_HEAP *heapArg, HEAP_NODE *outputStore)
 		if((tempArray[currentIndex].key >= tempArray[currentIndex*2 + 1].key) 
 			&& (tempArray[currentIndex].key >= tempArray[currentIndex*2 + 2].key)){
 			return heapArg;
-			}
+		}
 		
 		//When there is at least one child node whose key value is bigger than current node's key value.
 		if(tempArray[currentIndex*2 + 1].key > tempArray[currentIndex*2 + 2].key){
@@ -218,37 +219,122 @@ MAX_HEAP *Delete(MAX_HEAP *heapArg, HEAP_NODE *outputStore)
 	return NULL;
 }
 
+HEAP_NODE *ParentNode(MAX_HEAP *heapArg, HEAP_NODE *nodeArg)
+{
+	unsigned int indexNum = 0;
 
+	//Exception Handling
+	if (heapArg == NULL){
+		std::cout << DEBUG << "ERROR: heapArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Hnadling
+	if (heapArg->heapArray == NULL){
+		std::cout << DEBUG << "ERROR: heapArg->heapArray is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (nodeArg == NULL){
+		std::cout << DEBUG << "ERROR: nodeArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (!(heapArg->heapArray <= nodeArg && heapArg->heapArray+heapArg->maxNum > nodeArg)){
+		std::cout<< DEBUG << "ERROR: nodeArg is not an element of heapArg." << std::endl;
+		return NULL;
+	}
 
+	//When the node is a root node.
+	if (heapArg->heapArray == nodeArg)
+		return NULL;
 
+	indexNum = nodeArg - heapArg->heapArray;
+	
+	//Exception Handling
+	if (indexNum == 0){
+		std::cout << DEBUG << "ERROR: Unexpected event occurs." << std::endl;
+		return NULL;
+	}
 
+	indexNum = (indexNum-1)/2; //0.5 is truncated
 
+	return (heapArg->heapArray + indexNum);
+}
 
+HEAP_NODE *LeftChildNode(MAX_HEAP *heapArg, HEAP_NODE *nodeArg)
+{
+	unsigned int indexNum = 0;
 
+	//Exception Handling
+	if (heapArg == NULL){
+		std::cout << DEBUG << "ERROR: heapArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Hnadling
+	if (heapArg->heapArray == NULL){
+		std::cout << DEBUG << "ERROR: heapArg->heapArray is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (nodeArg == NULL){
+		std::cout << DEBUG << "ERROR: nodeArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (!(heapArg->heapArray <= nodeArg && heapArg->heapArray+heapArg->maxNum > nodeArg)){
+		std::cout<< DEBUG << "ERROR: nodeArg is not an element of heapArg." << std::endl;
+		return NULL;
+	}
 
+	indexNum = nodeArg - heapArg->heapArray;
+	indexNum = indexNum*2+1; 
+	//When the node doesn't have a left child.
+	if (indexNum > heapArg->lastIndex)
+		return NULL;
+	
+	return (heapArg->heapArray + indexNum);
+}
 
+HEAP_NODE *RightChildNode(MAX_HEAP *heapArg, HEAP_NODE *nodeArg)
+{
+	unsigned int indexNum = 0;
 
+	//Exception Handling
+	if (heapArg == NULL){
+		std::cout << DEBUG << "ERROR: heapArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Hnadling
+	if (heapArg->heapArray == NULL){
+		std::cout << DEBUG << "ERROR: heapArg->heapArray is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (nodeArg == NULL){
+		std::cout << DEBUG << "ERROR: nodeArg is NULL." << std::endl;
+		return NULL;
+	}
 
+	//Exception Handling
+	if (!(heapArg->heapArray <= nodeArg && heapArg->heapArray+heapArg->maxNum > nodeArg)){
+		std::cout<< DEBUG << "ERROR: nodeArg is not an element of heapArg." << std::endl;
+		return NULL;
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	indexNum = nodeArg - heapArg->heapArray;
+	indexNum = indexNum*2+2; 
+	//When the node doesn't have a right child.
+	if (indexNum > heapArg->lastIndex)
+		return NULL;
+	
+	return (heapArg->heapArray + indexNum);
+}
 

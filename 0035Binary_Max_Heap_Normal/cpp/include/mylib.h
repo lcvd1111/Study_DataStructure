@@ -18,13 +18,16 @@ typedef struct _MAX_BINARY_HEAP {
 	HEAP_NODE *heapArray;
 	unsigned int depth;
 	unsigned int maxNum;
-	int lastIndex;
+	long int lastIndex;
 } MAX_HEAP;
 
 //Function Declarations
-MAX_HEAP *CreateHeap(int);
+MAX_HEAP *CreateHeap(unsigned int);
 int DeleteHeap(MAX_HEAP *);
 int SwapNode(HEAP_NODE *, HEAP_NODE *);
 MAX_HEAP *Insert(MAX_HEAP *, int, const char *);
 MAX_HEAP *Delete(MAX_HEAP *, HEAP_NODE *outputStore);
+HEAP_NODE *ParentNode(MAX_HEAP *, HEAP_NODE *);
+HEAP_NODE *LeftChildNode(MAX_HEAP *, HEAP_NODE *);
+HEAP_NODE *RightChildNode(MAX_HEAP *, HEAP_NODE *);
 #endif

@@ -1,0 +1,3 @@
+ Even though the source codes in this directory are written in C++, it's actully written in completely C style.
+ The reason why I wrote the C++ implementation although I know nothing about C++ is because I must practice C++ for the coding interview where it allows only C++, but not C.
+ The purpose is only practicing 'new', 'delete' operator and 'cout', 'cin' interface.
