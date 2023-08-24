@@ -8,7 +8,7 @@
 //Type Declarations and Definitions
 typedef struct _BIN_MAX_HEAP_NODE {
 	int key;
-	char data;
+	char data[STRING_LEN];
 } HEAP_NODE;
 
 typedef struct _BIN_MAX_HEAP {
@@ -16,19 +16,21 @@ typedef struct _BIN_MAX_HEAP {
 	unsigned int size;
 	int level;
 	long int lastIndex;
-	HEAP *(*Enqueue)(HEAP *self, int keyArg, const char *dataArg);
-	HEAP *(*Dequeue)(HEAP *self, HEAP_NODE *outputStore);
-	HEAP_NODE *(*ParentNode)(HEAP *self, HEAP_NODE *heapArg);
-	HEAP_NODE *(*LeftChildNode)(HEAP *self, HEAP_NODE *heapArg);
-	HEAP_NODE *(*RightChildNode)(HEAP *self, HEAP_NODE *heapArg);
+	struct _BIN_MAX_HEAP *(*Enqueue)
+		(struct _BIN_MAX_HEAP *self, int keyArg, const char *dataArg);
+	struct _BIN_MAX_HEAP *
+		(*Dequeue)(struct _BIN_MAX_HEAP *self, HEAP_NODE *outputStore);
+	HEAP_NODE *(*ParentNode)(struct _BIN_MAX_HEAP *self, HEAP_NODE *heapArg);
+	HEAP_NODE *(*LeftChildNode)(struct _BIN_MAX_HEAP *self, HEAP_NODE *heapArg);
+	HEAP_NODE *(*RightChildNode)(struct _BIN_MAX_HEAP *self, HEAP_NODE *heapArg);
 } HEAP;
 
 //Function Delcarations
 HEAP *CreateHeap(int depthArg);
 int RemoveHeap(HEAP *);
-int InitHeap_METHOD(HEAP *self, int depthArg);
 HEAP *Enqueue_METHOD(HEAP *self, int keyArg, const char *dataArg);
 HEAP *Dequeue_METHOD(HEAP *self, HEAP_NODE *outputStore);
 HEAP_NODE *ParentNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
 HEAP_NODE *LeftChildNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
 HEAP_NODE *RightChildNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
+int SwapNode(HEAP_NODE *, HEAP_NODE *);
