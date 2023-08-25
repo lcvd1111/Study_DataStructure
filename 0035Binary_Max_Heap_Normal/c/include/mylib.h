@@ -1,3 +1,6 @@
+#ifndef __MYLIB_HEADER__
+#define __MYLIB_HEADER__
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -34,3 +37,5 @@ HEAP_NODE *ParentNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
 HEAP_NODE *LeftChildNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
 HEAP_NODE *RightChildNode_METHOD(HEAP *self, HEAP_NODE *heapArg);
 int SwapNode(HEAP_NODE *, HEAP_NODE *);
+
+#endif
