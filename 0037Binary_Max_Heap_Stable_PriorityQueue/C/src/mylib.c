@@ -11,6 +11,7 @@ HEAP *CreateHeap(int levelArg)
 		return NULL;
 	}
 
+	ret = (HEAP *)malloc(sizeof(HEAP));
 	//Exception Handling2
 	if (ret==NULL){
 		PRINTF("ERROR: malloc( ) failed.\n");
@@ -22,6 +23,7 @@ HEAP *CreateHeap(int levelArg)
 	for (int i=0 ; i<levelArg; i++)
 		ret->size = 2*(ret->size);
 
+	ret->size -= 1;
 	ret->heapArray = (HEAP_NODE *)malloc(sizeof(HEAP_NODE) * (ret->size));
 	ret->lastIndex = -1;
 	ret->H_enqOrder = 0;
@@ -160,8 +162,8 @@ HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *outputStore)
 
 	//Copying the root node's data to outputStorage.
 	outputStore->id = tempArray[0].id;
-	outputStore->enqOrder = 0;
 	strncpy(outputStore->data, tempArray[0].data, STRING_LEN);
+	outputStore->enqOrder = 0;
 
 	//When the heap becomes empty after the dequeueing.
 	if (self->lastIndex == 0){
@@ -181,7 +183,7 @@ HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *outputStore)
 	while(1){
 		//When the current node doesn't have any child.
 		if (currentIndex*2+1 > self->lastIndex)
-			return NULL;
+			return self;
 
 		//When the current node only has a left child.(That left child must be a last node)
 		if (currentIndex*2+1 == self->lastIndex){
