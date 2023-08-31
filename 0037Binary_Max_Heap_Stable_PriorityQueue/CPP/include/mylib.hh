@@ -31,7 +31,7 @@ public:
 	STABLE_MAX_HEAP(int levelArg);
 	~STABLE_MAX_HEAP(void);
 	HEAP *Enqueue(int, const char *);
-	HEAP *Dequeu_P(HEAP_NODE *); //Dequeue_P = Dequeueing with Priority
+	HEAP *Dequeue_P(HEAP_NODE *); //Dequeue_P = Dequeueing with Priority
 };
 
 //Function Declarations

@@ -4,6 +4,7 @@ int UnitTest_StablePriorityQueue(void)
 {
 	HEAP testHeap(10);
 	HEAP_NODE *tempArray = NULL;
+	HEAP_NODE *outputStore = new HEAP_NODE[18];
 
 	if (testHeap.level != 10){
 		UNIT_TEST_FAIL;
@@ -198,6 +199,103 @@ int UnitTest_StablePriorityQueue(void)
 		return -38;
 	}
 
+	//Dequeueing test Start.
+	for (int i=0 ; i<17 ; i++){
+		if (testHeap.Dequeue_P(outputStore+i) != &testHeap){
+			UNIT_TEST_FAIL;
+			return -39;
+		}
+	}
+
+	if (testHeap.Dequeue_P(outputStore+18) != NULL){
+		UNIT_TEST_FAIL;
+		return -40;
+	}
+
+	if (outputStore[0].id != 200 || strcmp(outputStore[0].data, "c")){
+		UNIT_TEST_FAIL;
+		return -41;
+	}
+
+	if (outputStore[1].id != 170 || strcmp(outputStore[1].data, "d")){
+		UNIT_TEST_FAIL;
+		return -42;
+	}
+
+	if (outputStore[2].id != 170 || strcmp(outputStore[2].data, "r")){
+		UNIT_TEST_FAIL;
+		return -43;
+	}
+
+	if (outputStore[3].id != 90 || strcmp(outputStore[3].data, "h")){
+		UNIT_TEST_FAIL;
+		return -44;
+	}
+
+	if (outputStore[4].id != 90 || strcmp(outputStore[4].data, "m")){
+		UNIT_TEST_FAIL;
+		return -45;
+	}
+
+	if (outputStore[5].id != 80 || strcmp(outputStore[5].data, "e")){
+		UNIT_TEST_FAIL;
+		return -46;
+	}
+
+	if (outputStore[6].id != 80 || strcmp(outputStore[6].data, "l")){
+		UNIT_TEST_FAIL;
+		return -47;
+	}
+
+	if (outputStore[7].id != 70 || strcmp(outputStore[7].data, "k")){
+		UNIT_TEST_FAIL;
+		return -48;
+	}
+
+	if (outputStore[8].id != 50 || strcmp(outputStore[8].data, "a")){
+		UNIT_TEST_FAIL;
+		STD_COUT << outputStore[8].id << " " << outputStore[8].data << std::endl;
+		return -49;
+	}
+
+	if (outputStore[9].id != 50 || strcmp(outputStore[9].data, "p")){
+		UNIT_TEST_FAIL;
+		return -50;
+	}
+
+	if (outputStore[10].id != 30 || strcmp(outputStore[10].data, "f")){
+		UNIT_TEST_FAIL;
+		return -51;
+	}
+	if (outputStore[11].id != 30 || strcmp(outputStore[11].data, "j")){
+		UNIT_TEST_FAIL;
+		return -52;
+	}
+
+	if (outputStore[12].id != 30 || strcmp(outputStore[12].data, "o")){
+		UNIT_TEST_FAIL;
+		return -53;
+	}
+
+	if (outputStore[13].id != 20 || strcmp(outputStore[13].data, "b")){
+		UNIT_TEST_FAIL;
+		return -54;
+	}
+
+	if (outputStore[14].id != 20 || strcmp(outputStore[14].data, "i")){
+		UNIT_TEST_FAIL;
+		return -55;
+	}
+
+	if (outputStore[15].id != 20 || strcmp(outputStore[15].data, "n")){
+		UNIT_TEST_FAIL;
+		return -56;
+	}
+
+	if (outputStore[16].id != 20 || strcmp(outputStore[16].data, "q")){
+		UNIT_TEST_FAIL;
+		return -57;
+	}
 
 	return 0;
 }
