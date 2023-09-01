@@ -225,7 +225,7 @@ HEAP *HEAP::Dequeue_P(HEAP_NODE *outputStore)
 				&& heapArray[currentIndex].enqOrder < heapArray[currentIndex*2+2].enqOrder){
 				return this;
 			}
-			SwapNode(heapArray+currentIndex, heapArray+currentIndex*2+22);
+			SwapNode(heapArray+currentIndex, heapArray+currentIndex*2+2);
 			currentIndex = currentIndex*2+2;
 			continue;
 		}
