@@ -33,7 +33,7 @@ struct STABLE_MIN_HEAP {
 //Function Declarations
 HEAP *MallocHeap(int);
 int FreeHeap(HEAP *);
-HEAP *Constructotr_Heap(HEAP *, int);
+HEAP *Constructor_Heap(HEAP *, int);
 HEAP *Destructor_Heap(HEAP *);
 HEAP *METHOD_Enqueue(HEAP *self, int, const char *);
 HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *);

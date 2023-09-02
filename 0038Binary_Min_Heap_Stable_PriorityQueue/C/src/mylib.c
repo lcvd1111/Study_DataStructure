@@ -80,6 +80,7 @@ HEAP *Constructor_Heap(HEAP *heapArg, int levelArg)
 
 	heapArg->heapArray = tmp->heapArray;
 	heapArg->level = tmp->level;
+	heapArg->size = tmp->size;
 	heapArg->lastIndex = tmp->lastIndex;
 	heapArg->lastEnqOrder = tmp->lastEnqOrder;
 	heapArg->Enqueue = tmp->Enqueue;
@@ -195,6 +196,7 @@ HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *outputStore)
 
 	//When the heap is empty.
 	if (self->lastIndex == -1){
+		self->lastEnqOrder = 0;
 		return NULL;
 	}
 
@@ -207,6 +209,7 @@ HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *outputStore)
 	//When the heap becomes empty after the dequeueing
 	if (self->lastIndex == 0){
 		self->lastIndex = -1;
+		self->lastEnqOrder = 0;
 		return self;
 	}
 
@@ -219,9 +222,81 @@ HEAP *METHOD_Dequeue_P(HEAP *self, HEAP_NODE *outputStore)
 	//Iterative Swapping
 	//currentIndex is 0 currently.
 	while(1){
+		//When the current node is a leaf node.
+		if (currentIndex*2+1 > self->lastIndex)
+			return self;
+
+		//When the current node has only a left child node.
+		if (currentIndex*2+1 == self->lastIndex){
+			if (tempArray[currentIndex].id < tempArray[currentIndex*2+1].id)
+				return self;
+
+			if (tempArray[currentIndex].id == tempArray[currentIndex*2+1].id 
+				&& tempArray[currentIndex].enqOrder < tempArray[2*currentIndex+1].enqOrder){
+				return self;
+			}
+
+			SwapNode(tempArray+currentIndex, tempArray+2*currentIndex+1);
+			return self;
+		}
+
+		//When the current node has both left and right child node.
+		////When the swapping is not needed at all.
+		if (tempArray[currentIndex].id < tempArray[currentIndex*2+1].id
+			&& tempArray[currentIndex].id < tempArray[currentIndex*2+2].id){
+			return self;
+		}
+
+		////When there exists at least one child node whose id value is smaller or equal to current node.
+		if (tempArray[currentIndex*2+1].id < tempArray[currentIndex*2+2].id){
+			if (tempArray[currentIndex].id == tempArray[currentIndex*2+1].id
+				&& tempArray[currentIndex].enqOrder < tempArray[currentIndex*2+1].enqOrder){
+				return self;
+			}
+			SwapNode(tempArray+currentIndex, tempArray+currentIndex*2+1);
+			currentIndex = currentIndex*2+1;
+			continue;
+		}
+
+		if (tempArray[currentIndex*2+1].id > tempArray[currentIndex*2+2].id){
+			if (tempArray[currentIndex].id == tempArray[currentIndex*2+2].id
+				&& tempArray[currentIndex].enqOrder < tempArray[currentIndex*2+2].enqOrder){
+				return self;
+			}
+			SwapNode(tempArray+currentIndex, tempArray+currentIndex*2+2);
+			currentIndex = currentIndex*2+2;
+			continue;
+		}
+
+		if (tempArray[currentIndex*2+1].id == tempArray[currentIndex*2+2].id){
+			if (tempArray[currentIndex*2+1].enqOrder < tempArray[currentIndex*2+2].enqOrder){
+				if (tempArray[currentIndex].id == tempArray[currentIndex*2+1].id
+					&& tempArray[currentIndex].enqOrder < tempArray[currentIndex*2+1].enqOrder){
+					return self;
+				}
+				SwapNode(tempArray+currentIndex, tempArray+currentIndex*2+1);
+				currentIndex = currentIndex*2+1;
+				continue;
+			}
+			if (tempArray[currentIndex*2+1].enqOrder > tempArray[currentIndex*2+2].enqOrder){
+				if (tempArray[currentIndex].id == tempArray[currentIndex*2+2].id
+					&& tempArray[currentIndex].enqOrder < tempArray[currentIndex*2+2].enqOrder){
+					return self;
+				}
+				SwapNode(tempArray+currentIndex, tempArray+currentIndex*2+2);
+				currentIndex = currentIndex*2+2;
+				continue;
+			}
+		}
+
+		//Exception Handling
+		DEBUG("ERROR: Unexpected Situation occured.\n");
+		return NULL;
 	}
 
-	return self;
+	//Exception Handling
+	DEBUG("ERROR: Unexpected Situation occured.\n");
+	return NULL;
 }
 
 
