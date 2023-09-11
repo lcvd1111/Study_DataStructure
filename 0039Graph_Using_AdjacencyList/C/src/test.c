@@ -2,13 +2,13 @@
 
 int UnitTest_Graph_Interface(void)
 {
+	GRAPH_NODE *tempNode = NULL;
 	GRAPH testGraph;
 	Constructor_Graph(&testGraph, 100);
 	if (testGraph.currentSize != 0){
 		UNIT_TEST_FAIL;
 		return -1;
 	}
-
 	testGraph.AddVertex(&testGraph, "a");
 	if (testGraph.currentSize != 1){
 		UNIT_TEST_FAIL;
@@ -62,6 +62,110 @@ int UnitTest_Graph_Interface(void)
 		UNIT_TEST_FAIL;
 		return -10;
 	}
+
+	testGraph.DeleteVertex(&testGraph, "d");
+	if (testGraph.currentSize != 8){
+		UNIT_TEST_FAIL;
+		return -11;
+	}
+
+	testGraph.DeleteVertex(&testGraph, "f");
+	if (testGraph.currentSize != 7){
+		UNIT_TEST_FAIL;
+		return -12;
+	}
+
+	if (testGraph.currentLastIndex != 8){
+		UNIT_TEST_FAIL;
+		return -13;
+	}
+
+	testGraph.DeleteVertex(&testGraph, "i");
+	if (testGraph.currentSize != 6){
+		UNIT_TEST_FAIL;
+		return -14;
+	}
+
+	if (testGraph.currentLastIndex != 7){
+		UNIT_TEST_FAIL;
+		return -15;
+	}
+
+	if (testGraph.DeleteVertex(&testGraph, "i") != NULL){
+		UNIT_TEST_FAIL;
+		return -16;
+	}
+
+	if (testGraph.currentSize != 6){
+		UNIT_TEST_FAIL;
+		return -17;
+	}
+
+	if (testGraph.currentLastIndex != 7){
+		UNIT_TEST_FAIL;
+		return -18;
+	}
+	testGraph.AddVertex(&testGraph, "i");
+	if (strcmp(testGraph.vertexList[3]->data, "i") != 0){
+		UNIT_TEST_FAIL;
+		return -19;
+	}
+	
+	if (testGraph.currentSize != 7){
+		UNIT_TEST_FAIL;
+		return -20;
+	}
+
+	if (testGraph.currentLastIndex != 7){
+		UNIT_TEST_FAIL;
+		return -21;
+	}
+
+	if (testGraph.AddEdge(&testGraph, 2, 6) == NULL){
+		UNIT_TEST_FAIL;
+		return -22;
+	}
+
+	if (testGraph.AddEdge(&testGraph, 2, 6) != NULL){
+		UNIT_TEST_FAIL;
+		return -23;
+	}
+
+	if (testGraph.AddEdge(&testGraph, 6, 2) != NULL){
+		UNIT_TEST_FAIL;
+		return -24;
+	}
+
+	testGraph.AddEdge(&testGraph, 2, 1);
+
+	if (testGraph.DeleteEdge(&testGraph, 1, 1) != NULL){
+		UNIT_TEST_FAIL;
+		return -25;
+	}
+
+	testGraph.AddEdge(&testGraph, 1, 0);
+	if (testGraph.DeleteEdge(&testGraph, 1, 0) == NULL){
+		UNIT_TEST_FAIL;
+		return -26;
+	}
+
+	//Printing Adjacency List
+	for (int i=0 ; i<=testGraph.currentLastIndex ; i++){
+		if (testGraph.vertexList[i] == NULL)
+			continue;
+
+		printf("Node [%s]: ", testGraph.vertexList[i]->data);
+		tempNode = testGraph.vertexList[i];
+		while(1){
+			if (tempNode->next ==  NULL)
+				break;
+			tempNode = tempNode->next;
+			printf("%s ", tempNode->data);
+		}
+		printf("\n");
+	}
+
+	printf("Number of total vertexes(nodes): %ld\n", testGraph.currentSize);
 
 	Destructor_Graph(&testGraph);
 	return 0;

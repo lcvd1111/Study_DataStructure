@@ -67,7 +67,7 @@ long int Method_ReturnIndex(GRAPH *self, char *dataArg)
 	}
 
 	//Simple Linear Search Bruteforce through the vertex list.
-	for (int i=0 ; i<(self->currentLastIndex) ; i++){
+	for (int i=0 ; i<=(self->currentLastIndex) ; i++){
 		 if ((self->vertexList)[i] == NULL)
 			 continue;
 
@@ -150,7 +150,6 @@ GRAPH *Method_AddEdge(GRAPH *self, long int originIndex, long int destIndex)
 	char dataA[STRING_LEN] = {0,};
 	char dataB[STRING_LEN] = {0,};
 	GRAPH_NODE *tempNode = NULL;
-
 	//Exception Handling
 	if (self == NULL){
 		DEBUG("self is NULL.\n");
@@ -181,11 +180,13 @@ GRAPH *Method_AddEdge(GRAPH *self, long int originIndex, long int destIndex)
 	strncpy(dataB, tempList[destIndex]->data, STRING_LEN);
 
 	//Checking whether edge already exists or not, and Creating an edge at the same time.
-	tempNode = tempList[originIndex]->next;
+	tempNode = tempList[originIndex];
 	while(1){
 		if (strcmp(tempNode->data, dataB)==0){
 			//When there already exsists an edge.
-			return NULL;
+			if (tempNode != tempList[originIndex]){
+				return NULL;
+			}
 		}
 		if (tempNode->next == NULL){
 			break;
@@ -198,7 +199,7 @@ GRAPH *Method_AddEdge(GRAPH *self, long int originIndex, long int destIndex)
 	tempNode->next->next = NULL;
 	strncpy(tempNode->next->data, dataB, STRING_LEN);
 
-	tempNode = tempList[destIndex]->next;
+	tempNode = tempList[destIndex];
 	while(1){
 		if (tempNode->next == NULL){
 			break;
@@ -248,7 +249,7 @@ GRAPH *Method_DeleteVertex(GRAPH *self, char *dataArg)
 		return NULL;
 	}
 
-	//Deleteing every edge including the dataArg
+	//Deleteing every edge which includes the dataArg
 	for (int i=0 ; i<=self->currentLastIndex ; i++){
 		if ((self->vertexList)[i] == NULL){
 			continue;
@@ -299,7 +300,7 @@ GRAPH *Method_DeleteEdge(GRAPH *self, long int originIndex, long int destIndex)
 	char nameB[STRING_LEN] = {0,};
 
 	//Exception Handling
-	if (self != NULL){
+	if (self == NULL){
 		DEBUG("ERROR: self is NULL.\n");
 		return NULL;
 	}
@@ -328,10 +329,14 @@ GRAPH *Method_DeleteEdge(GRAPH *self, long int originIndex, long int destIndex)
 	strncpy(nameB, tempArray[destIndex]->data, STRING_LEN);
 
 	//Finding the edge and Deleting it at the same time.
-	tempNode = tempArray[originIndex]->next;
+	tempNode = tempArray[originIndex];
 	while(tempNode != NULL){
-		if (strcmp(tempNode->data, nameB) == 0)
-			break;
+		if (strcmp(tempNode->data, nameB) == 0){
+			if (tempNode != tempArray[originIndex]){
+				break;
+			}
+		}
+		tempNode = tempNode->next;
 	}
 	if (tempNode == NULL){
 		//When the Edge doesn't exist.
@@ -347,10 +352,15 @@ GRAPH *Method_DeleteEdge(GRAPH *self, long int originIndex, long int destIndex)
 	}
 	free(tempNode);
 
-	tempNode = tempArray[destIndex]->next;
+	tempNode = tempArray[destIndex];
 	while(tempNode != NULL){
 		if (strcmp(tempNode->data, nameA) == 0)
-			break;
+		{
+			if (tempNode != tempArray[destIndex]){
+				break;
+			}
+		}
+		tempNode = tempNode->next;
 	}
 	if (tempNode == NULL){
 		DEBUG("ERROR: Unexpected Sitaution Occured.\n");
