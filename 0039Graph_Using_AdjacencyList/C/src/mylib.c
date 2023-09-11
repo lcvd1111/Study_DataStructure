@@ -215,6 +215,79 @@ GRAPH *Method_AddEdge(GRAPH *self, long int originIndex, long int destIndex)
 
 GRAPH *Method_DeleteVertex(GRAPH *self, char *dataArg)
 {
+	long int vertexIndex = 0;
+
+	//Exception Handling
+	if (self == NULL){
+		DEBUG("ERROR: self is NULL.\n");
+		return NULL;
+	}
+
+	//Exception Handling2
+	if (self->vertexList == NULL){
+		DEBUG("ERROR: self->vertexList is NULL.\n");
+		return NULL;
+	}
+
+	//When the Graph is empty currently.
+	if (self->currentSize == 0){
+		return NULL;
+	}
+
+	//Finding the index number;
+	vertexIndex = (self->ReturnIndex)(self, dataArg);
+
+	//When the vertex doesn't exist in the graph.
+	if (vertexIndex == -9999){
+		return NULL;
+	}
+
+	//Exception Handling
+	if (vertexIndex < 0){
+		DEBUG("ERROR: Unexpected Situation Occured.\n");
+		return NULL;
+	}
+
+	//Deleteing every edge including the dataArg
+	for (int i=0 ; i<=self->currentLastIndex ; i++){
+		if ((self->vertexList)[i] == NULL){
+			continue;
+		}
+		self->DeleteEdge(self, i, vertexIndex);
+	}
+
+	//Exception Handling afting deleting every edge.
+	if ((self->vertexList)[vertexIndex]->next != NULL){
+		DEBUG("ERROR: Unexpected Situatoin Occured.\n");
+		return NULL;
+	}
+
+	free((self->vertexList)[vertexIndex]);
+	(self->vertexList)[vertexIndex] = NULL;
+	
+	//Changing the parameter properly.
+	self->currentSize -= 1;
+	if (vertexIndex == self->currentLastIndex){
+		for (long int i=vertexIndex ; i>=-1 ; i--){
+			if ((self->vertexList)[i] == NULL){
+				continue;
+			}
+			else{
+				self->currentLastIndex = i;
+				break;
+			}
+		}
+	}
+
+	if (self->currentLastIndex == -1){
+		//Exception Handling.
+		//In this sitaution, Graph must be completely empty.
+		if (self->currentSize != 0){
+			DEBUG("ERROR: Unexpected Sitaution Occured.\n");
+			return NULL;
+		}
+	}
+
 	return self;
 }
 
