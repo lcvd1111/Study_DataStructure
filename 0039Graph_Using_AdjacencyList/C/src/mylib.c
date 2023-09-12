@@ -47,7 +47,52 @@ GRAPH Constructor_Graph(GRAPH *self, long int sizeArg)
 
 int Destructor_Graph(GRAPH *self)
 {
+	GRAPH_NODE **tempArray = NULL;
+
+	//Exception Handling
+	if (self == NULL){
+		DEBUG("ERROR: self is NULL.\n");
+		return -1;
+	}
+
+	//Exception Handling2
+	if (self->vertexList == NULL){
+		DEBUG("ERROR: self->vertexList is NULL.\n");
+		return -2;
+	}
+
+	tempArray = self->vertexList;
+
+	//When the Graph is empty.
+	if (self->currentSize == 0){
+		free(tempArray);
+		return 0;
+	}
+
+	//When the Graph is not empty. Deleting every vertex.
+	for (int i=0 ; i<=self->currentLastIndex ; i++){
+		if (tempArray[i] == NULL)
+			continue;
+		(self->DeleteVertex)(self, (tempArray[i])->data);
+	}
+
+	//Expception Handling after the deletion of every vertex.
+	if (self->currentSize !=0 ){
+		DEBUG("ERROR: Unexpected Situation Occured\n");
+		return -3;
+	}
+
+	//Exception Handling again
+	if (self->currentLastIndex != -1){
+		DEBUG("ERROR: Unexpected Situation Occured.\n");
+		return -4;
+	}
+
+	//Freeing the vertexList array
+	free(tempArray);
+	
 	return 0;
+
 }
 
 long int Method_ReturnIndex(GRAPH *self, char *dataArg)
@@ -257,7 +302,7 @@ GRAPH *Method_DeleteVertex(GRAPH *self, char *dataArg)
 		self->DeleteEdge(self, i, vertexIndex);
 	}
 
-	//Exception Handling afting deleting every edge.
+	//Exception Handling after deleting every edge.
 	if ((self->vertexList)[vertexIndex]->next != NULL){
 		DEBUG("ERROR: Unexpected Situatoin Occured.\n");
 		return NULL;
@@ -284,7 +329,15 @@ GRAPH *Method_DeleteVertex(GRAPH *self, char *dataArg)
 		//Exception Handling.
 		//In this sitaution, Graph must be completely empty.
 		if (self->currentSize != 0){
-			DEBUG("ERROR: Unexpected Sitaution Occured.\n");
+			DEBUG("ERROR: Unexpected Situation Occured.\n");
+			return NULL;
+		}
+	}
+
+	if (self->currentSize == 0){
+		//Exception Handling as the above.
+		if (self->currentLastIndex != -1){
+			DEBUG("ERROR: Unexpected Situation Occured.\n");
 			return NULL;
 		}
 	}

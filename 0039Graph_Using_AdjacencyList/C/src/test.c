@@ -149,6 +149,10 @@ int UnitTest_Graph_Interface(void)
 		return -26;
 	}
 
+	testGraph.AddEdge(&testGraph, testGraph.ReturnIndex(&testGraph, "i"), testGraph.ReturnIndex(&testGraph, "e"));
+	testGraph.AddEdge(&testGraph, testGraph.ReturnIndex(&testGraph, "e"), testGraph.ReturnIndex(&testGraph, "g"));
+	testGraph.AddEdge(&testGraph, testGraph.ReturnIndex(&testGraph, "h"), testGraph.ReturnIndex(&testGraph, "e"));
+
 	//Printing Adjacency List
 	for (int i=0 ; i<=testGraph.currentLastIndex ; i++){
 		if (testGraph.vertexList[i] == NULL)
@@ -164,9 +168,31 @@ int UnitTest_Graph_Interface(void)
 		}
 		printf("\n");
 	}
-
 	printf("Number of total vertexes(nodes): %ld\n", testGraph.currentSize);
 
-	Destructor_Graph(&testGraph);
+	testGraph.DeleteVertex(&testGraph, "e");
+	printf("\n\nAfter Deletion of vertex 'e'\n");
+	//Printing Adjacency List
+	for (int i=0 ; i<=testGraph.currentLastIndex ; i++){
+		if (testGraph.vertexList[i] == NULL)
+			continue;
+
+		printf("Node [%s]: ", testGraph.vertexList[i]->data);
+		tempNode = testGraph.vertexList[i];
+		while(1){
+			if (tempNode->next ==  NULL)
+				break;
+			tempNode = tempNode->next;
+			printf("%s ", tempNode->data);
+		}
+		printf("\n");
+	}
+	printf("Number of total vertexes(nodes): %ld\n", testGraph.currentSize);
+	
+	if(Destructor_Graph(&testGraph)){
+		UNIT_TEST_FAIL;
+		return -27;
+	}
+
 	return 0;
 }
