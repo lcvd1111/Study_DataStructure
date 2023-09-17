@@ -215,7 +215,7 @@ S_GRAPH *S_GRAPH::AddVertex
 	//When the node with inputted name doesn't exist in the graph.
 	newNode.name = nameArg;
 	(*this).nodeSet.insert(std::pair<std::string, S_GRAPH_NODE> (nameArg, newNode));
-	//((*this).nodeSet)[nameArg] = newNode;
+	//((*this).nodeSet)[nameArg] = newNode; //You can use this statement instead of the above one too.
 
 	return this;
 }
