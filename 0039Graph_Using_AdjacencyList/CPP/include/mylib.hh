@@ -37,19 +37,19 @@ public:
 class __GRAPH_USING_SET__NODE__ {
 public:
 	std::string name;
-	std::set<std::string> edgeList;
+	std::set<std::string> edgeSet;
 };
 
 class __GRAPH_USING_SET__ {
 public:
-	std::map<std::string, S_GRAPH_NODE> nodeList;
+	std::map<std::string, S_GRAPH_NODE> nodeSet;
 
 	//Methods Declarations
 	__GRAPH_USING_SET__(void);
-	S_GRAPH *AddVertex(std::string);
-	S_GRAPH *AddEdge(std::string, std::string);
-	S_GRAPH *DeleteVertex(std::string);
-	S_GRAPH *DeleteEdge(std::string, std::string);
+	S_GRAPH *AddVertex(const std::string &);
+	S_GRAPH *AddEdge(const std::string &,const std::string &);
+	S_GRAPH *DeleteVertex(const std::string &);
+	S_GRAPH *DeleteEdge(const std::string &, const std::string &);
 	void Print(void);
 };
 

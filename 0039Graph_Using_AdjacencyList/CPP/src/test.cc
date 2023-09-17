@@ -405,7 +405,7 @@ int UnitTest_Graph_Using_Set(void)
 		UNIT_TEST_FAIL;
 		return -35;
 	}
-	
+
 	std::cout << std::endl << "After the Deletion of Vertex E" << std::endl;
 	testGraph.Print();
 

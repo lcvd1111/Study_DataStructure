@@ -203,31 +203,143 @@ S_GRAPH::__GRAPH_USING_SET__(void)
 }
 
 S_GRAPH *S_GRAPH::AddVertex
-(std::string nameArg)
+(const std::string &nameArg)
 {
+	S_GRAPH_NODE newNode;
 	
+	//When the node already exists in the graph.
+	if ((*this).nodeSet.find(nameArg) != (*this).nodeSet.end()){
+		return NULL;
+	}
+
+	//When the node with inputted name doesn't exist in the graph.
+	newNode.name = nameArg;
+	(*this).nodeSet.insert(std::pair<std::string, S_GRAPH_NODE> (nameArg, newNode));
+	//((*this).nodeSet)[nameArg] = newNode;
+
 	return this;
 }
 
 S_GRAPH *S_GRAPH::AddEdge
-(std::string name1, std::string name2)
+(const std::string &name1, const std::string &name2)
 {
+	std::map<std::string, S_GRAPH_NODE>::iterator nodeA_Pointer = (*this).nodeSet.end();
+	std::map<std::string, S_GRAPH_NODE>::iterator nodeB_Pointer = (*this).nodeSet.end();
+	std::set<std::string> dummy;
+	std::set<std::string>::iterator edge1_Pointer = dummy.end();
+	std::set<std::string>::iterator edge2_Pointer = dummy.end();
+
+	nodeA_Pointer = (*this).nodeSet.find(name1);
+	//When the node with name1 doesn't exist in the Graph.
+	if (nodeA_Pointer == (*this).nodeSet.end())
+		return NULL;
+
+	nodeB_Pointer = (*this).nodeSet.find(name2);
+	//When the node with name2 doesn't exist in the Graph.
+	if (nodeB_Pointer == (*this).nodeSet.end())
+		return NULL;
+
+	edge1_Pointer = (nodeA_Pointer->second).edgeSet.find(name2);
+	//When the node2 already exists in the edge set of node1
+	if (edge1_Pointer != (*nodeA_Pointer).second.edgeSet.end())
+		return NULL;
+
+	edge2_Pointer = (*nodeB_Pointer).second.edgeSet.find(name1);
+	//When the node1 already exists in the edge set of node2
+	if (edge2_Pointer != (*nodeB_Pointer).second.edgeSet.end())
+		return NULL;
+
+	(*nodeA_Pointer).second.edgeSet.insert(name2);
+
+	//When the name1 == name2
+	if (name1 == name2)
+		return this;
+
+	//When the name1 != name2
+	(*nodeB_Pointer).second.edgeSet.insert(name1);
+
 	return this;
 }
 
 S_GRAPH *S_GRAPH::DeleteVertex
-(std::string nameArg)
+(const std::string &nameArg)
 {
+	std::map<std::string, S_GRAPH_NODE>::iterator vertex_Pointer = (*this).nodeSet.end();
+
+	//When the Graph is empty.
+	if ((*this).nodeSet.size() == 0)
+		return NULL;
+
+	vertex_Pointer = (*this).nodeSet.find(nameArg);
+	//When the inputted vertex doesn't exist in the Graph.
+	if (vertex_Pointer == (*this).nodeSet.end())
+		return NULL;
+
+	for(std::map<std::string, S_GRAPH_NODE>::iterator i=(*this).nodeSet.begin() ; i!=(*this).nodeSet.end() ; i++){
+		(*this).DeleteEdge((*i).first, nameArg);
+	}
+
+	//Exception Handling.
+	if ((vertex_Pointer->second).edgeSet.size() != 0){
+		DEBUG<<"ERROR: Unexpected Situation Occured.\n" << std::endl;
+		return NULL;
+	}
+
+	(*this).nodeSet.erase(vertex_Pointer);
+
 	return this;
 }
 
 S_GRAPH *S_GRAPH::DeleteEdge
-(std::string name1, std::string name2)
+(const std::string &name1, const std::string &name2)
 {
+	std::map<std::string, S_GRAPH_NODE>::iterator nodeA_Pointer = (*this).nodeSet.end();
+	std::map<std::string, S_GRAPH_NODE>::iterator nodeB_Pointer = (*this).nodeSet.end();
+	std::set<std::string> dummy;
+	std::set<std::string>::iterator edge1_Pointer = dummy.end();
+	std::set<std::string>::iterator edge2_Pointer = dummy.end();
+
+	nodeA_Pointer = (*this).nodeSet.find(name1);
+	//When the node with name1 doesn't exist in the graph.
+	if (nodeA_Pointer == (*this).nodeSet.end())
+		return NULL;
+
+	nodeB_Pointer = (*this).nodeSet.find(name2);
+	//When the node with name2 doesn't exist in the graph.
+	if (nodeB_Pointer == (*this).nodeSet.end())
+		return NULL;
+
+	edge1_Pointer = (*nodeA_Pointer).second.edgeSet.find(name2);
+	//When the nodeB doesn't exist in the edge list of node A.
+	if (edge1_Pointer == (*nodeA_Pointer).second.edgeSet.end())
+		return NULL;
+
+	edge2_Pointer = (*nodeB_Pointer).second.edgeSet.find(name1);
+	//When the nodeA doesn't exist in the edge list of node B.
+	if (edge2_Pointer == (*nodeB_Pointer).second.edgeSet.end())
+		return NULL;
+
+	(*nodeA_Pointer).second.edgeSet.erase(edge1_Pointer);
+
+	//When the name1 == name2
+	if (name1 == name2){
+		return this;
+	}
+
+	//When the name1 != name2
+	(*nodeB_Pointer).second.edgeSet.erase(edge2_Pointer);
+
 	return this;
 }
 
 void S_GRAPH::Print(void)
 {
+	for (std::map<std::string, S_GRAPH_NODE>::iterator i=(*this).nodeSet.begin() ; i!=(*this).nodeSet.end() ; i++){
+		std::cout << "[Vertex]: " << (*i).second.name << " [Edges]: ";
+		for (std::set<std::string>::iterator j=(*i).second.edgeSet.begin() ; j!=(*i).second.edgeSet.end() ; j++){
+			std::cout << *j << " ";
+		}
+		std::cout << std::endl;
+	}
 	return ;
 }
