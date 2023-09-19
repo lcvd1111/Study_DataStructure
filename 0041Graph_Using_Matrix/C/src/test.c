@@ -26,7 +26,7 @@ int UnitTest_Graph(void)
 	}
 
 	for (int i=0; i<testGraph.size ; i++){
-		for (int j=0; j<testGraph.size ; j++){
+		for (int j=i; j<testGraph.size ; j++){
 			if ((((i%2)==0)&&((j%2)==0))||((i%2==1)&&(j%2==1))){
 				testGraph.AddEdge(&testGraph, i, j);
 			}
