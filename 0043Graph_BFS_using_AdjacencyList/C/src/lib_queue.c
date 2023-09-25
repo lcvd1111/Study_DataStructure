@@ -234,6 +234,7 @@ QUEUE *QUEUE_METHOD_Dequeue(QUEUE *this, void **outputStore)
 
 	//When the queue is empty currently.
 	if (this->Empty(this)){
+		*outputStore = NULL;
 		return NULL;
 	}
 

@@ -19,6 +19,7 @@ void GRAPH_CONSTRUCTOR(GRAPH *this)
 	(*this).Create_BFS_Buffer = GRAPH_METHOD_Create_BFS_Buffer;
 	(*this).Release_BFS_Buffer = GRAPH_METHOD_Release_BFS_Buffer;
 	(*this).BFS = GRAPH_METHOD_BFS;
+	(*this).Print = GRAPH_METHOD_Print;
 
 	return ;
 }
@@ -51,7 +52,7 @@ GRAPH *GRAPH_METHOD_CreateGraph(GRAPH *this, int sizeArg)
 	}
 
 	//Exception Handling
-	if ((*this).size < 1){
+	if (sizeArg < 1){
 		DEBUG("ERROR: sizeArg < 1. It must be at least 1.\n");
 		return NULL;
 	}
@@ -168,7 +169,7 @@ GRAPH *GRAPH_METHOD_AddEdge_Directed(GRAPH *this, int nodeA, int nodeB)
 	tempNode->next = (GRAPH_NODE *)malloc(sizeof(GRAPH_NODE));
 	tempNode->next->prev = tempNode;
 	tempNode->next->next = NULL;
-	tempNode->node_id = nodeB;
+	tempNode->next->node_id = nodeB;
 
 	return this;
 }
@@ -232,52 +233,100 @@ int GRAPH_METHOD_Release_BFS_Buffer(GRAPH *this, int *bufferArg)
 
 GRAPH *GRAPH_METHOD_BFS(GRAPH *this, int *resultStore)
 {
-	QUEUE bfsQueue;
-	QUEUE *self = &bfsQueue;
-	QUEUE_CONSTRUCTOR(self);
-	char *visitVector = NULL;
 	GRAPH_NODE *currentNode = NULL;
+	GRAPH_NODE *tempNode = NULL;
+	char *visitVector = NULL;
+	QUEUE BFS_queue;
+	QUEUE_CONSTRUCTOR(&BFS_queue);
+	int resultStoreIndex = 0;
 
-	//Exception Handling.
+	//Exception Handling1
 	if (this == NULL){
-		DEBUG("ERROR:, 'this' is NULL.\n");
+		DEBUG("ERROR: 'this' is NULL.\n");
 		return NULL;
 	}
 
-	//Exception Handling2.
+	//Exception Handling2
 	if (this->nodeArray == NULL){
-		DEBUG("ERROR: this->nodeArray is NULL. Create the graph first.\n");
+		DEBUG("ERROR: 'this->nodeArray' is NULL.\n");
 		return NULL;
 	}
 
-	//Exception Handling3.
+	//Exception Handling3
 	if (resultStore == NULL){
-		DEBUG("ERROR: resultStore is NULL. Create the BFS Buffer First.\n");
+		DEBUG("ERROR: 'resultStore' is NULL. Please use 'Create_BFS_Buffer( )' method.\n");
 		return NULL;
 	}
 
-	//Creating the Queue with enough size. It is used for BFS.
-	if (bfsQueue.CreateQueue(self, this->size) == NULL){
-		DEBUG("ERROR: Creating bfsQueue(%d) failed.\n", this->size);
-		return NULL;
-	}
+	//Create VisitVector
+	visitVector = (char *)malloc(sizeof(char)*(this->size));
+	memset(visitVector, 0, sizeof(char)*(this->size));
 
-	//Creating the visit vector.
-	visitVector = (char *)malloc(sizeof(char) * (this->size));
-	memset(visitVector, 0, sizeof(char)*(this->size)); //If the node is enqueued->becomes 1. If the node is dequeued->becomes 2.
+	//Create Queue
+	BFS_queue.CreateQueue(&BFS_queue, this->size);
 
-	//BFS Start.
+	//BFS Start
 	currentNode = this->nodeArray;
+	BFS_queue.Enqueue(&BFS_queue, (void *)currentNode);
+	visitVector[currentNode->node_id] = 1;
 
-	while(1){
+	while (1){
+		BFS_queue.Dequeue(&BFS_queue, (void **)&currentNode);
+		if (currentNode == NULL)//When the queue was empty.
+			break;
+
+		currentNode = (this->nodeArray)+(currentNode->node_id); //This is extremely important.
+
+		visitVector[currentNode->node_id] = 2; //Visit Check.
+		resultStore[resultStoreIndex] = currentNode->node_id; //Visit Check2.
+		resultStoreIndex++;
+
+		tempNode = currentNode;
+
+		while (tempNode->next != NULL){
+			tempNode = tempNode->next;
+			if (visitVector[tempNode->node_id] != 0){
+				//When the tempNode is already visited.
+				//Or the tempNode is already stored in the BFS queue currently.
+				continue;
+			}
+
+			BFS_queue.Enqueue(&BFS_queue, (void *)tempNode);
+			visitVector[tempNode->node_id] = 1;
+		}
 	}
 
-	//Destroying the created Queue.
-	if (bfsQueue.DestroyQueue(self) == NULL){
-		DEBUG("ERROR: Destroying bfsQueue failed.\n");
-		return NULL;
-	}
-	QUEUE_DESTRUCTOR(self);
+	//Destroy Queue
+	BFS_queue.DestroyQueue(&BFS_queue);
+	QUEUE_DESTRUCTOR(&BFS_queue);
 	return this;
 }
 
+GRAPH *GRAPH_METHOD_Print(GRAPH *this)
+{
+	GRAPH_NODE *tempNode = NULL;
+
+	//Exception Handling
+	if (this == NULL){
+		DEBUG("ERROR: 'this' is NULL.\n");
+		return NULL;
+	}
+
+	//Exception Handling2
+	if (this->nodeArray == NULL){
+		DEBUG("ERROR: 'this->nodeArray' is NULL.\n");
+		return NULL;
+	}
+
+	for (int i=0; i<this->size ; i++){
+		printf("[Node] %d [Edge]", ((this->nodeArray)+i)->node_id);
+		tempNode = (this->nodeArray)+i;
+		while (tempNode->next != NULL){
+			tempNode = tempNode->next;
+			printf("%d ", tempNode->node_id);
+		}
+		printf("\n");
+	}
+	 
+	return this;
+}

@@ -26,6 +26,7 @@ struct _GRAPH {
 	int *(*Create_BFS_Buffer)(GRAPH *this);
 	int (*Release_BFS_Buffer)(GRAPH *this, int *);
 	GRAPH *(*BFS)(GRAPH *this, int *);
+	GRAPH *(*Print)(GRAPH *this);
 };
 
 //Function Declarations
@@ -38,4 +39,5 @@ GRAPH *GRAPH_METHOD_AddEdge(GRAPH *this, int nodeA, int nodeB);
 int *GRAPH_METHOD_Create_BFS_Buffer(GRAPH *this);
 int GRAPH_METHOD_Release_BFS_Buffer(GRAPH *this, int *);
 GRAPH *GRAPH_METHOD_BFS(GRAPH *this, int *resultStore);
+GRAPH *GRAPH_METHOD_Print(GRAPH *this);
 #endif
