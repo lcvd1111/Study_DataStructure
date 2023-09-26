@@ -405,8 +405,6 @@ int UnitTest_BFS_Directed(void)
 		return -10;
 	}
 
-	testGraph.BFS(&testGraph, BFS_result);
-
 	testGraph.Release_BFS_Buffer(&testGraph, BFS_result);
 	testGraph.DestroyGraph(&testGraph);
 	GRAPH_DESTRUCTOR(&testGraph);

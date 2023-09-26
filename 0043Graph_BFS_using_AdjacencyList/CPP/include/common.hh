@@ -7,5 +7,6 @@
 #include <cstring>
 #include <deque>
 
+#define DEBUG std::cout<<"["<<__func__<<", "<<__LINE__<<"]"
 
 #endif
