@@ -103,96 +103,55 @@ GRAPH *GRAPH::AddEdge(int nodeA, int nodeB)
 
 GRAPH *GRAPH::BFS(std::vector<int> &BFSresult)
 {
-#ifdef VERSION1
-	std::deque<std::vector<int>::iterator> BFS_Queue;
+	std::deque<std::vector<int>::iterator> bfs_Queue;
+	std::vector<char> visitVector;
 	std::vector<int> dummy;
 	std::vector<int>::iterator currentNode = dummy.end();
 	std::vector<int>::iterator tempNode = dummy.end();
-	std::vector<char> visitVector((*this).size, 0);
 
-	//Exception Handling.
-	if (this->nodeArray == NULL){
-		DEBUG<<"ERROR: 'this->nodeArray' is NULL. Create the graph first."<<std::endl;
+	//Exeption Handling
+	if ((*this).nodeArray == NULL){
+		DEBUG<<"ERROR: nodeArray is NULL." << std::endl;
 		return NULL;
 	}
 
-	//Output Storage Clear
+	//Create VisitVector
+	for (int i=0; i<(*this).size ; i++){
+		visitVector.push_back(0);
+	}
+
+	//Clearing the outputStorage
 	BFSresult.clear();
 
-	//BFS Start.
+	//BFS start
 	currentNode = (*this).nodeArray[0].begin();
-	BFS_Queue.push_back(currentNode);
+	bfs_Queue.push_back(currentNode);
 	visitVector[*currentNode] = 1;
 
-	while(1){
-		if (BFS_Queue.empty() == 1)
+	while (1){
+		if (bfs_Queue.empty() == 1){
 			break;
+		}
 
-		//Dequeueing.
-		currentNode = *(BFS_Queue.begin());
-		currentNode = ((*this).nodeArray[*currentNode]).begin();//This must be done.
-		BFS_Queue.pop_front();
-
-		//Visit Check.
+		//Dequeuing and Visit Check
+		currentNode = *(bfs_Queue.begin());
+		bfs_Queue.pop_front();
+		currentNode = (*this).nodeArray[*currentNode].begin();
 		visitVector[*currentNode] = 2;
 		BFSresult.push_back(*currentNode);
 
+		//Traversing the connected nodes of recently visitied node.
 		tempNode = currentNode;
 		tempNode++;
-		for( ; tempNode != (*this).nodeArray[*currentNode].end() ; tempNode++ ){
-			if (visitVector[*tempNode] != 0)
-				continue;
-
-			//Enqueueing.
-			BFS_Queue.push_back(tempNode);
-			visitVector[*tempNode] = 1;
-		}
-	}
-
-	return this;
-#endif
-
-#ifdef VERSION2
-	std::deque<int> BFS_Queue;
-	std::vector<int> visitVector((*this).size, 0);
-	std::vector<int> *currentNode = NULL;
-	std::vector<int> dummy;
-	std::vector<int>::iterator tempNode = dummy.end();
-
-	BFSresult.clear();
-
-	//Exception Handling
-	if ((*this).nodeArray == NULL){
-		DEBUG<<"ERROR: nodeArray is NULL. Create the graph first." << std::endl;
-		return NULL;
-	}
-
-	//BFS Start
-	currentNode = (*this).nodeArray + 0;
-	BFS_Queue.push_back(*(*currentNode).begin());
-	visitVector[*(*currentNode).begin()] = 1;
-
-	while(1){
-		if (BFS_Queue.empty() == 1) //When the queue is empty.
-			break;
-
-		currentNode = (*this).nodeArray + (*(BFS_Queue.begin()));
-		BFS_Queue.pop_front();
-		visitVector[(*currentNode)[0]] = 2;
-		BFSresult.push_back(*(currentNode->begin()));
-
-		for (std::vector<int>::iterator i=((currentNode->begin()) + 1) ; i!=currentNode->end() ; i++){
-			if (visitVector[*i] != 0){ //When the node is already visited or stored in the queue currently.
-				continue;
+		for ( ; tempNode != (*this).nodeArray[*currentNode].end() ; tempNode++){
+			if (visitVector[*tempNode] == 0){
+				bfs_Queue.push_back(tempNode);
+				visitVector[*tempNode] = 1;
 			}
-
-			BFS_Queue.push_back(*i);
-			visitVector[*i] = 1;
 		}
 	}
 
 	return this;
-#endif
 }
 
 GRAPH *GRAPH::Print(void)
