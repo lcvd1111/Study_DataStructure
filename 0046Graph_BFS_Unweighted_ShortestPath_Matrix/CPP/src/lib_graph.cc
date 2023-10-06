@@ -58,6 +58,9 @@ GRAPH *GRAPH::Destroy(void)
 
 	delete[] this->matrix;
 
+	this->matrix = NULL;
+	this->size = -1;
+
 	return this;
 }
 
@@ -117,6 +120,7 @@ int GRAPH::CalcPath
 
 	while(tempStack.empty() == 0){
 		buffer = tempStack.end();
+		tempStack.pop_back();
 		buffer--;
 		outputStore.push_back(*buffer);
 	}
@@ -132,6 +136,7 @@ int GRAPH::ShortestPath(int nodeA, int nodeB, std::vector<int> &outputStore)
 	int currentNode = 0, tempNode = 0;
 	int ret = 0;
 	char **pMatrix = NULL;
+	int loopCtl = 0;
 
 	//Excpetion Hnadling.
 	if (matrix == NULL){
@@ -169,7 +174,8 @@ int GRAPH::ShortestPath(int nodeA, int nodeB, std::vector<int> &outputStore)
 	visitVector[currentNode] = 1;
 	departureVector[currentNode] = -1;
 	
-	while(1){
+	loopCtl = 1;
+	while(loopCtl){
 		if (bfs_Queue.empty()){
 			ret = -1;
 			break;
@@ -182,7 +188,7 @@ int GRAPH::ShortestPath(int nodeA, int nodeB, std::vector<int> &outputStore)
 
 		//Traversing neighborhoods
 		tempNode = 0;
-		for ( ; tempNode<this->size ; tempNode++){
+		for ( ; tempNode < this->size ; tempNode++){
 			if (pMatrix[currentNode][tempNode] == 0){
 				continue;
 			}
@@ -197,6 +203,7 @@ int GRAPH::ShortestPath(int nodeA, int nodeB, std::vector<int> &outputStore)
 			//When the destination is found
 			if (tempNode == nodeB){
 				ret = CalcPath(nodeA, nodeB, departureVector, outputStore);
+				loopCtl = 0;
 				break;
 			}
 		}
