@@ -111,7 +111,7 @@ int GRAPH::RecursiveDFS
 	//Current Node visitCheck.
 	currentNode = pNodeArray[nextNode].begin();
 	visitVector[*currentNode] = 2;
-	outputStore.insert(outputStore.begin(), *currentNode);
+	outputStore.insert(outputStore.end(), *currentNode);
 
 	//Traversing neighbors.
 	tempNode = pNodeArray[*currentNode].begin();

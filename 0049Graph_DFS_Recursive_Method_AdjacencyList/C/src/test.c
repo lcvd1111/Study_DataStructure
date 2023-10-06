@@ -88,8 +88,6 @@ int UnitTest_DFS_Undirected(void)
 	GRAPH_DESTRUCTOR(&testGraph);
 
 	return 0;
-
-	return 0;
 }
 
 int UnitTest_DFS_Directed(void)
