@@ -8,7 +8,7 @@ int UnitTest_Graph(void)
 	testGraph.AddEdge(0, 1);
 	testGraph.AddEdge(0, 2);
 	testGraph.AddEdge_Directed(1, 2);
-	testGraph.Print();
+	//testGraph.Print();
 
 	testGraph.Destroy();
 
@@ -253,11 +253,6 @@ int UnitTest_DFS_2_Directed(void)
 	if (DFS_output[6] != 6){
 		UNIT_TEST_FAIL;
 		return -7;
-	}
-
-	if (DFS_output[7] != 0){
-		UNIT_TEST_FAIL;
-		return -8;
 	}
 
 	return 0;

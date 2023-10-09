@@ -123,10 +123,49 @@ GRAPH *GRAPH::Print(void)
 
 GRAPH *GRAPH::DFS_1(std::vector<int> &outputStore)
 {
+	std::deque<std::vector<int>::iterator> DFS_stack;
+	std::vector<char> visitVector;
+	std::vector<int>::iterator currentNode, tempNode;
+	std::vector<int> *pNodeArray = NULL;
+
 	//Exception Handling
 	if (this->nodeArray == NULL){
 		DEBUG << "ERROR: this->nodeArray is NULL." << std::endl;
 		return NULL;
+	}
+
+	//Clearing the outputStore vector and creating the visitVector
+	outputStore.clear();
+	visitVector.assign(this->size, 0);
+	pNodeArray = this->nodeArray;
+
+	//DFS start
+	currentNode = pNodeArray[0].begin();
+
+	DFS_stack.push_back(currentNode);
+	visitVector[*currentNode] = 1;
+
+	while(1){
+		if (DFS_stack.empty() == 1){
+			break;
+		}
+
+		//Popping the stack and visitCheck.
+		currentNode = *(DFS_stack.end()-1);
+		currentNode = pNodeArray[*currentNode].begin();
+		DFS_stack.pop_back();
+		visitVector[*currentNode] = 2;
+		outputStore.push_back(*currentNode);
+
+		//Pushing the every unvisited neighbors.
+		tempNode = currentNode + 1;
+		while(tempNode != pNodeArray[*currentNode].end()){
+			if (visitVector[*tempNode] == 0){
+				DFS_stack.push_back(tempNode);
+				visitVector[*tempNode] = 1;
+			}
+			tempNode++;
+		}
 	}
 
 	return this;
@@ -134,10 +173,63 @@ GRAPH *GRAPH::DFS_1(std::vector<int> &outputStore)
 
 GRAPH *GRAPH::DFS_2(std::vector<int> &outputStore)
 {
+	std::vector<int>::iterator currentNode, tempNode;
+	std::vector<char> visitVector;
+	std::deque<std::vector<int>::iterator> dfs_Stack;
+	std::vector<int> *pNodeArray = NULL;
+	int loopCtl1=0, loopCtl2=0;
+
 	//Exception Handling
 	if (this->nodeArray == NULL){
 		DEBUG << "ERROR: this->nodeArray is NULL." << std::endl;
 		return NULL;
+	}
+
+	//Clearing and Creating auxiliary objects.
+	outputStore.clear();
+	visitVector.assign(this->size, 0);
+	dfs_Stack.clear();
+	pNodeArray = this->nodeArray;
+
+	//DFS start.
+	currentNode = pNodeArray[0].begin();
+
+	loopCtl1 = 1;
+	while(loopCtl1){
+		//Visit Checking.
+		visitVector[*currentNode] = 2;
+		outputStore.push_back(*currentNode);
+
+		//Finding unvisited neighbor.
+		loopCtl2 = 1;
+		while(loopCtl2){
+			tempNode = pNodeArray[*currentNode].begin();
+			tempNode++;
+			while(tempNode != pNodeArray[*currentNode].end()){
+				if (visitVector[*tempNode] != 0){
+					//When the neighbor is already visited.
+					tempNode++;
+					continue;
+				}
+				//When the unvisited neighbor node is found.
+				dfs_Stack.push_back(currentNode);
+				currentNode = pNodeArray[*tempNode].begin();
+				loopCtl2 = 0;
+				break;
+			}
+			//When there is no more unvisited neighbor node.
+			if (tempNode == pNodeArray[*currentNode].end()){
+				if (dfs_Stack.empty() == 1){
+					loopCtl2 = 0;
+					loopCtl1 = 0;
+					break;
+				}
+				currentNode = *(dfs_Stack.end() - 1);
+				currentNode = pNodeArray[*currentNode].begin();
+				dfs_Stack.pop_back();
+				continue;
+			}
+		}
 	}
 
 	return this;
