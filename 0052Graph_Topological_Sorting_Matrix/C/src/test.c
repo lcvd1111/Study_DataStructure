@@ -101,7 +101,6 @@ int UnitTest_Queue(void)
 
 int UnitTest_Graph(void)
 {
-	/*
 	GRAPH testGraph;
 	GRAPH *pTestGraph = &testGraph;
 	GRAPH_CONSTRUCTOR(pTestGraph);
@@ -112,13 +111,12 @@ int UnitTest_Graph(void)
 	//testGraph.Print(pTestGraph);
 
 	GRAPH_DESTRUCTOR(pTestGraph);
-	*/
+
 	return 0;
 }
 
 int UnitTest_TopologicalSorting(void)
 {
-	/*
 	GRAPH testGraph;
 	GRAPH *pTestGraph = &testGraph;
 	GRAPH_CONSTRUCTOR(pTestGraph);
@@ -142,7 +140,7 @@ int UnitTest_TopologicalSorting(void)
 	output = (int *)malloc(sizeof(int)*(testGraph.size));
 	memset(output, 0, sizeof(int)*(testGraph.size));
 
-	testGraph.TopologicalSort(pTestGraph, output);
+	testGraph.TopologicalSorting(pTestGraph, output);
 
 	if (output[0] != 1){
 		UNIT_TEST_FAIL;
@@ -197,6 +195,6 @@ int UnitTest_TopologicalSorting(void)
 	free(output);
 	testGraph.Destroy(pTestGraph);
 	GRAPH_DESTRUCTOR(pTestGraph);
-	*/
+
 	return 0;
 }
