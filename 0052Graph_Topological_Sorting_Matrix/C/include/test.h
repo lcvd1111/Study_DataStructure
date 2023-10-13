@@ -1,5 +1,5 @@
-#ifndef __UNIT_TEST_HEADER__
-#define __UNIT_TEST_HEADER__
+#ifndef __TEST_HEADER__
+#define __TEST_HEADER__
 
 #include "common.h"
 #include "lib_queue.h"
