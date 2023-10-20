@@ -4,24 +4,16 @@
 #include "common.hh"
 
 //Type Definitions and Declarations
-typedef class _GRAPH_NODE GRAPH_NODE;
-typedef GRAPH_NODE NODE;
 typedef class _GRAPH GRAPH;
-typedef struct _CUMSTOM_COMPARE CUSTOM_COMPARE;
 typedef class _HEAP_NODE HEAP_NODE;
-
-class _GRAPH_NODE {
-public:
-	int node_id;
-	int weight;
-};
+typedef struct _CUSTOM_COMPARATOR CUSTOM_COMPARATOR;
 
 class _GRAPH {
 public:
-	std::vector<NODE> *nodeArray;
+	int **matrix;
 	int size;
 
-	//Method Declarations
+	//Methods
 	_GRAPH(void);
 	~_GRAPH(void);
 	GRAPH *Create(int);
@@ -29,17 +21,19 @@ public:
 	GRAPH *AddEdge_Directed(int, int, int);
 	GRAPH *AddEdge(int, int, int);
 	GRAPH *Print(void);
+	int Weight(void); //It can be used only for undirected Graph.
 	GRAPH Prim(void);
-	int Weight(void); //Caution: It can be used only for Undirected Graph!
 };
 
-class _HEAP_NODE:public _GRAPH_NODE {
+class _HEAP_NODE {
 public:
+	int node_id;
 	int parent_node_id;
+	int weight;
 };
 
-struct _CUMSTOM_COMPARE {
+struct _CUSTOM_COMPARATOR {
 public:
-	bool operator()(HEAP_NODE argX, HEAP_NODE argY);	
+	bool operator()(HEAP_NODE, HEAP_NODE);
 };
 #endif

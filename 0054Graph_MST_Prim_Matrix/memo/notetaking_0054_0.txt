@@ -1,0 +1,8 @@
+The overall flow chart for Prim's Algorithm is well explained in /0053~~~/memo/notetaking_0053_0.jpg image file.
+The most important things are below two things.
+
+1. Check whether distance toward neighborhood is longer than previously recorded distance or not, before the enqueueing.
+   If it is, you should not enqueue this node&edge to priority queue.
+
+2. Check whether Dequeued node is already in Minimum Spanning Tree or not.
+   If it is, you must dequeue again.

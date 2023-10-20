@@ -7,11 +7,12 @@ int UnitTest_Graph(void)
 	testGraph.Create(5);
 
 	testGraph.AddEdge(0,3,5);
-	testGraph.AddEdge(2,1, 13);
+	testGraph.AddEdge(1,4,3);
+
 	//testGraph.Print();
-	if (testGraph.Weight() != 18){
+
+	if (testGraph.Weight() != 8){
 		UNIT_TEST_FAIL;
-		testGraph.Destroy();
 		return -1;
 	}
 
@@ -53,5 +54,6 @@ int UnitTest_Prim(void)
 
 	testGraph.Destroy();
 	testMST.Destroy();
+	
 	return 0;
 }
