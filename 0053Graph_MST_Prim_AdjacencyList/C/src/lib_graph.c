@@ -337,6 +337,7 @@ GRAPH *GRAPH_METHOD_Prim(GRAPH *this, GRAPH *outputStore)
 
 	//Destroying the auxiliary variables and objects
 	primHeap.Destroy(&primHeap);
+	HEAP_DESTRUCTOR(&primHeap);
 	free(mstVector);
 	free(distanceVector);
 
