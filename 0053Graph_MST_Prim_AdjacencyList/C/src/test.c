@@ -39,6 +39,11 @@ int UnitTest_Heap(void)
 	testNode.data = testPointer+6;
 	testHeap.Enqueue(p, &testNode);
 
+	if (testHeap.lastIndex != 6){
+		UNIT_TEST_FAIL;
+		return -999;
+	}
+
 	if (testHeap.Dequeue(p, &testNode) != p){
 		UNIT_TEST_FAIL;
 		return -1;
@@ -46,9 +51,77 @@ int UnitTest_Heap(void)
 
 	if (testNode.data != testPointer + 6){
 		UNIT_TEST_FAIL;
-DEBUG("%d\n", *(int *)testNode.data);
-DEBUG("%d\n", testNode.key);
 		return -2;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -3;
+	}
+
+	if (testNode.data != testPointer + 1){
+		UNIT_TEST_FAIL;
+		return -4;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -5;
+	}
+
+	if (testNode.data != testPointer + 3){
+		UNIT_TEST_FAIL;
+		return -6;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -7;
+	}
+
+	if (testNode.data != testPointer + 0){
+		UNIT_TEST_FAIL;
+		return -8;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -9;
+	}
+
+	if (testNode.data != testPointer + 4){
+		UNIT_TEST_FAIL;
+		return -10;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -11;
+	}
+
+	if (testNode.data != testPointer + 5){
+		UNIT_TEST_FAIL;
+		return -12;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != p){
+		UNIT_TEST_FAIL;
+		return -13;
+	}
+
+	if (testNode.data != testPointer + 2){
+		UNIT_TEST_FAIL;
+		return -14;
+	}
+
+	if (testHeap.Dequeue(p, &testNode) != NULL){
+		UNIT_TEST_FAIL;
+		return -15;
+	}
+
+	if (testHeap.Empty(p) != 1){
+		UNIT_TEST_FAIL;
+		return -16;
 	}
 
 	testHeap.Destroy(p);
@@ -58,10 +131,65 @@ DEBUG("%d\n", testNode.key);
 
 int UnitTest_Graph(void)
 {
+	GRAPH testGraph;
+	GRAPH_CONSTRUCTOR(&testGraph);
+	testGraph.Create(&testGraph, 5);
+
+	testGraph.AddEdge(&testGraph, 0, 3, 5);
+	testGraph.AddEdge(&testGraph, 0, 4, 3);
+	testGraph.AddEdge(&testGraph, 4, 1, 2);
+
+	//testGraph.Print(&testGraph);
+
+	if (testGraph.Weight(&testGraph) != 10){
+		UNIT_TEST_FAIL;
+		return -1;
+	}
+
+	testGraph.Destroy(&testGraph);
+	GRAPH_DESTRUCTOR(&testGraph);
 	return 0;
 }
 
 int UnitTest_Prim(void)
 {
+	GRAPH testGraph;
+	GRAPH_CONSTRUCTOR(&testGraph);
+	GRAPH testMST;
+	GRAPH_CONSTRUCTOR(&testMST);
+
+	testGraph.Create(&testGraph, 7);
+	testGraph.AddEdge(&testGraph, 0, 3, 3);
+	testGraph.AddEdge(&testGraph, 0, 4, 1);
+	testGraph.AddEdge(&testGraph, 1, 2, 5);
+	testGraph.AddEdge(&testGraph, 1, 4, 7);
+	testGraph.AddEdge(&testGraph, 1, 6, 13);
+	testGraph.AddEdge(&testGraph, 2, 5, 8);
+	testGraph.AddEdge(&testGraph, 3, 6, 9);
+	testGraph.AddEdge(&testGraph, 4, 5, 6);
+	testGraph.AddEdge(&testGraph, 5, 6, 4);
+	if (testGraph.Weight(&testGraph) != 56){
+		UNIT_TEST_FAIL;
+		return -1;
+	}
+	
+	testGraph.Prim(&testGraph, &testMST);
+
+	if (testMST.Weight(&testMST) != 26){
+		UNIT_TEST_FAIL;
+		return -2;
+	}
+
+	printf("<Given Graph>\n");
+	testGraph.Print(&testGraph);
+	printf("<Created MST>\n");
+	testMST.Print(&testMST);
+
+	testGraph.Destroy(&testGraph);
+	testMST.Destroy(&testMST);
+	
+	GRAPH_DESTRUCTOR(&testGraph);
+	GRAPH_DESTRUCTOR(&testMST);
+
 	return 0;
 }

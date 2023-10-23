@@ -90,7 +90,6 @@ HEAP *HEAP_METHOD_Destroy(HEAP *this)
 HEAP *HEAP_METHOD_Enqueue(HEAP *this, HEAP_NODE *inputArg)
 {
 	int currentIndex=0, parentIndex=0;
-	HEAP_NODE buffer;
 	HEAP_NODE *pHeapArray = NULL;
 
 	//Exception Handling
@@ -106,7 +105,7 @@ HEAP *HEAP_METHOD_Enqueue(HEAP *this, HEAP_NODE *inputArg)
 
 	pHeapArray = this->heapArray;
 
-	//Adding the inputArg as a last element of the array.
+	//Adding the inputArg to back of the current last element of the array.
 	this->lastIndex += 1;
 	(pHeapArray)[this->lastIndex].key = inputArg->key;
 	(pHeapArray)[this->lastIndex].data = inputArg->data;
@@ -121,6 +120,7 @@ HEAP *HEAP_METHOD_Enqueue(HEAP *this, HEAP_NODE *inputArg)
 		}
 
 		if (pHeapArray[parentIndex].key <= pHeapArray[currentIndex].key){
+			//When the swapping is not needed anymore.
 			break;
 		}
 
@@ -186,12 +186,12 @@ HEAP *HEAP_METHOD_Dequeue(HEAP *this, HEAP_NODE *outputStore)
 
 	while(1){
 		//When it has no child.
-		if (lChildIndex >= this->lastIndex){
+		if (lChildIndex > this->lastIndex){
 			break;
 		}
 
 		//When it has only a left child.
-		if (lChildIndex == this->lastIndex-1){
+		if (lChildIndex == this->lastIndex){
 			if (pHeapArray[currentIndex].key > pHeapArray[lChildIndex].key){
 				(this->Swap)(this, currentIndex, lChildIndex);
 			}
@@ -259,7 +259,7 @@ HEAP *HEAP_METHOD_Swap(HEAP *this, int indexA, int indexB)
 
 	buffer = pHeapArray[indexA];
 	pHeapArray[indexA] = pHeapArray[indexB];
-	pHeapArray[indexB] = pHeapArray[indexA];
+	pHeapArray[indexB] = buffer;
 
 	return this;
 }

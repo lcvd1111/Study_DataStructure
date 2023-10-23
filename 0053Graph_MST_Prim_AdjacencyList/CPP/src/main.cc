@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 		std::cout << "Error code: " << err << std::endl;
 		return -2;
 	}
-	std::cout << "Unit Test for Prim MST: Success." << std::endl;
+	std::cout << "Unit Test for Prim Algorithm: Success." << std::endl;
 
 	return 0;
 }
