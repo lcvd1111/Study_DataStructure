@@ -140,5 +140,39 @@ int UnitTest_UnionFind(void)
 
 int UnitTest_Kruskal(void)
 {
+	GRAPH testGraph;
+	GRAPH testMST;
+
+	testGraph.Create(7);
+	testGraph.AddEdge(0, 3, 3);
+	testGraph.AddEdge(0, 4, 1);
+	testGraph.AddEdge(1, 2, 5);
+	testGraph.AddEdge(1, 4, 7);
+	testGraph.AddEdge(1, 6, 13);
+	testGraph.AddEdge(2, 5, 8);
+	testGraph.AddEdge(3, 6, 9);
+	testGraph.AddEdge(4, 5, 6);
+	testGraph.AddEdge(5, 6, 4);
+
+	if (testGraph.Weight() != 56){
+		UNIT_TEST_FAIL;
+		return -1;
+	}
+	
+	testGraph.Kruskal(testMST);
+
+	if (testMST.Weight() != 26){
+		UNIT_TEST_FAIL;
+		return -2;
+	}
+
+	std::cout << "<Given Graph>" << std::endl;
+	testGraph.Print();
+	std::cout << std::endl << "<Created MST>" << std::endl;
+	testMST.Print();
+
+	testGraph.Destroy();
+	testMST.Destroy();
+
 	return 0;
 }
