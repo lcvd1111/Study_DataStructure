@@ -171,6 +171,8 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int indexArg)
 	}
 
 	pSuccessorArray = this->successorArray;
+
+#if !defined(USE_RECURSION)
 	ret = indexArg;
 
 	while(pSuccessorArray[ret] != ret){
@@ -178,6 +180,15 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int indexArg)
 	}
 
 	return ret;
+#else
+	ret = pSuccessorArray[indexArg];
+	if (ret != indexArg){
+		return ((*this).Find(this, ret));
+	}
+	else if (ret == indexArg){
+		return ret;
+	}
+#endif
 }
 
 int UNION_FIND_METHOD_Size(UNION_FIND *this, int indexArg)

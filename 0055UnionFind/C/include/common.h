@@ -8,4 +8,6 @@
 #define DEBUG( x , ... ) printf("[%s, %d]" x, __func__, __LINE__, ##__VA_ARGS__)
 #define UNIT_TEST_FAIL DEBUG("Unit Test Failed.\n")
 
+#define USE_RECURSION
+
 #endif
