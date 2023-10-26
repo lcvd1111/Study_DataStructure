@@ -4,22 +4,15 @@
 #include "common.hh"
 
 //Type Definitions and Declarations
-typedef class _GRAPH_NODE GRAPH_NODE;
 typedef class _GRAPH GRAPH;
 typedef class _HEAP_NODE HEAP_NODE;
-
-class _GRAPH_NODE {
-public:
-	int node_id;
-	int weight;
-};
+typedef class _HEAP_COMPARATOR HEAP_COMPARATOR;
 
 class _GRAPH {
-private:
-	std::vector<std::vector<GRAPH_NODE>> nodeVector;
+public:
+	int **matrix;
 	int size;
 
-public:
 	//Method Functions
 	_GRAPH(void);
 	~_GRAPH(void);
@@ -27,12 +20,12 @@ public:
 	GRAPH *Destroy(void);
 	GRAPH *AddEdge_Directed(int, int, int);
 	GRAPH *AddEdge(int, int, int);
-	int Weight(void);
 	GRAPH *Print(void);
+	int Weight(void);
 	int Dijkstra(int);
 };
 
-//Below class and struct are used in priority queue for Kruskal Algorithm
+//Below things are used for priority queue for kruskal algorithm
 class _HEAP_NODE {
 public:
 	int node_id;
@@ -40,8 +33,8 @@ public:
 	int distance_from_departure;
 };
 
-struct CUSTOM_COMPARATOR {
+class _HEAP_COMPARATOR {
+public:
 	bool operator()(HEAP_NODE &, HEAP_NODE &);
 };
-
 #endif
