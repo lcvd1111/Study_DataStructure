@@ -52,8 +52,8 @@ UNION_FIND *UNION_FIND::Destroy(void)
 		return NULL;
 	}
 
-	(this->successorVector).empty();
-	(this->sizeVector).empty();
+	(this->successorVector).clear();
+	(this->sizeVector).clear();
 	this->collectionSize = -1;
 
 	return this;
