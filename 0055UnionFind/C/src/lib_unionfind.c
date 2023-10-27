@@ -8,7 +8,7 @@ void UNION_FIND_CONSTRUCTOR(UNION_FIND *this)
 		return ;
 	}
 
-	this->successorArray = NULL;
+	this->predecessorArray = NULL;
 	this->sizeArray = NULL;
 	this->collectionSize = -1;
 
@@ -60,11 +60,11 @@ UNION_FIND *UNION_FIND_METHOD_Create(UNION_FIND *this, int sizeArg)
 	}
 
 	this->collectionSize = sizeArg;
-	this->successorArray = (int *)malloc(sizeof(int)*sizeArg);
+	this->predecessorArray = (int *)malloc(sizeof(int)*sizeArg);
 	this->sizeArray = (int *)malloc(sizeof(int)*sizeArg);
 
 	for (int i=0; i<sizeArg ; i++){
-		(this->successorArray)[i] = i;
+		(this->predecessorArray)[i] = i;
 		(this->sizeArray)[i] = 1;
 	}
 
@@ -86,7 +86,7 @@ UNION_FIND *UNION_FIND_METHOD_Destroy(UNION_FIND *this)
 	}
 
 	this->collectionSize = -1;
-	this->successorArray = NULL;
+	this->predecessorArray = NULL;
 	this->sizeArray = NULL;
 
 	return this;
@@ -121,7 +121,7 @@ UNION_FIND *UNION_FIND_METHOD_Unite(UNION_FIND *this, int indexA, int indexB)
 		return NULL;
 	}
 
-	pSuccessorArray = this->successorArray;
+	pSuccessorArray = this->predecessorArray;
 	pSizeArray = this->sizeArray;
 
 	setA = (*this).Find(this, indexA);
@@ -170,7 +170,7 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int indexArg)
 		return -3;
 	}
 
-	pSuccessorArray = this->successorArray;
+	pSuccessorArray = this->predecessorArray;
 
 #if !defined(USE_RECURSION)
 	ret = indexArg;

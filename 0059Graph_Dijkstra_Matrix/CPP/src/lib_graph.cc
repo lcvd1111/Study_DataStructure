@@ -143,7 +143,7 @@ int GRAPH::Weight(void)
 int GRAPH::Dijkstra(int departureArg)
 {
 	std::vector<char> visitVector;
-	std::vector<int> distanceVector, successorVector;
+	std::vector<int> distanceVector, predecessorVector;
 	std::priority_queue<HEAP_NODE, std::vector<HEAP_NODE>, HEAP_COMPARATOR> dijkstraPQ;
 	HEAP_NODE heapBuffer;
 	int currentNode=0, parentNode=0;
@@ -165,7 +165,7 @@ int GRAPH::Dijkstra(int departureArg)
 	//Initializing the auxiliary variables and objects
 	visitVector.assign((this->size), 0);
 	distanceVector.assign((this->size), INT_MAX);
-	successorVector.assign((this->size), -1);
+	predecessorVector.assign((this->size), -1);
 	pMatrix = this->matrix;
 
 	//Dijkstra Algorithm start
@@ -176,7 +176,7 @@ int GRAPH::Dijkstra(int departureArg)
 	loopCtl = 1;
 	while(loopCtl){
 		visitVector[currentNode] = 1;
-		successorVector[currentNode] = parentNode;
+		predecessorVector[currentNode] = parentNode;
 
 		//Traversing the neighborhoods of currentNode
 		for (int tempNode=0 ; tempNode<(this->size) ; tempNode++){
@@ -235,7 +235,7 @@ int GRAPH::Dijkstra(int departureArg)
 			if (temp == departureArg){
 				break;
 			}
-			temp = successorVector[temp];
+			temp = predecessorVector[temp];
 		}
 		std::cout << std::endl;
 	}

@@ -158,7 +158,7 @@ GRAPH *GRAPH::Print(void)
 int GRAPH::Dijkstra(int departureArg)
 {
 	std::vector<char> visitVector;
-	std::vector<int> distanceVector, successorVector;
+	std::vector<int> distanceVector, predecessorVector;
 	std::priority_queue<HEAP_NODE, std::vector<HEAP_NODE>, CUSTOM_COMPARATOR> dijkstraPQ;
 	HEAP_NODE heapBuffer;
 	std::vector<GRAPH_NODE>::iterator currentNode, parentNode;
@@ -173,7 +173,7 @@ int GRAPH::Dijkstra(int departureArg)
 	//Initializing the auxiliary objects and variables.
 	visitVector.assign(this->size, 0);
 	distanceVector.assign(this->size, INT_MAX/2);
-	successorVector.assign(this->size, -1);
+	predecessorVector.assign(this->size, -1);
 
 	//Start Dijkstra Algorithm
 	currentNode = (this->nodeVector)[departureArg].begin();
@@ -183,7 +183,7 @@ int GRAPH::Dijkstra(int departureArg)
 		visitVector[currentNode->node_id] = 1;
 		if (currentNode->node_id == departureArg){
 			distanceVector[currentNode->node_id] = 0;
-			successorVector[currentNode->node_id] = -1;
+			predecessorVector[currentNode->node_id] = -1;
 		}
 
 		//Traversing every Neighborhood.
@@ -204,7 +204,7 @@ int GRAPH::Dijkstra(int departureArg)
 			//Proper new fringe node is found. Not visited yet + The shortest path toward this neighbor is from the currentNode so far.
 			//Enqueueing to PriorityQueue and Updating the distanceVector information.
 			distanceVector[i->node_id] = distanceVector[currentNode->node_id] + (i->weight);
-			successorVector[i->node_id] = currentNode->node_id;
+			predecessorVector[i->node_id] = currentNode->node_id;
 			heapBuffer.node_id = i->node_id;
 			heapBuffer.parent_node_id = currentNode->node_id;
 			heapBuffer.distance_from_departure = distanceVector[i->node_id];
@@ -228,7 +228,7 @@ int GRAPH::Dijkstra(int departureArg)
 
 			currentNode = (this->nodeVector)[heapBuffer.node_id].begin();
 			parentNode = (this->nodeVector)[heapBuffer.parent_node_id].begin();
-			successorVector[currentNode->node_id] = parentNode->node_id;
+			predecessorVector[currentNode->node_id] = parentNode->node_id;
 			distanceVector[currentNode->node_id] = heapBuffer.distance_from_departure;
 			break;
 		}
@@ -247,7 +247,7 @@ int GRAPH::Dijkstra(int departureArg)
 			if (temp == departureArg){
 				break;
 			}
-			temp = successorVector[temp];
+			temp = predecessorVector[temp];
 		}
 		std::cout << std::endl;
 	}

@@ -8,7 +8,7 @@ typedef class _UNION_FIND UNION_FIND;
 
 class _UNION_FIND {
 private:
-	std::vector<int> successorVector;
+	std::vector<int> predecessorVector;
 	std::vector<int> sizeVector;
 	int collectionSize;
 

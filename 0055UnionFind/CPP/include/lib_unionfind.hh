@@ -9,7 +9,7 @@ typedef class _UNION_FIND UNION_FIND;
 class _UNION_FIND {
 private:
 	int size;
-	std::vector<int> successorArray;
+	std::vector<int> predecessorArray;
 	std::vector<int> setSizeArray;
 
 public:

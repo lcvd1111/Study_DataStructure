@@ -4,7 +4,7 @@ UNION_FIND::_UNION_FIND(void)
 {
 	this->size = -1;
 
-	successorArray.clear();
+	predecessorArray.clear();
 	setSizeArray.clear();
 
 	return ;
@@ -24,7 +24,7 @@ UNION_FIND *UNION_FIND::Create(int sizeArg)
 
 	this->size = sizeArg;
 	for (int i=0 ; i<this->size ; i++){
-		(this->successorArray).push_back(i);
+		(this->predecessorArray).push_back(i);
 		(this->setSizeArray).push_back(1);
 	}
 	return this;
@@ -37,7 +37,7 @@ UNION_FIND *UNION_FIND::Destroy(void)
 	}
 
 	this->size = -1;
-	successorArray.clear();
+	predecessorArray.clear();
 	setSizeArray.clear();
 
 	return this;
@@ -46,7 +46,7 @@ UNION_FIND *UNION_FIND::Destroy(void)
 int UNION_FIND::Find(int indexArg)
 {
 	int ret = 0;
-	std::vector<int> &pSuccessorArray = this->successorArray;
+	std::vector<int> &pSuccessorArray = this->predecessorArray;
 
 	//Exception Handling
 	if (this->size == -1){
@@ -102,11 +102,11 @@ UNION_FIND *UNION_FIND::Unite(int indexA, int indexB)
 	sizeB = (*this).SetSize(setB);
 
 	if (sizeA >= sizeB){
-		(*this).successorArray[setB] = setA;
+		(*this).predecessorArray[setB] = setA;
 		(*this).setSizeArray[setA] = (*this).setSizeArray[setA] + (*this).setSizeArray[setB];
 	}
 	else {
-		(*this).successorArray[setA] = setB;
+		(*this).predecessorArray[setA] = setB;
 		(*this).setSizeArray[setB] = (*this).setSizeArray[setA] + (*this).setSizeArray[setA];
 	}
 
