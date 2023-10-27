@@ -53,6 +53,7 @@ GRAPH *GRAPH::Destroy(void)
 		(this->nodeVector)[i].clear();
 	}
 	(this->nodeVector).clear();
+	this->size = -1;
 
 	return this;
 }
