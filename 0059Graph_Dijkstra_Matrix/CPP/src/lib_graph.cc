@@ -142,6 +142,104 @@ int GRAPH::Weight(void)
 
 int GRAPH::Dijkstra(int departureArg)
 {
+	std::vector<char> visitVector;
+	std::vector<int> distanceVector, successorVector;
+	std::priority_queue<HEAP_NODE, std::vector<HEAP_NODE>, HEAP_COMPARATOR> dijkstraPQ;
+	HEAP_NODE heapBuffer;
+	int currentNode=0, parentNode=0;
+	int **pMatrix = NULL;
+	int loopCtl = 0;
+
+	//Exception Handling
+	if (this->matrix == NULL){
+		DEBUG << "ERROR: Graph is empty currently." << std::endl;
+		return -1;
+	}
+
+	//Exception Handling
+	if (departureArg >= (this->size)){
+		DEBUG << "ERROR: departureArg >= size." << std::endl;
+		return -2;
+	}
+
+	//Initializing the auxiliary variables and objects
+	visitVector.assign((this->size), 0);
+	distanceVector.assign((this->size), INT_MAX);
+	successorVector.assign((this->size), -1);
+	pMatrix = this->matrix;
+
+	//Dijkstra Algorithm start
+	currentNode = departureArg;
+	parentNode = -1;
+	distanceVector[currentNode] = 0;
+
+	loopCtl = 1;
+	while(loopCtl){
+		visitVector[currentNode] = 1;
+		successorVector[currentNode] = parentNode;
+
+		//Traversing the neighborhoods of currentNode
+		for (int tempNode=0 ; tempNode<(this->size) ; tempNode++){
+			if (pMatrix[currentNode][tempNode] == 0){
+				//When it is not a neighborhood
+				continue;
+			}
+			if (visitVector[tempNode] == 1){
+				//When the neighborhood is already visited before.
+				continue;
+			}
+			if (distanceVector[tempNode] < (distanceVector[currentNode] + pMatrix[currentNode][tempNode]))
+			{
+				//When the better(shorter) path toward this neighborhood is already stored in PriorityQueue.
+				continue;
+			}
+			//New proper fringe node is found. Enqueueing and Distance info updating.
+			heapBuffer.node_id = tempNode;
+			heapBuffer.parent_node_id = currentNode;
+			heapBuffer.distance_from_departure = distanceVector[currentNode]+pMatrix[tempNode][currentNode];
+			dijkstraPQ.push(heapBuffer);
+			distanceVector[tempNode] = heapBuffer.distance_from_departure;
+		}
+
+		//Dequeueing form PriorityQueue.
+		while(1){
+			if (dijkstraPQ.empty() == 1){
+				loopCtl = 0;
+				break;
+			}
+
+			heapBuffer = dijkstraPQ.top();
+			dijkstraPQ.pop();
+			if (visitVector[heapBuffer.node_id] == 1){
+				//When the dequeued node is already visited before.
+				continue;
+			}
+
+			currentNode = heapBuffer.node_id;
+			parentNode = heapBuffer.parent_node_id;
+			break;
+		}
+	}
+
+	for (int i=0 ; i<this->size ; i++){
+		std::cout << "[" << departureArg << "->" << i << "] "
+					<< "Distance: " << distanceVector[i]
+					<< " Path: ";
+		int temp = i;
+		if (temp == departureArg){
+			std::cout << std::endl;
+			continue;
+		}
+		while (1){
+			std::cout << temp << " ";
+			if (temp == departureArg){
+				break;
+			}
+			temp = successorVector[temp];
+		}
+		std::cout << std::endl;
+	}
+
 	return 0;
 }
 

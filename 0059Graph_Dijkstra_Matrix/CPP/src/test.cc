@@ -4,8 +4,8 @@
 int UnitTest_Dijkstra(void)
 {
 	GRAPH testGraph;
-	testGraph.Create(7);
 
+	testGraph.Create(7);
 	testGraph.AddEdge(0, 1, 3);
 	testGraph.AddEdge(0, 2, 7);
 	testGraph.AddEdge(0, 3, 10);
@@ -21,7 +21,22 @@ int UnitTest_Dijkstra(void)
 
 	testGraph.Dijkstra(1);
 	std::cout << std::endl;
+	
 	testGraph.Dijkstra(0);
+	std::cout << std::endl;
+
+	testGraph.Destroy();
+	testGraph.Create(5);
+
+	testGraph.AddEdge(1, 0, 4);
+	testGraph.AddEdge(0, 3, 8);
+	testGraph.AddEdge(1, 2, 1);
+	testGraph.AddEdge(2, 3, 15);
+	testGraph.AddEdge(1, 4, 1);
+	testGraph.AddEdge(2, 4, 3);
+	testGraph.AddEdge(3, 4, 6);
+
+	testGraph.Dijkstra(2);
 
 	testGraph.Destroy();
 	return 0;
