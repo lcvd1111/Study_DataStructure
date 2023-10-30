@@ -1,0 +1,4 @@
+You must be careful for overflow when you implement Warhsall Algorithm.
+If you represent the non-edge as INT_MAX, then unexpected errors may happen.
+Because (INT_MAX) + (INT_MAX) < (INT_MAX).
+It is samely important when you implement the Dijsktra Algorithm too.

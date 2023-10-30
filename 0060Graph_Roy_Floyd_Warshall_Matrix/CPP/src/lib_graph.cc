@@ -135,10 +135,58 @@ GRAPH *GRAPH::Print(void)
 
 int GRAPH::FloydWarshall(GRAPH &outputStore)
 {
+	GRAPH pathGraph;
+	int **pMatrix = NULL;
+	int **o_pMatrix = NULL;
 
 	//Exception Handling
 	if (this->matrix == NULL){
 		DEBUG << "ERROR: Graph is empty currently." << std::endl;
+		return -1;
+	}
+
+	//Clearing the outputStorage
+	outputStore.Create(this->size);
+	o_pMatrix = outputStore.matrix;
+
+	//Initializing the auxiliary variables and objects
+	pathGraph.Create(this->size);
+	pMatrix = this->matrix;
+
+	//Roy-Floyd-Warshall Algorithm Start
+	for (int i=0 ; i<this->size ; i++){
+		for (int j=0 ; j<this->size ; j++){
+			if (pMatrix[i][j]==0){
+				o_pMatrix[i][j] = 9999;
+				pathGraph.matrix[i][j] = -1;
+			}
+			else {
+				o_pMatrix[i][j] = pMatrix[i][j];
+				pathGraph.matrix[i][j] = j;
+			}
+		}
+	}
+
+	for (int k=0 ; k<(this->size) ; k++){
+		for (int i=0 ; i<(this->size) ; i++){
+			for (int j=0 ; j<(this->size) ; j++){
+				if (o_pMatrix[i][j] > o_pMatrix[i][k]+o_pMatrix[k][j]){
+					o_pMatrix[i][j] = o_pMatrix[i][k]+o_pMatrix[k][j];
+					pathGraph.matrix[i][j] = pathGraph.matrix[i][k];
+				}
+				else {
+					continue;
+				}
+			}
+		}
+	}
+
+	std::cout << std::endl << "[Path Matrix]" << std::endl;
+	pathGraph.Print();
+	std::cout << std::endl;
+
+	if(pathGraph.Destroy()==NULL){
+		DEBUG << "ERROR" << std::endl;
 		return -1;
 	}
 

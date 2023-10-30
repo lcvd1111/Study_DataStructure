@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
 
 #define DEBUG std::cout<<"["<<__func__<<", "<<__LINE__<<"]"
-#define UNIT_TEST_FAIL DEBUG<<"Unit Test Failed."<<std:endl
+#define UNIT_TEST_FAIL DEBUG<<"Unit Test Failed."<<std::endl
 
 #endif
