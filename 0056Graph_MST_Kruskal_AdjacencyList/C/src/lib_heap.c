@@ -68,7 +68,7 @@ HEAP *HEAP_METHOD_Create(HEAP *this, int levelArg)
 	}
 
 	this->entireSize -= 1;
-	this->heapArray = (int *)malloc(sizeof(int)*(this->entireSize));
+	this->heapArray = (HEAP_NODE *)malloc(sizeof(int)*(this->entireSize));
 	this->lastIndex = -1;
 
 	return this;
@@ -98,10 +98,10 @@ HEAP *HEAP_METHOD_Destroy(HEAP *this)
 }
 
 
-HEAP *HEAP_METHOD_Enqueue(HEAP *this, int inputArg)
+HEAP *HEAP_METHOD_Enqueue(HEAP *this, HEAP_NODE *inputArg)
 {
 	int currentIndex=0, parentIndex=0;
-	int *pHeapArray = NULL;
+	HEAP_NODE *pHeapArray = NULL;
 
 	//Excpetion Handling
 	if (this == NULL){
@@ -122,17 +122,20 @@ HEAP *HEAP_METHOD_Enqueue(HEAP *this, int inputArg)
 
 	pHeapArray = this->heapArray;
 	this->lastIndex += 1;
-	(this->heapArray)[this->lastIndex] = inputArg;
+	(this->heapArray)[this->lastIndex].key = inputArg->key;
+	(this->heapArray)[this->lastIndex].nodeA = inputArg->nodeA;
+	(this->heapArray)[this->lastIndex].nodeB = inputArg->nodeB;
 
 	currentIndex = (this->lastIndex);
 	while(1){
 		if (currentIndex == 0){
+			//When the current node is a root node.
 			break;
 		}
 
 		parentIndex = (currentIndex-1)/2;
 		
-		if (pHeapArray[parentIndex] > pHeapArray[currentIndex]){
+		if (pHeapArray[parentIndex].key > pHeapArray[currentIndex].key){
 			HEAP_PRIVATE_Swap(this, currentIndex, parentIndex);
 			currentIndex = parentIndex;
 			continue;
@@ -148,7 +151,7 @@ HEAP *HEAP_METHOD_Enqueue(HEAP *this, int inputArg)
 HEAP *HEAP_METHOD_Dequeue(HEAP *this)
 {
 	int currentIndex=0, leftChildIndex=0, rightChildIndex=0;
-	int *pHeapArray = NULL;
+	HEAP_NODE *pHeapArray = NULL;
 
 	//Excpetion Handling
 	if (this == NULL){
@@ -171,13 +174,13 @@ HEAP *HEAP_METHOD_Dequeue(HEAP *this)
 
 	//When the heap becomes empty after the dequeueing.
 	if (this->lastIndex == 0){
-		pHeapArray[0] = 0;
+		memset(pHeapArray+0, 0, sizeof(HEAP_NODE));
 		this->lastIndex -= 1;
 		return this;
 	}
 
-	pHeapArray[0] = pHeapArray[this->lastIndex];
-	pHeapArray[this->lastIndex] = 0;
+	memcpy(pHeapArray+0, pHeapArray+(this->lastIndex), sizeof(HEAP_NODE));
+	memset(pHeapArray+(this->lastIndex), 0, sizeof(HEAP_NODE));
 	this->lastIndex -= 1;
 
 	//When the heap becomes having only an element after the dequeueing.
@@ -198,7 +201,7 @@ HEAP *HEAP_METHOD_Dequeue(HEAP *this)
 
 		//When the currentNode has only a left child.
 		if (this->lastIndex == leftChildIndex){
-			if (pHeapArray[currentIndex] > pHeapArray[leftChildIndex]){
+			if (pHeapArray[currentIndex].key > pHeapArray[leftChildIndex].key){
 				HEAP_PRIVATE_Swap(this, currentIndex, leftChildIndex);
 				break;
 			}
@@ -208,21 +211,21 @@ HEAP *HEAP_METHOD_Dequeue(HEAP *this)
 		}
 
 		//When the currentNode has both left and right child.
-		if (pHeapArray[currentIndex] <= pHeapArray[leftChildIndex]
-			&& pHeapArray[currentIndex] <= pHeapArray[rightChildIndex])
+		if (pHeapArray[currentIndex].key <= pHeapArray[leftChildIndex].key
+			&& pHeapArray[currentIndex].key <= pHeapArray[rightChildIndex].key)
 		{
 			//When there is no need to swap anymore.
 			break;
 		}
 
 		//when there exists at least one child node that is smaller than current node.
-		if (pHeapArray[leftChildIndex] < pHeapArray[rightChildIndex]){
+		if (pHeapArray[leftChildIndex].key < pHeapArray[rightChildIndex].key){
 			HEAP_PRIVATE_Swap(this, currentIndex, leftChildIndex);
 			currentIndex = leftChildIndex;
 			continue;
 		}
 
-		if (pHeapArray[leftChildIndex] >= pHeapArray[rightChildIndex]){
+		if (pHeapArray[leftChildIndex].key >= pHeapArray[rightChildIndex].key){
 			HEAP_PRIVATE_Swap(this, currentIndex, rightChildIndex);
 			currentIndex = rightChildIndex;
 			continue;
@@ -235,36 +238,42 @@ HEAP *HEAP_METHOD_Dequeue(HEAP *this)
 	return this;
 }
 
-int HEAP_METHOD_Peek(HEAP *this)
+HEAP *HEAP_METHOD_Peek(HEAP *this, HEAP_NODE *outputStore)
 {
-	int ret = 0;
-
 	//Excpetion Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: The First arguement(='this') is NULL.\n");
-		return -1;
+		return NULL;
 	}
 
 	//Excetption Handling
 	if (this->heapArray == NULL){
 		PRINTF_ERROR("ERROR: The heap doesn't exist currently.\n");
-		return -2;
+		return NULL;
 	}
 
 	//Exception Handling
 	if (this->lastIndex == -1){
 		PRINTF_ERROR("ERROR: The heap is empty currently.\n");
-		return -3;
+		return NULL;
 	}
 
-	ret = (this->heapArray)[0];
+	//Exception Handling
+	if (outputStore == NULL){
+		PRINTF_ERROR("ERROR: outputStore is NULL.\n");
+		return NULL;
+	}
 
-	return ret;
+	memcpy((void *)outputStore,
+			(void *)((this->heapArray)+0),
+			sizeof(HEAP_NODE));
+
+	return this;
 }
 
 int HEAP_PRIVATE_Swap(HEAP *this, int indexArgX, int indexArgY)
 {
-	int buffer = 0;
+	HEAP_NODE buffer;
 
 	//Excpetion Handling
 	if (this == NULL){
@@ -290,9 +299,17 @@ int HEAP_PRIVATE_Swap(HEAP *this, int indexArgX, int indexArgY)
 		return -4;
 	}
 
-	buffer = (this->heapArray)[indexArgX];
-	(this->heapArray)[indexArgX] = (this->heapArray)[indexArgY];
-	(this->heapArray)[indexArgY] = buffer;
+	memcpy(&buffer,
+			this->heapArray + indexArgX,
+			sizeof(HEAP_NODE));
+
+	memcpy(this->heapArray + indexArgX,
+			this->heapArray + indexArgY,
+			sizeof(HEAP_NODE));
+
+	memcpy(this->heapArray + indexArgY,
+			&buffer,
+			sizeof(HEAP_NODE));
 
 	return 0;
 }
