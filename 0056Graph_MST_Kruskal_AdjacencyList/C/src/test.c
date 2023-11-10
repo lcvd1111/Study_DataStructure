@@ -9,7 +9,7 @@ int UnitTest_UnionFind(void)
 	UNION_FIND_CONSTRUCTOR(&testUF);
 	UNION_FIND *p = &testUF;
 
-	testUF.Create(p,  5);
+	testUF.Create(p, 5);
 	if (testUF.Same(p, 0, 1) != 0){
 		UNIT_TEST_FAIL;
 		return -1;
@@ -129,6 +129,106 @@ int UnitTest_UnionFind(void)
 
 int UnitTest_Heap(void)
 {
+	HEAP testHeap;
+	HEAP *pTestHeap = &testHeap;
+	HEAP_CONSTRUCTOR(pTestHeap);
+	testHeap.Create(pTestHeap, 10);
+
+	if (testHeap.entireSize != 1023){
+		UNIT_TEST_FAIL;
+		return -1;
+	}
+
+	if (testHeap.Dequeue(pTestHeap)!=NULL){
+		UNIT_TEST_FAIL;
+		return -2;
+	}
+
+	testHeap.Enqueue(pTestHeap, 150);
+	testHeap.Enqueue(pTestHeap, 300);
+	testHeap.Enqueue(pTestHeap, 50);
+	testHeap.Enqueue(pTestHeap, 200);
+	testHeap.Enqueue(pTestHeap, 360);
+	testHeap.Enqueue(pTestHeap, 180);
+	testHeap.Enqueue(pTestHeap, 70);
+	testHeap.Enqueue(pTestHeap, 95);
+	testHeap.Enqueue(pTestHeap, 50);
+	testHeap.Enqueue(pTestHeap, 70);
+
+	if (testHeap.Peek(pTestHeap) != 50){
+		UNIT_TEST_FAIL;
+		return -3;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 50){
+		UNIT_TEST_FAIL;
+		return -4;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 70){
+		UNIT_TEST_FAIL;
+		return -5;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 70){
+		UNIT_TEST_FAIL;
+		return -6;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 95){
+		UNIT_TEST_FAIL;
+		return -7;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 150){
+		UNIT_TEST_FAIL;
+		return -8;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 180){
+		UNIT_TEST_FAIL;
+		return -9;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 200){
+		UNIT_TEST_FAIL;
+		return -10;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 300){
+		UNIT_TEST_FAIL;
+		return -11;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+	if (testHeap.Peek(pTestHeap) != 360){
+		UNIT_TEST_FAIL;
+		return -12;
+	}
+
+	testHeap.Dequeue(pTestHeap);
+
+
+	testHeap.Destroy(pTestHeap);
+	HEAP_DESTRUCTOR(pTestHeap);
+
 	return 0;
 }
 

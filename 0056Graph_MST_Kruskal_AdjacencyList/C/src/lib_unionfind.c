@@ -179,7 +179,9 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int arg)
 		PRINTF_ERROR("ERROR: arg >= entireSize\n");
 		return -3;
 	}
-	
+
+	ret = arg;
+
 	while(ret != (*this).predecessorVector[ret]){
 		ret = (*this).predecessorVector[ret];
 	}
