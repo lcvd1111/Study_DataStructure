@@ -1,5 +1,6 @@
 #include "lib_unionfind.h"
 
+//Function Definitions
 void UNION_FIND_CONSTRUCTOR(UNION_FIND *this)
 {
 	//Exception Handling

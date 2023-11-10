@@ -1,5 +1,6 @@
 #include "lib_heap.h"
 
+//Function Definitions
 void HEAP_CONSTRUCTOR(HEAP *this)
 {
 	//Exception Handling

@@ -234,6 +234,14 @@ int UnitTest_Heap(void)
 
 int UnitTest_Graph(void)
 {
+	GRAPH testGraph;
+	GRAPH_CONSTRUCTOR(&testGraph);
+	testGraph.Create(&testGraph, 5);
+
+	testGraph.Print(&testGraph);
+
+	testGraph.Destroy(&testGraph);
+	GRAPH_DESTRUCTOR(&testGraph);
 	return 0;
 }
 
