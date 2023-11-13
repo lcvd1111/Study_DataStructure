@@ -216,7 +216,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	distanceVector = (int *)malloc(sizeof(int) * (this->size));
 	successorVector = (int *)malloc(sizeof(int) * (this->size));
 	for (int i=0 ; i<(this->size) ; i++){
-		distanceVector[i] = 99999;
+		distanceVector[i] = INT_MAX/4;
 		successorVector[i] = -1;
 	}
 
@@ -227,23 +227,27 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 
 	loopCtl = 1;
 	while(loopCtl){
-		neighborNode = currentNode->next;
 		//Enqueuing every proper neighborhoods
+		neighborNode = currentNode->next;
 		while(neighborNode != NULL){
 			if (visitVector[neighborNode->node_id] == 1){
+				//When the neighbor is already visited before.
 				neighborNode = neighborNode->next;
 				continue;
 			}
 			if (distanceVector[currentNode->node_id] + (neighborNode->weight)
 				> distanceVector[neighborNode->node_id])
 			{
+				/*When the shorter path toward the neighbor
+				  has already enqueued into priority queue before.*/
 				neighborNode = neighborNode->next;
 				continue;
 			}
 			//Found proper neighborhood to enqueue into Priority queue.
 			distanceVector[neighborNode->node_id]
-				= distanceVector[currentNode->node_id] + (neighborNode->weight); //Updating Distance Information.
-			heapNode.key = neighborNode->weight;
+				= distanceVector[currentNode->node_id]
+					+ (neighborNode->weight); //Updating Distance Information.
+			heapNode.key = distanceVector[neighborNode->node_id];
 			heapNode.graphCurrentNode = currentNode->node_id;
 			heapNode.graphNeighborNode = neighborNode->node_id;
 			dijkstraPQ.Enqueue(&dijkstraPQ, &heapNode); //Enqueueing neighborhood to priority queue.
@@ -275,14 +279,15 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 
 	//Printing the result.
 	for (int i=0; i<(this->size) ; i++){
-		printf(COLOR_BLACK "Distance from %d to %d: %d\n", 0, i, distanceVector[i]);
+		printf(COLOR_BLACK "Distance from %d to %d:"
+				COLOR_MAGENTA " %d\n", 0, i, distanceVector[i]);
 		int j = i;
-		printf("Path: ");
+		printf(COLOR_BLACK "Path: ");
 		while(j != 0 ){
-			printf("%d <- ", j);
+			printf(COLOR_MAGENTA "%d" COLOR_BLACK " <- ", j);
 			j = successorVector[j];
 		}
-		printf("0\n");
+		printf(COLOR_MAGENTA "0" COLOR_BLACK "\n");
 	}
 
 	//Destroying the auxiliary variables and objects.

@@ -164,7 +164,7 @@ int UnitTest_Dijkstra(void)
 	testGraph.AddEdge(&testGraph, 2, 4, 43);
 	testGraph.AddEdge(&testGraph, 3, 4, 9);
 
-	//testGraph.Print(&testGraph);
+	testGraph.Print(&testGraph);
 	testGraph.Dijkstra(&testGraph);
 
 	testGraph.Destroy(&testGraph);
