@@ -193,11 +193,9 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	pMatrix = this->matrix;
 	visitVector = (int *)calloc(this->size, sizeof(int));
 	distanceVector = (int *)malloc(sizeof(int) * (this->size));
-	for (int i=0 ; i<this->size ; i++){
-		distanceVector[i] = 999999;
-	}
 	successorVector = (int *)malloc(sizeof(int) * (this->size));
 	for (int i=0 ; i<this->size ; i++){
+		distanceVector[i] = 999999;
 		successorVector[i] = -1;
 	}
 	dijkstraPQ.Create(&dijkstraPQ, this->size);
@@ -209,7 +207,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 
 	loopCtl = 1;
 	while(loopCtl){
-		//Enqueuing every proper neighborhoods of the current node.
+		//Enqueuing every proper neighborhood of the current node.
 		for (neighborNode=0 ; neighborNode<(this->size) ; neighborNode++){
 			if (pMatrix[currentNode][neighborNode] == 0){
 				continue;
@@ -229,7 +227,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 			dijkstraPQ.Enqueue(&dijkstraPQ, &heapNode); //Enqueueing the data into priority queue.
 		}
 
-		//Dequeuing form the Priority queue.
+		//Dequeuing from the Priority queue.
 		while(1){
 			if (dijkstraPQ.Empty(&dijkstraPQ) == 1){
 				loopCtl = 0;
@@ -246,6 +244,8 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 
 			visitVector[heapNode.graphNeighborNode] = 1;
 			successorVector[heapNode.graphNeighborNode] = heapNode.graphCurrentNode;
+			currentNode = heapNode.graphNeighborNode;
+			break;
 		}
 	}
 
