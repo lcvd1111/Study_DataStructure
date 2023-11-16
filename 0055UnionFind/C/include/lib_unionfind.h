@@ -7,7 +7,7 @@
 typedef struct _UNION_FIND UNION_FIND;
 
 struct _UNION_FIND {
-	int *predecessorArray;
+	int *successorArray;
 	int *sizeArray;
 	int collectionSize;
 

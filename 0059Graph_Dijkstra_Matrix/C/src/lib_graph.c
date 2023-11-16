@@ -169,9 +169,9 @@ GRAPH *GRAPH_METHOD_Print(GRAPH *this)
 
 GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 {
-	int currentNode=0, neighborNode=0, successorNode=0;
+	int currentNode=0, neighborNode=0, predecessorNode=0;
 	int **pMatrix = NULL;
-	int *visitVector = NULL, *distanceVector, *successorVector = NULL;
+	int *visitVector = NULL, *distanceVector, *predecessorVector = NULL;
 	HEAP_NODE heapNode;
 	HEAP dijkstraPQ;
 	HEAP_CONSTRUCTOR(&dijkstraPQ);
@@ -193,10 +193,10 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	pMatrix = this->matrix;
 	visitVector = (int *)calloc(this->size, sizeof(int));
 	distanceVector = (int *)malloc(sizeof(int) * (this->size));
-	successorVector = (int *)malloc(sizeof(int) * (this->size));
+	predecessorVector = (int *)malloc(sizeof(int) * (this->size));
 	for (int i=0 ; i<this->size ; i++){
 		distanceVector[i] = 999999;
-		successorVector[i] = -1;
+		predecessorVector[i] = -1;
 	}
 	dijkstraPQ.Create(&dijkstraPQ, this->size);
 
@@ -243,7 +243,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 			}
 
 			visitVector[heapNode.graphNeighborNode] = 1;
-			successorVector[heapNode.graphNeighborNode] = heapNode.graphCurrentNode;
+			predecessorVector[heapNode.graphNeighborNode] = heapNode.graphCurrentNode;
 			currentNode = heapNode.graphNeighborNode;
 			break;
 		}
@@ -256,7 +256,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 		printf("Path: ");
 		while (j!=0 && j!=-1){
 			printf("%d <- ", j);
-			j = successorVector[j];
+			j = predecessorVector[j];
 		}
 		printf("0\n");
 	}
@@ -264,7 +264,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	//Destroying the auxiliary variables and objects.
 	free(visitVector);
 	free(distanceVector);
-	free(successorVector);
+	free(predecessorVector);
 	dijkstraPQ.Destroy(&dijkstraPQ);
 	HEAP_DESTRUCTOR(&dijkstraPQ);
 

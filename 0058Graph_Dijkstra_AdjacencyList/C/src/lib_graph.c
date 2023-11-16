@@ -191,11 +191,11 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 {
 	GRAPH_NODE *currentNode=NULL, *neighborNode=NULL;
 	GRAPH_NODE *pNodeVector = NULL;
-	int currentIndex=0, successorIndex=0;
+	int currentIndex=0, predecessorIndex=0;
 	HEAP dijkstraPQ;
 	HEAP_CONSTRUCTOR(&dijkstraPQ);
 	HEAP_NODE heapNode;
-	int *visitVector=NULL, *distanceVector=NULL, *successorVector=NULL;
+	int *visitVector=NULL, *distanceVector=NULL, *predecessorVector=NULL;
 	int loopCtl = 0;
 
 	//Exception Handling.
@@ -214,10 +214,10 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	dijkstraPQ.Create(&dijkstraPQ, this->size);
 	visitVector = (int *)calloc((this->size), sizeof(int));
 	distanceVector = (int *)malloc(sizeof(int) * (this->size));
-	successorVector = (int *)malloc(sizeof(int) * (this->size));
+	predecessorVector = (int *)malloc(sizeof(int) * (this->size));
 	for (int i=0 ; i<(this->size) ; i++){
 		distanceVector[i] = INT_MAX/4;
-		successorVector[i] = -1;
+		predecessorVector[i] = -1;
 	}
 
 	//Dijkstra Algorithm Starts.
@@ -270,7 +270,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 			else {
 				//Visit check.
 				visitVector[heapNode.graphNeighborNode] = 1;
-				successorVector[heapNode.graphNeighborNode] = heapNode.graphCurrentNode;
+				predecessorVector[heapNode.graphNeighborNode] = heapNode.graphCurrentNode;
 				currentNode = pNodeVector + (heapNode.graphNeighborNode);
 				break;
 			}
@@ -285,7 +285,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 		printf(COLOR_BLACK "Path: ");
 		while(j != 0 ){
 			printf(COLOR_MAGENTA "%d" COLOR_BLACK " <- ", j);
-			j = successorVector[j];
+			j = predecessorVector[j];
 		}
 		printf(COLOR_MAGENTA "0" COLOR_BLACK "\n");
 	}
@@ -295,7 +295,7 @@ GRAPH *GRAPH_METHOD_Dijkstra(GRAPH *this)
 	HEAP_DESTRUCTOR(&dijkstraPQ);
 	free(visitVector);
 	free(distanceVector);
-	free(successorVector);
+	free(predecessorVector);
 
 	return this;
 }

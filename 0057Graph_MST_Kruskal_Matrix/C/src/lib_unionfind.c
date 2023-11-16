@@ -9,7 +9,7 @@ void UNION_FIND_CONSTRUCTOR(UNION_FIND *this)
 		return ;
 	}
 
-	this->predecessorVector = NULL;
+	this->successorVector = NULL;
 	this->sizeVector = NULL;
 	this->entireSize = 0;
 
@@ -61,12 +61,12 @@ UNION_FIND *UNION_FIND_METHOD_Create(UNION_FIND *this, int sizeArg)
 	}
 
 	this->entireSize = sizeArg;
-	this->predecessorVector = (int *)malloc(sizeof(int)*sizeArg);
+	this->successorVector = (int *)malloc(sizeof(int)*sizeArg);
 	this->sizeVector = (int *)malloc(sizeof(int)*sizeArg);
 
 
 	for (int i=0 ; i<sizeArg ; i++){
-		(this->predecessorVector)[i] = i;
+		(this->successorVector)[i] = i;
 		(this->sizeVector)[i] = 1;
 	}
 
@@ -88,9 +88,9 @@ UNION_FIND *UNION_FIND_METHOD_Destroy(UNION_FIND *this)
 	}
 
 	this->entireSize = 0;
-	free(this->predecessorVector);
+	free(this->successorVector);
 	free(this->sizeVector);
-	this->predecessorVector = NULL;
+	this->successorVector = NULL;
 	this->sizeVector = NULL;
 
 	return this;
@@ -131,7 +131,7 @@ UNION_FIND *UNION_FIND_METHOD_Unite(UNION_FIND *this, int nodeA, int nodeB)
 		return NULL;
 	}
 
-	pPredecessorVector = this->predecessorVector;
+	pPredecessorVector = this->successorVector;
 	pSizeVector = this->sizeVector;
 
 	setA = (*this).Find(this, nodeA);
@@ -175,7 +175,7 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int nodeArg)
 		return -3;
 	}
 
-	pPredecessorVector = this->predecessorVector;
+	pPredecessorVector = this->successorVector;
 	ret = nodeArg;
 	while(ret != pPredecessorVector[ret]){
 		ret = pPredecessorVector[ret];

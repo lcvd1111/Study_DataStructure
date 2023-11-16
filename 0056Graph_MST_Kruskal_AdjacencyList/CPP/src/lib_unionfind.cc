@@ -4,7 +4,7 @@
 UNION_FIND::_UNION_FIND(void)
 {
 	this->collectionSize = -1;
-	(this->predecessorVector).clear();
+	(this->successorVector).clear();
 	(this->sizeVector).clear();
 
 	return ;
@@ -37,7 +37,7 @@ UNION_FIND *UNION_FIND::Create(int sizeArg)
 
 	this->collectionSize = sizeArg;
 	for (int i=0 ; i<sizeArg ; i++){
-		(this->predecessorVector).push_back(i);
+		(this->successorVector).push_back(i);
 		(this->sizeVector).push_back(1);
 	}
 
@@ -52,7 +52,7 @@ UNION_FIND *UNION_FIND::Destroy(void)
 		return NULL;
 	}
 
-	(this->predecessorVector).clear();
+	(this->successorVector).clear();
 	(this->sizeVector).clear();
 	this->collectionSize = -1;
 
@@ -93,11 +93,11 @@ UNION_FIND *UNION_FIND::Unite(int indexA, int indexB)
 	sizeB = (*this).Size(indexB);
 
 	if (sizeA >= sizeB){
-		(*this).predecessorVector[setB] = setA;
+		(*this).successorVector[setB] = setA;
 		(*this).sizeVector[setA] = sizeA + sizeB;
 	}
 	else {
-		(*this).predecessorVector[setA] = setB;
+		(*this).successorVector[setA] = setB;
 		(*this).sizeVector[setB]  = sizeA + sizeB;
 	}
 
@@ -114,10 +114,10 @@ int UNION_FIND::Find(int indexArg)
 		return -1;
 	}
 
-	ret = (*this).predecessorVector[indexArg];
+	ret = (*this).successorVector[indexArg];
 
-	while((*this).predecessorVector[ret] != ret){
-		ret = (*this).predecessorVector[ret];
+	while((*this).successorVector[ret] != ret){
+		ret = (*this).successorVector[ret];
 	}
 
 	return ret;

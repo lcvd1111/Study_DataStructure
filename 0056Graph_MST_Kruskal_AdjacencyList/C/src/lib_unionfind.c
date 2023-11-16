@@ -9,7 +9,7 @@ void UNION_FIND_CONSTRUCTOR(UNION_FIND *this)
 		return ;
 	}
 
-	this->predecessorVector = NULL;
+	this->successorVector = NULL;
 	this->sizeVector = NULL;
 	this->entireSize = 0;
 
@@ -50,7 +50,7 @@ UNION_FIND *UNION_FIND_METHOD_Create(UNION_FIND *this, int sizeArg)
 
 	//Exception Handling
 	if (this->entireSize != 0 ||
-		this->predecessorVector != NULL ||
+		this->successorVector != NULL ||
 		this->sizeVector != NULL)
 	{
 		PRINTF_ERROR("ERROR: UnionFind is not empty currently.\n");
@@ -63,12 +63,12 @@ UNION_FIND *UNION_FIND_METHOD_Create(UNION_FIND *this, int sizeArg)
 		return NULL;
 	}
 
-	this->predecessorVector = (int *)malloc(sizeof(sizeArg));
+	this->successorVector = (int *)malloc(sizeof(sizeArg));
 	this->sizeVector = (int *)malloc(sizeof(sizeArg));
 	this->entireSize = sizeArg;
 
 	for (int i=0 ; i<(this->entireSize) ; i++){
-		(this->predecessorVector)[i] = i;
+		(this->successorVector)[i] = i;
 		(this->sizeVector)[i] = 1;
 	}
 
@@ -85,14 +85,14 @@ UNION_FIND *UNION_FIND_METHOD_Destroy(UNION_FIND *this)
 
 	//Exception Handling
 	if (this->entireSize == 0 || 
-		this->predecessorVector == NULL ||
+		this->successorVector == NULL ||
 		this->sizeVector == NULL)
 	{
 		PRINTF_ERROR("ERROR: \n");
 	}
 
-	free(this->predecessorVector);
-	this->predecessorVector = NULL;
+	free(this->successorVector);
+	this->successorVector = NULL;
 	free(this->sizeVector);
 	this->sizeVector = NULL;
 	this->entireSize = 0;
@@ -112,7 +112,7 @@ UNION_FIND *UNION_FIND_METHOD_Unite(UNION_FIND *this, int argX, int argY)
 
 	//Exception Handling
 	if (this->entireSize == 0 ||
-		this->predecessorVector == NULL ||
+		this->successorVector == NULL ||
 		this->sizeVector == NULL)
 	{
 		PRINTF_ERROR("ERROR: The UnionFind is empty currently.\n");
@@ -144,13 +144,13 @@ UNION_FIND *UNION_FIND_METHOD_Unite(UNION_FIND *this, int argX, int argY)
 	sizeY = (*this).Size(this, setY);
 
 	if (sizeX > sizeY){
-		(*this).predecessorVector[setY] = setX;
+		(*this).successorVector[setY] = setX;
 		(*this).sizeVector[setX] = (*this).sizeVector[setX] + (*this).sizeVector[setY];
 		(*this).sizeVector[setY] = 0;
 		return this;
 	}
 
-	(*this).predecessorVector[setX] = setY;
+	(*this).successorVector[setX] = setY;
 	(*this).sizeVector[setY] = (*this).sizeVector[setX] + (*this).sizeVector[setY];
 	(*this).sizeVector[setX] = 0;
 	return this;
@@ -168,7 +168,7 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int arg)
 
 	//Exception Handling
 	if (this->entireSize == 0 ||
-		this->predecessorVector == NULL ||
+		this->successorVector == NULL ||
 		this->sizeVector == NULL)
 	{
 		PRINTF_ERROR("ERROR: The UnionFind is empty currently.\n");
@@ -183,11 +183,11 @@ int UNION_FIND_METHOD_Find(UNION_FIND *this, int arg)
 
 	ret = arg;
 
-	while(ret != (*this).predecessorVector[ret]){
-		ret = (*this).predecessorVector[ret];
+	while(ret != (*this).successorVector[ret]){
+		ret = (*this).successorVector[ret];
 	}
 
-	if (ret != (*this).predecessorVector[ret]){
+	if (ret != (*this).successorVector[ret]){
 		PRINTF_ERROR("ERROR: Unexpected situation occured.\n");
 		return -4;
 	}
@@ -208,7 +208,7 @@ int UNION_FIND_METHOD_Size(UNION_FIND *this, int arg)
 
 	//Exception Handling
 	if (this->entireSize == 0 ||
-		this->predecessorVector == NULL ||
+		this->successorVector == NULL ||
 		this->sizeVector == NULL)
 	{
 		PRINTF_ERROR("ERROR: The UnionFind is empty currently.\n");
@@ -239,7 +239,7 @@ int UNION_FIND_METHOD_Same(UNION_FIND *this, int argX, int argY)
 
 	//Exception Handling
 	if (this->entireSize == 0 ||
-		this->predecessorVector == NULL ||
+		this->successorVector == NULL ||
 		this->sizeVector == NULL)
 	{
 		PRINTF_ERROR("ERROR: The UnionFind is empty currently.\n");

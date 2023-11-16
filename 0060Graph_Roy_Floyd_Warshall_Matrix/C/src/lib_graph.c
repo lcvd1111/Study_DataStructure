@@ -164,9 +164,9 @@ GRAPH *GRAPH_METHOD_Print(GRAPH *this)
 GRAPH *GRAPH_METHOD_FloydWarshall(GRAPH *this)
 {
 	GRAPH distanceGraph;
-	GRAPH predecessorGraph;
+	GRAPH successorGraph;
 	GRAPH_CONSTRUCTOR(&distanceGraph);
-	GRAPH_CONSTRUCTOR(&predecessorGraph);
+	GRAPH_CONSTRUCTOR(&successorGraph);
 	int **pMatrix = NULL; //Pointer to Matrix
 	int **pDmatrix = NULL; //Pointeor to Distance Matrix.
 	int **pPmatrix = NULL; //Pointer to Path Matrix.
@@ -187,24 +187,24 @@ GRAPH *GRAPH_METHOD_FloydWarshall(GRAPH *this)
 	//Initialzing the auxiliary variables and objects.
 	pMatrix = this->matrix;
 	distanceGraph.Create(&distanceGraph, this->size);
-	predecessorGraph.Create(&predecessorGraph, this->size);
+	successorGraph.Create(&successorGraph, this->size);
 
 	for (int i=0; i<(this->size) ; i++){
 		for (int j=0 ; j<(this->size) ; j++){
 			if (pMatrix[i][j] != 0 || (i==j)){
 				distanceGraph.AddEdge_Directed(&distanceGraph, i, j, pMatrix[i][j]);
-				predecessorGraph.AddEdge_Directed(&predecessorGraph, i, j, j);
+				successorGraph.AddEdge_Directed(&successorGraph, i, j, j);
 			}
 			else {
 				distanceGraph.AddEdge_Directed(&distanceGraph, i, j, INT_MAX/4);
-				predecessorGraph.AddEdge_Directed(&predecessorGraph, i, j, -1);
+				successorGraph.AddEdge_Directed(&successorGraph, i, j, -1);
 			}
 		}
 	}
 	
 	//Floyd Warshall Algorithm Starts.
 	pDmatrix = distanceGraph.matrix;
-	pPmatrix = predecessorGraph.matrix;
+	pPmatrix = successorGraph.matrix;
 
 	for (int j=0 ; j<(this->size) ; j++){
 		for (int i=0 ; i<(this->size) ; i++){
@@ -225,13 +225,13 @@ GRAPH *GRAPH_METHOD_FloydWarshall(GRAPH *this)
 	distanceGraph.Print(&distanceGraph);
 	
 	printf(COLOR_BLACK "\n<Path Graph>\n");
-	predecessorGraph.Print(&predecessorGraph);
+	successorGraph.Print(&successorGraph);
 
 	//Destroying the auxiliary objects and variables
 	distanceGraph.Destroy(&distanceGraph);
-	predecessorGraph.Destroy(&predecessorGraph);
+	successorGraph.Destroy(&successorGraph);
 	GRAPH_DESTRUCTOR(&distanceGraph);
-	GRAPH_DESTRUCTOR(&predecessorGraph);
+	GRAPH_DESTRUCTOR(&successorGraph);
 
 	return this;
 }
