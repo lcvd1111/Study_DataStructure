@@ -1,3 +1,5 @@
+<h3>[About]</h3>
+
 This repository contains the work created during the study of basic Data Structures.<br />
 I used the book 'Data Structures using C (2nd)(2018) by Reema Thareja' as my learning resource.
 
