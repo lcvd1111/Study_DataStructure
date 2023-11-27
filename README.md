@@ -2,13 +2,13 @@ This repository contains the work created during the study of basic Data Structu
 I used the book 'Data Structures using C (2nd)(2018) by Reema Thareja' as my learning resource.
 
 
-**[Book Overview]**
+<h3>[Book Overview]</h3>
 
 : This is an overview of the textbook I used.(Reema Thareja book)<br />
 I skipped writing down the concepts related to 'linked list' in the below overveiw.<br />
 It is bc I thought it should be regarded as a basic syntax of the language like 'array', rather than a specific data structure.<br />
 
-- 1. Stack (Chatper 7)<br />
+- **1. Stack (Chatper 7)**<br />
   - 1-1. Definition of 'Stack ADT(Abstract Data Type)'<br />
   - 1-2. Implementation of Stack<br />
     - 1-2-1. Implementation using array.<br />
@@ -20,7 +20,7 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
     - 1-3-4. Analysis of the recursive function by writing down the 'Status of Call Stack(=Stack Segment of the process memory)'.<br />
 
 
-- 2. Queue (Chatper 8)<br />
+- **2. Queue (Chatper 8)**<br />
   - 2-1. Definition of 'Queue ADT(Abstract Data Type)'<br />
   - 2-2. Implementation of Queue<br />
     - 2-2-1. Implementation using array. It is usually done by implementing 'Circualr Queue'. You should know the reason.<br />
@@ -32,7 +32,7 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
     : It's most often uses are 'buffer for the communication between two entity'.<br />
 
 
-- 3. Basic Tree (Chapter 9, 10)<br />
+- **3. Basic Tree (Chapter 9, 10)**<br />
   - 3-1. Definition of Basic Terms and properties<br />
     - 3-1-1. Definitions of 'Tree', 'Root', 'Leaf', 'Parent', 'Child', 'Uncle', 'Sibling', 'Ancestors', 'Descendants', 'Height', 'Depth', 'Level'<br />
     - 3-1-2. Definitions of 'Binary Tree', 'Complete Binary Tree', 'Full Binary Tree', 'Perfect Binary Tree', 'Extended Binary tree'<br />
@@ -54,7 +54,7 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
   - 3-7. Application of binary Tree: Huffman Coding.<br />
 
 
-- 4. Advanced Binary Tree(Almost about BST) (Chapter 10)<br />
+- **4. Advanced Binary Tree (Almost about BST) (Chapter 10)**<br />
   - 4-1. Threaded Tree<br />
   - 4-2. Basic Binary Search Tree(BST)<br />
     - 4-2-1. Definition of 'Binary Search Tree'(BST) Data Structure.<br />
@@ -93,10 +93,10 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
 	It is a 'time compelxity' in the worst situation, and the 'Well-Sorted' feature.<br />
 
 
-- 5. Multiway Search Tree<br />
+- **5. Multiway Search Tree (Chapter 11)**<br />
 
 
-- 6. Heap<br />
+- **6. Heap (Chapter 12)**<br />
   - 6-1. Binary Heap<br />
     - 6-1-1. Definition of 'Binary Heap' data structure.<br />
     - 6-1-2. Algorithm for implementing "Priority Queue ADT's Enqueue operation" using binary heap data structure.<br />
@@ -125,7 +125,7 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
       - 6-3-5-1. Time Complexity of this algorithm.<br />
 
 
-- 7. Graph<br />
+- **7. Graph (Chapter 13)**<br />
   - 7-1. Defintions of basic terms.<br />
     - 7-1-1. Defintions of 'Undriected Graph', 'Directed Graph', 'Degree', 'In/Out Degree', 'Sink/Source', 'Pendant Vertex', 'Isolated Vertex', 'K-regular Graph', 'Subgraph', 'Complete Graph'.<br />
     - 7-1-2. Definitions of 'Path', 'Circuit', 'Simple Path', 'Cycle', 'Connected undirected graph', 'Bi-Laterally connected directed graph', 'Uni-Laterally connected directed graph', 'Weakly-Connected directed graph', 'Articular point(=Cut vertex)', 'Bridge', 'Bi-Connected graph'.<br />
@@ -159,13 +159,13 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
       - 7-6-2-2. Finding the 'acutal shortest paths', but not only the 'length of the shortest paths' using Floyd's Algorithm. -> You need to exploit the 'Successor Matrix'.<br />
 
 
-- 8. Sorting and Searching Algorithms<br />
+- **8. Sorting and Searching Algorithms (Chpater 14)**<br />
 
 
-- 9. Hashmap<br />
+- **9. Hashmap (Chapter 15)**<br />
 
 
-**[Implementations List]**
+<h3>[Implementations List]</h3>
 
 .
 .
