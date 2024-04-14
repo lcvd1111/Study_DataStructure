@@ -162,7 +162,8 @@ It is bc I thought it should be regarded as a basic syntax of the language like 
 
 
 - **8. Sorting and Searching Algorithms (Chpater 14)**<br />
-
+  - See <a href="https://github.com/lcvd1111/Study_Algorithm_and_CP">here</a>.
+  - I implemented them in other repository because I felt like it belongs to the domain of algorithm, but not data structures.
 
 - **9. Hashmap (Chapter 15)**<br />
 
