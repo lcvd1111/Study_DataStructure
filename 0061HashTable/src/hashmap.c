@@ -220,6 +220,9 @@ void HASHMAP_METHOD_CONSTRUCTOR(HASHMAP *this)
 		LINKED_LIST_METHOD_CONSTRUCTOR(this->table + i);
 	}
 
+	//Binding the method functions
+	this->Method = &gHashMap_Method;
+
 	return ;
 }
 
@@ -281,7 +284,6 @@ HASHMAP *HASHMAP_METHOD_Insert(HASHMAP *this, char *nameArg, int numberArg)
 
 	this->elementSize += 1;
 	this->collisionNum += 1;
-
 
 	//Implement Rehashing!!!!! 
 	//Implement Rehashing!!!!! 
@@ -398,11 +400,38 @@ HASHMAP *HASHMAP_METHOD_Delete(HASHMAP *this, char *nameArg)
 
 HASHMAP *HASHMAP_METHOD_Rehash(HASHMAP *this)
 {
+	LINKED_LIST *newTable = NULL;
+	LINKED_LIST *oldTable = this->table;
+	int oldSize = 0;
+	LINKED_LIST *bufList = NULL;
+	LINKED_LIST_NODE *bufNode = NULL;
+	
 	//Error Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: 'this' is NULL.\n");
 		return NULL;
 	}
+
+	oldSize = this->tableSize;
+	this->tableSize = 2*oldSize;
+	newTable = (LINKED_LIST *)malloc(sizeof(LINKED_LIST)*(this->tableSize));
+	this->table = newTable;
+	this->elementSize = 0;
+	this->collisionNum = 0;
+
+	//Filling new table
+	for (int i=0 ; i<oldSize ; i++){
+		bufList = this->table + i;
+		bufNode = bufList->begin;
+
+		while(bufNode != NULL){
+			(*(this->Method->Insert))(this, bufNode->name, bufNode->number);
+			bufNode = bufNode->next;
+		}
+		//Destroying linked list whose elements are copied completely.
+		LINKED_LIST_METHOD_DESTRUCTOR(oldTable + i);
+	}
+	free(oldTable);
 	
 	return this;
 }
@@ -432,9 +461,24 @@ int HASHMAP_METHOD_Hash(HASHMAP *this, char *nameArg)
 
 void HASHMAP_METHOD_Print(HASHMAP *this)
 {
+	LINKED_LIST *bufList = NULL;
+	LINKED_LIST_NODE *bufNode = NULL;
+
 	//Error Handling
 	if (this == NULL){
 		return ;
+	}
+
+	for (int i=0 ; i<this->tableSize ; i++){
+		bufList = this->table + i;
+		bufNode = bufList->begin;
+		while(bufNode != NULL){
+			printf("[Name]: %s\n[Number]: %d\n[Hash Value]: %d\n\n",
+					bufNode->name,
+					bufNode->number,
+					i);
+			bufNode = bufNode->next;
+		}
 	}
 
 	return ;
