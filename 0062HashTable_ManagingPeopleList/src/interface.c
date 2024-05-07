@@ -1,5 +1,7 @@
 #include "interface.h"
 
+#define MENU_NUM 6
+
 int Ui_Main(void)
 {
 	int userInput = 0;
@@ -28,7 +30,7 @@ int Ui_Main(void)
 			break;
 		default:
 			userInput = 0;
-			printf("\nPlease Input proper value, from 1 to 4.\n");
+			printf("\nPlease Input proper value, from 1 to %d.\n", MENU_NUM);
 		}
 
 		if (userInput == 6){
@@ -64,7 +66,7 @@ int Ui_MainScreen(void)
 	system("clear");
 
 	printf("%s", mainScreen_str);
-	printf("Select a Menu(1~4): ");
+	printf("Select a Menu(1~%d): ", MENU_NUM);
 
 	fgets(userInput_str, 128, stdin);
 	userInput_int = atoi(userInput_str);

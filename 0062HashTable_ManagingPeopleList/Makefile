@@ -11,7 +11,7 @@ object_%:
 	cp $< $@
 
 %.o:
-	$(COMPILE.cc) $< -I $(INCLUDE_MY_DIRS) -o $@
+	$(COMPILE.c) $< -I $(INCLUDE_MY_DIRS) -o $@
 
 object_main: main.o
 

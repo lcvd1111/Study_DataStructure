@@ -31,5 +31,6 @@
 #define COLOR_BG_WHITE "\x1b[47m"
 
 #define NAME_LEN 32
+#define DATA_LEN 128
 
 #endif
