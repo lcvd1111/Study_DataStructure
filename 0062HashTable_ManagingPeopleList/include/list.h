@@ -13,6 +13,8 @@ struct _LIST_NODE {
 	//Member Variables
 	char key[NAME_LEN];
 	char data[DATA_LEN];
+	LIST_NODE *prev;
+	LIST_NODE *next;
 
 	//Member Functions
 	LIST_NODE_METHOD *Method;
