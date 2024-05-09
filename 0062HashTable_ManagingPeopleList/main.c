@@ -1,11 +1,11 @@
 #include "interface.h"
 #include "test.h"
-#define UNITTEST_ON
 
 int main(void)
 {
 	int err = 0;
 #ifdef UNITTEST_ON
+	//UNITTEST_ON is defined in ./include/common.h
 	if (err = UnitTest()){
 		PRINTF_ERROR("ERROR: UnitTest() failed.\n");
 		printf("Error Code: %d\n", err);

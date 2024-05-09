@@ -33,4 +33,6 @@
 #define NAME_LEN 32
 #define DATA_LEN 128
 
+#define UNITTEST_ON
+
 #endif

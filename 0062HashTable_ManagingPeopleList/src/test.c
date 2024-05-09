@@ -62,9 +62,5 @@ int UnitTest(void)
 	}
 	printf(COLOR_GREEN "SUCCESS\n" COLOR_BLACK);
 
-	printf(COLOR_BLACK "Unit Test is all successful.\n" COLOR_BLACK);
-	printf(COLOR_BLACK "(Press Enter...)" COLOR_BLACK);
-	fgets(dummyText, 128, stdin);
-
 	return 0;
 }

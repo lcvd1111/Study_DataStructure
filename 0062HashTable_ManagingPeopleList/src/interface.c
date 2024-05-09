@@ -7,6 +7,10 @@ int Ui_Main(void)
 	int userInput = 0;
 	char dummy[128] = {0,};
 	
+#ifndef UNITTEST_ON
+	//UNITTEST_ON is defined in ./include/common.h
+	system("clear");
+#endif
 	while(userInput != 6){
 		userInput = Ui_MainScreen();
 
@@ -40,6 +44,8 @@ int Ui_Main(void)
 
 		printf("(Press Enter)\n");
 		fgets(dummy, 128, stdin);
+
+		system("clear");
 	}
 	system("clear");
 
@@ -62,8 +68,6 @@ int Ui_MainScreen(void)
 		"  *************************\n\n";
 	char userInput_str[128] = {0,};
 	int userInput_int = 0;
-
-	system("clear");
 
 	printf("%s", mainScreen_str);
 	printf("Select a Menu(1~%d): ", MENU_NUM);
