@@ -26,6 +26,9 @@ void HASHMAP_METHOD_CONSTRUCTOR(HASHMAP *this)
 	this->currentSize = 0;
 	this->collisionNum = 0;
 	this->table = (LIST *)malloc(sizeof(LIST)*(this->tableSize));
+	for (int i=0 ; i<this->tableSize ; i++){
+		LIST_METHOD_CONSTRUCTOR(this->table + i);
+	}
 
 	//Binding the Method Functions
 	this->Method = &gHashmapMethod;
@@ -78,23 +81,62 @@ HASHMAP_NODE *HASHMAP_METHOD_Search(HASHMAP *this, char *keyArg)
 		return NULL;
 	}
 
-	index = (this->Method->Hash)(this, keyArg);
-
-	if (((this->table)[index].Method->IsEmpty)(&((this->table)[index])) != 0){
+	//When the table is empty.
+	if (this->currentSize == 0){
 		return NULL;
 	}
 
-	//작성중
+	index = (this->Method->Hash)(this, keyArg);
 
+	if (((this->table)[index].Method->IsEmpty)(&((this->table)[index])) != 0){
+		//When the table[h(key)] is empty.
+		return NULL;
+	}
+
+	//When the table[h(key) is not empty.
+	ret = (this->table)[index].begin;
+	while (ret != NULL){
+		if (strcmp(ret->key, keyArg) == 0){
+			//Search Complete!
+			break;
+		}
+		else {
+			ret = ret->next;
+		}
+	}
+
+	//If there is no element in hashtable whose key value is equivalent to keyArg,
+	//Then the below statement naturally returns 'NULL'.
 	return ret;
 }
 
 HASHMAP *HASHMAP_METHOD_Insert(HASHMAP *this, char *keyArg, char *dataArg)
 {
+	int index = 0;
+
 	//Exception Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: 'this' is NULL.\n");
 		return NULL;
+	}
+
+	if ((this->Method->Search)(this, keyArg) != NULL){
+		//When there is already an element in the hashtable whose key value is equivalent to keyArg.
+		return NULL;
+	}
+
+	index = (this->Method->Hash)(this, keyArg);
+	((this->table)[index].Method->AddElement)(this->table + index, keyArg, dataArg);
+	this->currentSize += 1;
+
+	//Calculating the collision Number.
+	if ((this->table)[index].size > 1){
+		this->collisionNum += 1;
+	}
+
+	//Rehashing should be done if table is too full.
+	if ((this->currentSize)*3 > (this->tableSize)*2){
+		(this->Method->Rehash)(this);
 	}
 
 	return this;
@@ -102,10 +144,34 @@ HASHMAP *HASHMAP_METHOD_Insert(HASHMAP *this, char *keyArg, char *dataArg)
 
 HASHMAP *HASHMAP_METHOD_Delete(HASHMAP *this, char *keyArg)
 {
+	int index = 0;
+	HASHMAP_NODE *deleteArg = NULL;
+	
 	//Exception Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: 'this' is NULL.\n");
 		return NULL;
+	}
+
+	//When the table is empty.
+	if (this->currentSize == 0){
+		return NULL;
+	}
+
+	deleteArg = (this->Method->Search)(this, keyArg);
+
+	//When the element with keyArg doesn't exist.
+	if ( deleteArg == NULL){
+		return NULL;
+	}
+
+	index = (this->Method->Hash)(this, keyArg);
+	((this->table)[index].Method->DeleteElement)(this->table + index, deleteArg);
+	this->currentSize -= 1;
+
+	//Calculating the collision Number.
+	if ((this->table)[index].size > 0){
+		this->collisionNum -= 1;
 	}
 
 	return this;
@@ -130,15 +196,46 @@ HASHMAP *HASHMAP_METHOD_MakeEmpty(HASHMAP *this)
 		return NULL;
 	}
 
+	for (int i=0 ; i<this->tableSize ; i++){
+		LIST_METHOD_DESTRUCTOR(this->table + i);
+	}
+
+	free(this->table);
+	this->table = NULL;
+	HASHMAP_METHOD_CONSTRUCTOR(this);
+
 	return this;
 }
 
 HASHMAP *HASHMAP_METHOD_Print(HASHMAP *this)
 {
+	HASHMAP_NODE *buf_node = NULL;
+	LIST *buf_list = NULL;
+
 	//Exception Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: 'this' is NULL.\n");
 		return NULL;
+	}
+
+	//When the Hashmap is empty.
+	if (this->currentSize == 0){
+		return this;
+	}
+
+	for (int i=0 ; i<this->tableSize ; i++){
+		buf_list = (this->table)+i;
+		if ((buf_list->Method->IsEmpty)(buf_list) == 1){
+			continue;
+		}
+		else {
+			buf_node = buf_list->begin;
+			while(buf_node != NULL){
+				printf("[key]:%s, [data]:%s, ", buf_node->key, buf_node->data);
+				printf("[Hash(%s, %d)]:%d, [Index]:%d\n", buf_node->key, this->tableSize, (this->Method->Hash)(this, buf_node->key), i);
+				buf_node = buf_node->next;
+			}
+		}
 	}
 
 	return this;

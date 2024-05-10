@@ -1,5 +1,7 @@
 #include "test.h"
 
+static const char letterCollection[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
 int UnitTest_List(void)
 {
 	LIST testList;
@@ -40,6 +42,19 @@ int UnitTest_List(void)
 
 int UnitTest_HashMap(void)
 {
+	HASHMAP testMap;
+	HASHMAP_METHOD_CONSTRUCTOR(&testMap);
+
+	(testMap.Method->Insert)(&testMap, "A", "001");
+	(testMap.Method->Insert)(&testMap, "B", "002");
+	(testMap.Method->Insert)(&testMap, "C", "003");
+	(testMap.Method->Insert)(&testMap, "D", "004");
+	(testMap.Method->Insert)(&testMap, "E", "005");
+
+	(testMap.Method->Print)(&testMap);
+
+	HASHMAP_METHOD_DESTRUCTOR(&testMap);
+
 	return 0;
 }
 
