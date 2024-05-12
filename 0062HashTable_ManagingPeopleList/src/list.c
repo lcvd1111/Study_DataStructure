@@ -152,6 +152,8 @@ void LIST_METHOD_DESTRUCTOR(LIST *this)
 		return;
 	}
 
+	//When the list is empty.
+
 	//Making the list Empty.
 	(this->Method->MakeEmpty)(this);
 

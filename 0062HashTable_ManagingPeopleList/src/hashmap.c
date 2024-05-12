@@ -132,6 +132,12 @@ HASHMAP *HASHMAP_METHOD_Insert(HASHMAP *this, char *keyArg, char *dataArg)
 	//Calculating the collision Number.
 	if ((this->table)[index].size > 1){
 		this->collisionNum += 1;
+#ifdef DEBUG_ON
+		printf(COLOR_BG_CYAN "[JYJO DEBUG] Collision Occured!"
+				"H(%s, %d)=%d, H(%s, %d)=%d" COLOR_BG_WHITE "\n"
+				, keyArg, this->tableSize, (this->Method->Hash)(this, keyArg),
+				(this->table)[index].begin->key, this->tableSize, (this->Method->Hash)(this, (this->table)[index].begin->key));
+#endif
 	}
 
 	//Rehashing should be done if table is too full.
@@ -179,11 +185,59 @@ HASHMAP *HASHMAP_METHOD_Delete(HASHMAP *this, char *keyArg)
 
 HASHMAP *HASHMAP_METHOD_Rehash(HASHMAP *this)
 {
+	int oldTableSize = 0;
+	int newTableSize = 0;
+#ifdef DEBUG_ON
+	int oldCollisionNum = 0;
+#endif
+	LIST *oldTable = NULL;
+	LIST *newTable = NULL;
+
+	LIST *buf_List = NULL;
+	LIST_NODE *buf_Node = NULL;
+
 	//Exception Handling
 	if (this == NULL){
 		PRINTF_ERROR("ERROR: 'this' is NULL.\n");
 		return NULL;
 	}
+
+	oldTableSize = this->tableSize;
+	newTableSize = 2*oldTableSize;
+	oldTable = this->table;
+	newTable = (LIST *)malloc(sizeof(LIST) * newTableSize);
+	for (int i=0 ; i<newTableSize ; i++){
+		LIST_METHOD_CONSTRUCTOR(newTable + i);
+	}
+
+#ifdef DEBUG_ON
+	oldCollisionNum = this->collisionNum;
+#endif
+
+	this->currentSize = 0;
+	this->collisionNum = 0;
+	this->tableSize = newTableSize;
+	this->table = newTable;
+
+	for (int i=0 ; i<oldTableSize ; i++){
+		buf_List = oldTable + i;
+		if ((buf_List->Method->IsEmpty)(buf_List) == 0){
+			buf_Node = buf_List->begin;
+			for (int j=0 ; j<buf_List->size ; j++){
+				(this->Method->Insert)(this, buf_Node->key, buf_Node->data);
+				buf_Node = buf_Node->next;
+			}
+		}
+		else {
+			continue;
+		}
+	}
+#ifdef DEBUG_ON
+		printf(COLOR_BG_YELLOW "[JYJO DEBUG] Rehashing is Done!"
+				"TableSize: %d->%d, CollisionNum: %d->%d" COLOR_BG_WHITE "\n"
+				, oldTableSize, this->tableSize,
+				oldCollisionNum, this->collisionNum);
+#endif
 
 	return this;
 }

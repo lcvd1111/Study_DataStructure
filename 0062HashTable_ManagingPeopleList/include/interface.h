@@ -2,6 +2,7 @@
 #define __INTERFACE_HEADER__
 
 #include "common.h"
+#include "hashmap.h"
 
 int Ui_Main(void);
 int Ui_MainScreen(void);
