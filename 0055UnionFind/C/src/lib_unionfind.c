@@ -86,7 +86,19 @@ UNION_FIND *UNION_FIND_METHOD_Destroy(UNION_FIND *this)
 	}
 
 	this->collectionSize = -1;
+
+	if (this->successorArray == NULL){
+		DEBUG("ERROR: 'this->successorArray' is NULL.\n");
+		return NULL;
+	}
+	free(this->successorArray);
 	this->successorArray = NULL;
+
+	if (this->sizeArray == NULL){
+		DEBUG("ERROR: 'this->sizeArray' is NULL.\n");
+		return NULL;
+	}
+	free(this->sizeArray);
 	this->sizeArray = NULL;
 
 	return this;
